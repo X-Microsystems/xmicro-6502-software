@@ -1,5 +1,5 @@
 ; da65 V2.17 - Git N/A
-; Created:    2018-07-22 00:06:50
+; Created:    2018-07-22 12:17:42
 ; Input file: ROM.BIN
 ; Page:       1
 
@@ -7,15 +7,16 @@
         .setcpu "65C02"
 
 ; ----------------------------------------------------------------------------
+CF_BUFFERPOINTER:= $0000
+M32PTR1         := $0002
+M32PTR2         := $0004
+M32PTR3         := $0006
+M32PTR4         := $0008
+MOVE_FROM       := $000A
+MOVE_TO         := $000C
+MOVE_SIZE       := $000E
 L003B           := $003B
-CF_BUFFERPOINTER:= $00E0
-M32PTR1         := $00E2
-M32PTR2         := $00E4
-M32PTR3         := $00E6
-M32PTR4         := $00E8
-MOVE_FROM       := $00EA
-MOVE_TO         := $00EC
-MOVE_SIZE       := $00EE
+L0047           := $0047
 IRQ0            := $0201
 IRQ1            := $0205
 IRQ2            := $0209
@@ -143,58 +144,58 @@ _INIT:  sei                                     ; F000 78                       
         txs                                     ; F004 9A                       .
         pha                                     ; F005 48                       H
         lda     #$EB                            ; F006 A9 EB                    ..
-        sta     MOVE_TO                         ; F008 85 EC                    ..
+        sta     MOVE_TO                         ; F008 85 0C                    ..
         lda     #$09                            ; F00A A9 09                    ..
-        sta     $ED                             ; F00C 85 ED                    ..
+        sta     $0D                             ; F00C 85 0D                    ..
         lda     #$65                            ; F00E A9 65                    .e
-        sta     MOVE_SIZE                       ; F010 85 EE                    ..
+        sta     MOVE_SIZE                       ; F010 85 0E                    ..
         lda     #$00                            ; F012 A9 00                    ..
-        sta     $EF                             ; F014 85 EF                    ..
+        sta     $0F                             ; F014 85 0F                    ..
         jsr     ZERO_FILL                       ; F016 20 FA F0                  ..
         pla                                     ; F019 68                       h
         pha                                     ; F01A 48                       H
         lda     #$3C                            ; F01B A9 3C                    .<
-        sta     MOVE_FROM                       ; F01D 85 EA                    ..
+        sta     MOVE_FROM                       ; F01D 85 0A                    ..
         lda     #$F1                            ; F01F A9 F1                    ..
-        sta     $EB                             ; F021 85 EB                    ..
+        sta     $0B                             ; F021 85 0B                    ..
         lda     #$00                            ; F023 A9 00                    ..
-        sta     MOVE_TO                         ; F025 85 EC                    ..
+        sta     MOVE_TO                         ; F025 85 0C                    ..
         lda     #$03                            ; F027 A9 03                    ..
-        sta     $ED                             ; F029 85 ED                    ..
+        sta     $0D                             ; F029 85 0D                    ..
         lda     #$C8                            ; F02B A9 C8                    ..
-        sta     MOVE_SIZE                       ; F02D 85 EE                    ..
+        sta     MOVE_SIZE                       ; F02D 85 0E                    ..
         lda     #$06                            ; F02F A9 06                    ..
-        sta     $EF                             ; F031 85 EF                    ..
+        sta     $0F                             ; F031 85 0F                    ..
         jsr     ROM_MOVEDOWN                    ; F033 20 D3 F0                  ..
         pla                                     ; F036 68                       h
         pha                                     ; F037 48                       H
         lda     #$04                            ; F038 A9 04                    ..
-        sta     MOVE_FROM                       ; F03A 85 EA                    ..
+        sta     MOVE_FROM                       ; F03A 85 0A                    ..
         lda     #$F8                            ; F03C A9 F8                    ..
-        sta     $EB                             ; F03E 85 EB                    ..
+        sta     $0B                             ; F03E 85 0B                    ..
         lda     #$C8                            ; F040 A9 C8                    ..
-        sta     MOVE_TO                         ; F042 85 EC                    ..
+        sta     MOVE_TO                         ; F042 85 0C                    ..
         lda     #$09                            ; F044 A9 09                    ..
-        sta     $ED                             ; F046 85 ED                    ..
+        sta     $0D                             ; F046 85 0D                    ..
         lda     #$23                            ; F048 A9 23                    .#
-        sta     MOVE_SIZE                       ; F04A 85 EE                    ..
+        sta     MOVE_SIZE                       ; F04A 85 0E                    ..
         lda     #$00                            ; F04C A9 00                    ..
-        sta     $EF                             ; F04E 85 EF                    ..
+        sta     $0F                             ; F04E 85 0F                    ..
         jsr     ROM_MOVEDOWN                    ; F050 20 D3 F0                  ..
         pla                                     ; F053 68                       h
         pha                                     ; F054 48                       H
         lda     #$1C                            ; F055 A9 1C                    ..
-        sta     MOVE_FROM                       ; F057 85 EA                    ..
+        sta     MOVE_FROM                       ; F057 85 0A                    ..
         lda     #$F1                            ; F059 A9 F1                    ..
-        sta     $EB                             ; F05B 85 EB                    ..
+        sta     $0B                             ; F05B 85 0B                    ..
         lda     #$00                            ; F05D A9 00                    ..
-        sta     MOVE_TO                         ; F05F 85 EC                    ..
+        sta     MOVE_TO                         ; F05F 85 0C                    ..
         lda     #$02                            ; F061 A9 02                    ..
-        sta     $ED                             ; F063 85 ED                    ..
+        sta     $0D                             ; F063 85 0D                    ..
         lda     #$20                            ; F065 A9 20                    . 
-        sta     MOVE_SIZE                       ; F067 85 EE                    ..
+        sta     MOVE_SIZE                       ; F067 85 0E                    ..
         lda     #$00                            ; F069 A9 00                    ..
-        sta     $EF                             ; F06B 85 EF                    ..
+        sta     $0F                             ; F06B 85 0F                    ..
         jsr     ROM_MOVEDOWN                    ; F06D 20 D3 F0                  ..
         pla                                     ; F070 68                       h
         lda     #$40                            ; F071 A9 40                    .@
@@ -223,17 +224,17 @@ STARTUP_ERROR:
 
 _MAIN:  pha                                     ; F08B 48                       H
         lda     S_AUTOEXECBIN                   ; F08C AD DF 09                 ...
-        sta     MOVE_FROM                       ; F08F 85 EA                    ..
+        sta     MOVE_FROM                       ; F08F 85 0A                    ..
         lda     $09E0                           ; F091 AD E0 09                 ...
-        sta     $EB                             ; F094 85 EB                    ..
+        sta     $0B                             ; F094 85 0B                    ..
         lda     FILENAME                        ; F096 AD CA 09                 ...
-        sta     MOVE_TO                         ; F099 85 EC                    ..
+        sta     MOVE_TO                         ; F099 85 0C                    ..
         lda     $09CB                           ; F09B AD CB 09                 ...
-        sta     $ED                             ; F09E 85 ED                    ..
+        sta     $0D                             ; F09E 85 0D                    ..
         lda     #$0B                            ; F0A0 A9 0B                    ..
-        sta     MOVE_SIZE                       ; F0A2 85 EE                    ..
+        sta     MOVE_SIZE                       ; F0A2 85 0E                    ..
         lda     #$00                            ; F0A4 A9 00                    ..
-        sta     $EF                             ; F0A6 85 EF                    ..
+        sta     $0F                             ; F0A6 85 0F                    ..
         jsr     MOVEDOWN                        ; F0A8 20 A1 09                  ..
         pla                                     ; F0AB 68                       h
         jsr     FAT_FIND                        ; F0AC 20 3B 06                  ;.
@@ -267,20 +268,20 @@ ROM_MOVEDOWN:
         phx                                     ; F0D4 DA                       .
         phy                                     ; F0D5 5A                       Z
         ldy     #$00                            ; F0D6 A0 00                    ..
-        ldx     $EF                             ; F0D8 A6 EF                    ..
+        ldx     $0F                             ; F0D8 A6 0F                    ..
         beq     MD2                             ; F0DA F0 0E                    ..
-MD1:    lda     (MOVE_FROM),y                   ; F0DC B1 EA                    ..
-        sta     (MOVE_TO),y                     ; F0DE 91 EC                    ..
+MD1:    lda     (MOVE_FROM),y                   ; F0DC B1 0A                    ..
+        sta     (MOVE_TO),y                     ; F0DE 91 0C                    ..
         iny                                     ; F0E0 C8                       .
         bne     MD1                             ; F0E1 D0 F9                    ..
-        inc     $EB                             ; F0E3 E6 EB                    ..
-        inc     $ED                             ; F0E5 E6 ED                    ..
+        inc     $0B                             ; F0E3 E6 0B                    ..
+        inc     $0D                             ; F0E5 E6 0D                    ..
         dex                                     ; F0E7 CA                       .
         bne     MD1                             ; F0E8 D0 F2                    ..
-MD2:    ldx     MOVE_SIZE                       ; F0EA A6 EE                    ..
+MD2:    ldx     MOVE_SIZE                       ; F0EA A6 0E                    ..
         beq     MD4                             ; F0EC F0 08                    ..
-MD3:    lda     (MOVE_FROM),y                   ; F0EE B1 EA                    ..
-        sta     (MOVE_TO),y                     ; F0F0 91 EC                    ..
+MD3:    lda     (MOVE_FROM),y                   ; F0EE B1 0A                    ..
+        sta     (MOVE_TO),y                     ; F0F0 91 0C                    ..
         iny                                     ; F0F2 C8                       .
         dex                                     ; F0F3 CA                       .
         bne     MD3                             ; F0F4 D0 F8                    ..
@@ -296,17 +297,17 @@ ZERO_FILL:
         phy                                     ; F0FC 5A                       Z
         lda     #$00                            ; F0FD A9 00                    ..
         tay                                     ; F0FF A8                       .
-        ldx     $EF                             ; F100 A6 EF                    ..
+        ldx     $0F                             ; F100 A6 0F                    ..
         beq     L2                              ; F102 F0 0A                    ..
-L1:     sta     (MOVE_TO),y                     ; F104 91 EC                    ..
+L1:     sta     (MOVE_TO),y                     ; F104 91 0C                    ..
         iny                                     ; F106 C8                       .
         bne     L1                              ; F107 D0 FB                    ..
-        inc     $ED                             ; F109 E6 ED                    ..
+        inc     $0D                             ; F109 E6 0D                    ..
         dex                                     ; F10B CA                       .
         bne     L1                              ; F10C D0 F6                    ..
-L2:     ldx     MOVE_SIZE                       ; F10E A6 EE                    ..
+L2:     ldx     MOVE_SIZE                       ; F10E A6 0E                    ..
         beq     L4                              ; F110 F0 06                    ..
-L3:     sta     (MOVE_TO),y                     ; F112 91 EC                    ..
+L3:     sta     (MOVE_TO),y                     ; F112 91 0C                    ..
         iny                                     ; F114 C8                       .
         dex                                     ; F115 CA                       .
         bne     L3                              ; F116 D0 FA                    ..
@@ -366,9 +367,9 @@ L4:     ply                                     ; F118 7A                       
 
         pha                                     ; F13C 48                       H
         lda     CF_BUFFER                       ; F13D AD C8 09                 ...
-        sta     CF_BUFFERPOINTER                ; F140 85 E0                    ..
+        sta     CF_BUFFERPOINTER                ; F140 85 00                    ..
         lda     $09C9                           ; F142 AD C9 09                 ...
-        sta     $E1                             ; F145 85 E1                    ..
+        sta     $01                             ; F145 85 01                    ..
         lda     #$00                            ; F147 A9 00                    ..
         sta     CF_LBA                          ; F149 8D EB 09                 ...
         sta     $09EC                           ; F14C 8D EC 09                 ...
@@ -440,17 +441,17 @@ LF1C2:  jsr     LOOP_BUSY                       ; F1C2 20 3E 03                 
         and     #$01                            ; F1D8 29 01                    ).
         bne     LF1C2                           ; F1DA D0 E6                    ..
         lda     CF_BUFFER                       ; F1DC AD C8 09                 ...
-        sta     CF_BUFFERPOINTER                ; F1DF 85 E0                    ..
+        sta     CF_BUFFERPOINTER                ; F1DF 85 00                    ..
         lda     $09C9                           ; F1E1 AD C9 09                 ...
-        sta     $E1                             ; F1E4 85 E1                    ..
+        sta     $01                             ; F1E4 85 01                    ..
         ldy     #$00                            ; F1E6 A0 00                    ..
         ldx     #$02                            ; F1E8 A2 02                    ..
 LF1EA:  jsr     LOOP_DAT_RDY                    ; F1EA 20 50 03                  P.
         lda     CFDATA                          ; F1ED AD 00 11                 ...
-        sta     (CF_BUFFERPOINTER),y            ; F1F0 91 E0                    ..
+        sta     (CF_BUFFERPOINTER),y            ; F1F0 91 00                    ..
         iny                                     ; F1F2 C8                       .
         bne     LF1EA                           ; F1F3 D0 F5                    ..
-        inc     $E1                             ; F1F5 E6 E1                    ..
+        inc     $01                             ; F1F5 E6 01                    ..
         dex                                     ; F1F7 CA                       .
         bne     LF1EA                           ; F1F8 D0 F0                    ..
         rts                                     ; F1FA 60                       `
@@ -491,82 +492,82 @@ LF217:  pha                                     ; F217 48                       
         pla                                     ; F230 68                       h
         jsr     CF_READ_SECTOR                  ; F231 20 BF 03                  ..
         lda     CF_BUFFER                       ; F234 AD C8 09                 ...
-        sta     CF_BUFFERPOINTER                ; F237 85 E0                    ..
+        sta     CF_BUFFERPOINTER                ; F237 85 00                    ..
         lda     $09C9                           ; F239 AD C9 09                 ...
-        sta     $E1                             ; F23C 85 E1                    ..
+        sta     $01                             ; F23C 85 01                    ..
         ldy     #$0B                            ; F23E A0 0B                    ..
-        lda     (CF_BUFFERPOINTER),y            ; F240 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; F240 B1 00                    ..
         sta     BYTESPERSECTOR                  ; F242 8D FF 09                 ...
         iny                                     ; F245 C8                       .
-        lda     (CF_BUFFERPOINTER),y            ; F246 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; F246 B1 00                    ..
         sta     $0A00                           ; F248 8D 00 0A                 ...
         iny                                     ; F24B C8                       .
-        lda     (CF_BUFFERPOINTER),y            ; F24C B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; F24C B1 00                    ..
         sta     SECTORSPERCLUSTER               ; F24E 8D 03 0A                 ...
         iny                                     ; F251 C8                       .
-        lda     (CF_BUFFERPOINTER),y            ; F252 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; F252 B1 00                    ..
         sta     RESERVEDSECTORS                 ; F254 8D 07 0A                 ...
         iny                                     ; F257 C8                       .
-        lda     (CF_BUFFERPOINTER),y            ; F258 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; F258 B1 00                    ..
         sta     $0A08                           ; F25A 8D 08 0A                 ...
         iny                                     ; F25D C8                       .
-        lda     (CF_BUFFERPOINTER),y            ; F25E B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; F25E B1 00                    ..
         sta     FATCOPIES                       ; F260 8D 0B 0A                 ...
         iny                                     ; F263 C8                       .
-        lda     (CF_BUFFERPOINTER),y            ; F264 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; F264 B1 00                    ..
         sta     ROOTENTRIES                     ; F266 8D 0F 0A                 ...
         iny                                     ; F269 C8                       .
-        lda     (CF_BUFFERPOINTER),y            ; F26A B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; F26A B1 00                    ..
         sta     $0A10                           ; F26C 8D 10 0A                 ...
         ldy     #$16                            ; F26F A0 16                    ..
-        lda     (CF_BUFFERPOINTER),y            ; F271 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; F271 B1 00                    ..
         sta     SECTORSPERFAT                   ; F273 8D 13 0A                 ...
         iny                                     ; F276 C8                       .
-        lda     (CF_BUFFERPOINTER),y            ; F277 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; F277 B1 00                    ..
         sta     $0A14                           ; F279 8D 14 0A                 ...
         pha                                     ; F27C 48                       H
         lda     #$EF                            ; F27D A9 EF                    ..
-        sta     M32PTR1                         ; F27F 85 E2                    ..
+        sta     M32PTR1                         ; F27F 85 02                    ..
         lda     #$09                            ; F281 A9 09                    ..
-        sta     $E3                             ; F283 85 E3                    ..
+        sta     $03                             ; F283 85 03                    ..
         lda     #$07                            ; F285 A9 07                    ..
-        sta     M32PTR2                         ; F287 85 E4                    ..
+        sta     M32PTR2                         ; F287 85 04                    ..
         lda     #$0A                            ; F289 A9 0A                    ..
-        sta     $E5                             ; F28B 85 E5                    ..
+        sta     $05                             ; F28B 85 05                    ..
         lda     #$17                            ; F28D A9 17                    ..
-        sta     M32PTR3                         ; F28F 85 E6                    ..
+        sta     M32PTR3                         ; F28F 85 06                    ..
         lda     #$0A                            ; F291 A9 0A                    ..
-        sta     $E7                             ; F293 85 E7                    ..
+        sta     $07                             ; F293 85 07                    ..
         pla                                     ; F295 68                       h
         jsr     MATH_ADD32                      ; F296 20 A1 08                  ..
         pha                                     ; F299 48                       H
         lda     #$13                            ; F29A A9 13                    ..
-        sta     M32PTR1                         ; F29C 85 E2                    ..
+        sta     M32PTR1                         ; F29C 85 02                    ..
         lda     #$0A                            ; F29E A9 0A                    ..
-        sta     $E3                             ; F2A0 85 E3                    ..
+        sta     $03                             ; F2A0 85 03                    ..
         lda     #$0B                            ; F2A2 A9 0B                    ..
-        sta     M32PTR2                         ; F2A4 85 E4                    ..
+        sta     M32PTR2                         ; F2A4 85 04                    ..
         lda     #$0A                            ; F2A6 A9 0A                    ..
-        sta     $E5                             ; F2A8 85 E5                    ..
+        sta     $05                             ; F2A8 85 05                    ..
         lda     #$1B                            ; F2AA A9 1B                    ..
-        sta     M32PTR3                         ; F2AC 85 E6                    ..
+        sta     M32PTR3                         ; F2AC 85 06                    ..
         lda     #$0A                            ; F2AE A9 0A                    ..
-        sta     $E7                             ; F2B0 85 E7                    ..
+        sta     $07                             ; F2B0 85 07                    ..
         pla                                     ; F2B2 68                       h
         jsr     MATH_MUL32                      ; F2B3 20 CF 08                  ..
         pha                                     ; F2B6 48                       H
         lda     #$17                            ; F2B7 A9 17                    ..
-        sta     M32PTR1                         ; F2B9 85 E2                    ..
+        sta     M32PTR1                         ; F2B9 85 02                    ..
         lda     #$0A                            ; F2BB A9 0A                    ..
-        sta     $E3                             ; F2BD 85 E3                    ..
+        sta     $03                             ; F2BD 85 03                    ..
         lda     #$1B                            ; F2BF A9 1B                    ..
-        sta     M32PTR2                         ; F2C1 85 E4                    ..
+        sta     M32PTR2                         ; F2C1 85 04                    ..
         lda     #$0A                            ; F2C3 A9 0A                    ..
-        sta     $E5                             ; F2C5 85 E5                    ..
+        sta     $05                             ; F2C5 85 05                    ..
         lda     #$1B                            ; F2C7 A9 1B                    ..
-        sta     M32PTR3                         ; F2C9 85 E6                    ..
+        sta     M32PTR3                         ; F2C9 85 06                    ..
         lda     #$0A                            ; F2CB A9 0A                    ..
-        sta     $E7                             ; F2CD 85 E7                    ..
+        sta     $07                             ; F2CD 85 07                    ..
         pla                                     ; F2CF 68                       h
         jsr     MATH_ADD32                      ; F2D0 20 A1 08                  ..
         lda     #$20                            ; F2D3 A9 20                    . 
@@ -579,98 +580,98 @@ LF217:  pha                                     ; F217 48                       
         sta     $09FA                           ; F2E4 8D FA 09                 ...
         pha                                     ; F2E7 48                       H
         lda     #$0F                            ; F2E8 A9 0F                    ..
-        sta     M32PTR1                         ; F2EA 85 E2                    ..
+        sta     M32PTR1                         ; F2EA 85 02                    ..
         lda     #$0A                            ; F2EC A9 0A                    ..
-        sta     $E3                             ; F2EE 85 E3                    ..
+        sta     $03                             ; F2EE 85 03                    ..
         lda     #$F7                            ; F2F0 A9 F7                    ..
-        sta     M32PTR2                         ; F2F2 85 E4                    ..
+        sta     M32PTR2                         ; F2F2 85 04                    ..
         lda     #$09                            ; F2F4 A9 09                    ..
-        sta     $E5                             ; F2F6 85 E5                    ..
+        sta     $05                             ; F2F6 85 05                    ..
         lda     #$1F                            ; F2F8 A9 1F                    ..
-        sta     M32PTR3                         ; F2FA 85 E6                    ..
+        sta     M32PTR3                         ; F2FA 85 06                    ..
         lda     #$0A                            ; F2FC A9 0A                    ..
-        sta     $E7                             ; F2FE 85 E7                    ..
+        sta     $07                             ; F2FE 85 07                    ..
         pla                                     ; F300 68                       h
         jsr     MATH_MUL32                      ; F301 20 CF 08                  ..
         pha                                     ; F304 48                       H
         lda     #$1F                            ; F305 A9 1F                    ..
-        sta     M32PTR1                         ; F307 85 E2                    ..
+        sta     M32PTR1                         ; F307 85 02                    ..
         lda     #$0A                            ; F309 A9 0A                    ..
-        sta     $E3                             ; F30B 85 E3                    ..
+        sta     $03                             ; F30B 85 03                    ..
         lda     #$FF                            ; F30D A9 FF                    ..
-        sta     M32PTR2                         ; F30F 85 E4                    ..
+        sta     M32PTR2                         ; F30F 85 04                    ..
         lda     #$09                            ; F311 A9 09                    ..
-        sta     $E5                             ; F313 85 E5                    ..
+        sta     $05                             ; F313 85 05                    ..
         lda     #$1F                            ; F315 A9 1F                    ..
-        sta     M32PTR3                         ; F317 85 E6                    ..
+        sta     M32PTR3                         ; F317 85 06                    ..
         lda     #$0A                            ; F319 A9 0A                    ..
-        sta     $E7                             ; F31B 85 E7                    ..
+        sta     $07                             ; F31B 85 07                    ..
         lda     #$FB                            ; F31D A9 FB                    ..
-        sta     M32PTR4                         ; F31F 85 E8                    ..
+        sta     M32PTR4                         ; F31F 85 08                    ..
         lda     #$09                            ; F321 A9 09                    ..
-        sta     $E9                             ; F323 85 E9                    ..
+        sta     $09                             ; F323 85 09                    ..
         pla                                     ; F325 68                       h
         jsr     MATH_DIV32                      ; F326 20 24 09                  $.
         lda     #$02                            ; F329 A9 02                    ..
         sta     TMP2                            ; F32B 8D F7 09                 ...
         pha                                     ; F32E 48                       H
         lda     #$03                            ; F32F A9 03                    ..
-        sta     M32PTR1                         ; F331 85 E2                    ..
+        sta     M32PTR1                         ; F331 85 02                    ..
         lda     #$0A                            ; F333 A9 0A                    ..
-        sta     $E3                             ; F335 85 E3                    ..
+        sta     $03                             ; F335 85 03                    ..
         lda     #$F7                            ; F337 A9 F7                    ..
-        sta     M32PTR2                         ; F339 85 E4                    ..
+        sta     M32PTR2                         ; F339 85 04                    ..
         lda     #$09                            ; F33B A9 09                    ..
-        sta     $E5                             ; F33D 85 E5                    ..
+        sta     $05                             ; F33D 85 05                    ..
         lda     #$F3                            ; F33F A9 F3                    ..
-        sta     M32PTR3                         ; F341 85 E6                    ..
+        sta     M32PTR3                         ; F341 85 06                    ..
         lda     #$09                            ; F343 A9 09                    ..
-        sta     $E7                             ; F345 85 E7                    ..
+        sta     $07                             ; F345 85 07                    ..
         pla                                     ; F347 68                       h
         jsr     MATH_MUL32                      ; F348 20 CF 08                  ..
         pha                                     ; F34B 48                       H
         lda     #$1B                            ; F34C A9 1B                    ..
-        sta     M32PTR1                         ; F34E 85 E2                    ..
+        sta     M32PTR1                         ; F34E 85 02                    ..
         lda     #$0A                            ; F350 A9 0A                    ..
-        sta     $E3                             ; F352 85 E3                    ..
+        sta     $03                             ; F352 85 03                    ..
         lda     #$1F                            ; F354 A9 1F                    ..
-        sta     M32PTR2                         ; F356 85 E4                    ..
+        sta     M32PTR2                         ; F356 85 04                    ..
         lda     #$0A                            ; F358 A9 0A                    ..
-        sta     $E5                             ; F35A 85 E5                    ..
+        sta     $05                             ; F35A 85 05                    ..
         lda     #$23                            ; F35C A9 23                    .#
-        sta     M32PTR3                         ; F35E 85 E6                    ..
+        sta     M32PTR3                         ; F35E 85 06                    ..
         lda     #$0A                            ; F360 A9 0A                    ..
-        sta     $E7                             ; F362 85 E7                    ..
+        sta     $07                             ; F362 85 07                    ..
         pla                                     ; F364 68                       h
         jsr     MATH_ADD32                      ; F365 20 A1 08                  ..
         pha                                     ; F368 48                       H
         lda     #$23                            ; F369 A9 23                    .#
-        sta     M32PTR1                         ; F36B 85 E2                    ..
+        sta     M32PTR1                         ; F36B 85 02                    ..
         lda     #$0A                            ; F36D A9 0A                    ..
-        sta     $E3                             ; F36F 85 E3                    ..
+        sta     $03                             ; F36F 85 03                    ..
         lda     #$F3                            ; F371 A9 F3                    ..
-        sta     M32PTR2                         ; F373 85 E4                    ..
+        sta     M32PTR2                         ; F373 85 04                    ..
         lda     #$09                            ; F375 A9 09                    ..
-        sta     $E5                             ; F377 85 E5                    ..
+        sta     $05                             ; F377 85 05                    ..
         lda     #$23                            ; F379 A9 23                    .#
-        sta     M32PTR3                         ; F37B 85 E6                    ..
+        sta     M32PTR3                         ; F37B 85 06                    ..
         lda     #$0A                            ; F37D A9 0A                    ..
-        sta     $E7                             ; F37F 85 E7                    ..
+        sta     $07                             ; F37F 85 07                    ..
         pla                                     ; F381 68                       h
         jsr     MATH_SUB32                      ; F382 20 B8 08                  ..
         pha                                     ; F385 48                       H
         lda     #$03                            ; F386 A9 03                    ..
-        sta     M32PTR1                         ; F388 85 E2                    ..
+        sta     M32PTR1                         ; F388 85 02                    ..
         lda     #$0A                            ; F38A A9 0A                    ..
-        sta     $E3                             ; F38C 85 E3                    ..
+        sta     $03                             ; F38C 85 03                    ..
         lda     #$FF                            ; F38E A9 FF                    ..
-        sta     M32PTR2                         ; F390 85 E4                    ..
+        sta     M32PTR2                         ; F390 85 04                    ..
         lda     #$09                            ; F392 A9 09                    ..
-        sta     $E5                             ; F394 85 E5                    ..
+        sta     $05                             ; F394 85 05                    ..
         lda     #$27                            ; F396 A9 27                    .'
-        sta     M32PTR3                         ; F398 85 E6                    ..
+        sta     M32PTR3                         ; F398 85 06                    ..
         lda     #$0A                            ; F39A A9 0A                    ..
-        sta     $E7                             ; F39C 85 E7                    ..
+        sta     $07                             ; F39C 85 07                    ..
         pla                                     ; F39E 68                       h
         jsr     MATH_MUL32                      ; F39F 20 CF 08                  ..
         lda     #$FF                            ; F3A2 A9 FF                    ..
@@ -699,12 +700,12 @@ LF217:  pha                                     ; F217 48                       
         lda     CF_BUFFER                       ; F3CE AD C8 09                 ...
         clc                                     ; F3D1 18                       .
         adc     #$36                            ; F3D2 69 36                    i6
-        sta     CF_BUFFERPOINTER                ; F3D4 85 E0                    ..
+        sta     CF_BUFFERPOINTER                ; F3D4 85 00                    ..
         lda     $09C9                           ; F3D6 AD C9 09                 ...
         adc     #$00                            ; F3D9 69 00                    i.
-        sta     $E1                             ; F3DB 85 E1                    ..
+        sta     $01                             ; F3DB 85 01                    ..
         ldy     #$07                            ; F3DD A0 07                    ..
-LF3DF:  lda     (CF_BUFFERPOINTER),y            ; F3DF B1 E0                    ..
+LF3DF:  lda     (CF_BUFFERPOINTER),y            ; F3DF B1 00                    ..
         cmp     S_FAT16,y                       ; F3E1 D9 D6 09                 ...
         bne     LF3EC                           ; F3E4 D0 06                    ..
         dey                                     ; F3E6 88                       .
@@ -717,11 +718,11 @@ LF3EC:  ldx     #$04                            ; F3EC A2 04                    
         lda     CF_BUFFER                       ; F3F0 AD C8 09                 ...
         clc                                     ; F3F3 18                       .
         adc     #$C2                            ; F3F4 69 C2                    i.
-        sta     CF_BUFFERPOINTER                ; F3F6 85 E0                    ..
+        sta     CF_BUFFERPOINTER                ; F3F6 85 00                    ..
         lda     $09C9                           ; F3F8 AD C9 09                 ...
         adc     #$01                            ; F3FB 69 01                    i.
-        sta     $E1                             ; F3FD 85 E1                    ..
-LF3FF:  lda     (CF_BUFFERPOINTER),y            ; F3FF B1 E0                    ..
+        sta     $01                             ; F3FD 85 01                    ..
+LF3FF:  lda     (CF_BUFFERPOINTER),y            ; F3FF B1 00                    ..
         cmp     #$04                            ; F401 C9 04                    ..
         beq     LF417                           ; F403 F0 12                    ..
         cmp     #$06                            ; F405 C9 06                    ..
@@ -740,12 +741,12 @@ LF3FF:  lda     (CF_BUFFERPOINTER),y            ; F3FF B1 E0                    
 LF417:  lda     CF_BUFFER                       ; F417 AD C8 09                 ...
         clc                                     ; F41A 18                       .
         adc     #$C6                            ; F41B 69 C6                    i.
-        sta     CF_BUFFERPOINTER                ; F41D 85 E0                    ..
+        sta     CF_BUFFERPOINTER                ; F41D 85 00                    ..
         lda     $09C9                           ; F41F AD C9 09                 ...
         adc     #$01                            ; F422 69 01                    i.
-        sta     $E1                             ; F424 85 E1                    ..
+        sta     $01                             ; F424 85 01                    ..
         ldx     #$00                            ; F426 A2 00                    ..
-LF428:  lda     (CF_BUFFERPOINTER),y            ; F428 B1 E0                    ..
+LF428:  lda     (CF_BUFFERPOINTER),y            ; F428 B1 00                    ..
         sta     BOOTBLOCK,x                     ; F42A 9D EF 09                 ...
         iny                                     ; F42D C8                       .
         inx                                     ; F42E E8                       .
@@ -817,27 +818,27 @@ LF49C:  lda     CF_LBA,y                        ; F49C B9 EB 09                 
         bne     LF49C                           ; F4A7 D0 F3                    ..
 LF4A9:  jsr     CF_READ_SECTOR                  ; F4A9 20 BF 03                  ..
         lda     CF_BUFFER                       ; F4AC AD C8 09                 ...
-        sta     CF_BUFFERPOINTER                ; F4AF 85 E0                    ..
+        sta     CF_BUFFERPOINTER                ; F4AF 85 00                    ..
         lda     $09C9                           ; F4B1 AD C9 09                 ...
-        sta     $E1                             ; F4B4 85 E1                    ..
+        sta     $01                             ; F4B4 85 01                    ..
         bra     LF4CD                           ; F4B6 80 15                    ..
-LF4B8:  lda     CF_BUFFERPOINTER                ; F4B8 A5 E0                    ..
+LF4B8:  lda     CF_BUFFERPOINTER                ; F4B8 A5 00                    ..
         clc                                     ; F4BA 18                       .
         adc     #$20                            ; F4BB 69 20                    i 
-        sta     CF_BUFFERPOINTER                ; F4BD 85 E0                    ..
+        sta     CF_BUFFERPOINTER                ; F4BD 85 00                    ..
         bcc     LF4CD                           ; F4BF 90 0C                    ..
-        lda     $E1                             ; F4C1 A5 E1                    ..
+        lda     $01                             ; F4C1 A5 01                    ..
         cmp     $09C9                           ; F4C3 CD C9 09                 ...
         bne     LF48B                           ; F4C6 D0 C3                    ..
         clc                                     ; F4C8 18                       .
         adc     #$01                            ; F4C9 69 01                    i.
-        sta     $E1                             ; F4CB 85 E1                    ..
+        sta     $01                             ; F4CB 85 01                    ..
 LF4CD:  ldy     #$0B                            ; F4CD A0 0B                    ..
-        lda     (CF_BUFFERPOINTER),y            ; F4CF B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; F4CF B1 00                    ..
         and     #$DE                            ; F4D1 29 DE                    ).
         bne     LF4B8                           ; F4D3 D0 E3                    ..
         dey                                     ; F4D5 88                       .
-LF4D6:  lda     (CF_BUFFERPOINTER),y            ; F4D6 B1 E0                    ..
+LF4D6:  lda     (CF_BUFFERPOINTER),y            ; F4D6 B1 00                    ..
         cmp     FILENAME,y                      ; F4D8 D9 CA 09                 ...
         bne     LF4B8                           ; F4DB D0 DB                    ..
         dey                                     ; F4DD 88                       .
@@ -854,17 +855,17 @@ LF4E2:  lda     #$FF                            ; F4E2 A9 FF                    
 
 ; ----------------------------------------------------------------------------
 LF4F1:  ldy     #$1A                            ; F4F1 A0 1A                    ..
-        lda     (CF_BUFFERPOINTER),y            ; F4F3 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; F4F3 B1 00                    ..
         sta     STARTCLUSTER                    ; F4F5 8D 2B 0A                 .+.
         iny                                     ; F4F8 C8                       .
-        lda     (CF_BUFFERPOINTER),y            ; F4F9 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; F4F9 B1 00                    ..
         sta     $0A2C                           ; F4FB 8D 2C 0A                 .,.
         lda     #$00                            ; F4FE A9 00                    ..
         sta     $0A2D                           ; F500 8D 2D 0A                 .-.
         sta     $0A2E                           ; F503 8D 2E 0A                 ...
         ldx     #$00                            ; F506 A2 00                    ..
         iny                                     ; F508 C8                       .
-LF509:  lda     (CF_BUFFERPOINTER),y            ; F509 B1 E0                    ..
+LF509:  lda     (CF_BUFFERPOINTER),y            ; F509 B1 00                    ..
         sta     FILESIZE,x                      ; F50B 9D 2F 0A                 ./.
         iny                                     ; F50E C8                       .
         inx                                     ; F50F E8                       .
@@ -905,32 +906,32 @@ LF536:  lda     FILESIZE                        ; F536 AD 2F 0A                 
         sta     RESULT                          ; F54B 8D 40 0A                 .@.
         pha                                     ; F54E 48                       H
         lda     #$35                            ; F54F A9 35                    .5
-        sta     M32PTR1                         ; F551 85 E2                    ..
+        sta     M32PTR1                         ; F551 85 02                    ..
         lda     #$0A                            ; F553 A9 0A                    ..
-        sta     $E3                             ; F555 85 E3                    ..
+        sta     $03                             ; F555 85 03                    ..
         lda     #$03                            ; F557 A9 03                    ..
-        sta     M32PTR2                         ; F559 85 E4                    ..
+        sta     M32PTR2                         ; F559 85 04                    ..
         lda     #$0A                            ; F55B A9 0A                    ..
-        sta     $E5                             ; F55D 85 E5                    ..
+        sta     $05                             ; F55D 85 05                    ..
         lda     #$39                            ; F55F A9 39                    .9
-        sta     M32PTR3                         ; F561 85 E6                    ..
+        sta     M32PTR3                         ; F561 85 06                    ..
         lda     #$0A                            ; F563 A9 0A                    ..
-        sta     $E7                             ; F565 85 E7                    ..
+        sta     $07                             ; F565 85 07                    ..
         pla                                     ; F567 68                       h
         jsr     MATH_MUL32                      ; F568 20 CF 08                  ..
         pha                                     ; F56B 48                       H
         lda     #$39                            ; F56C A9 39                    .9
-        sta     M32PTR1                         ; F56E 85 E2                    ..
+        sta     M32PTR1                         ; F56E 85 02                    ..
         lda     #$0A                            ; F570 A9 0A                    ..
-        sta     $E3                             ; F572 85 E3                    ..
+        sta     $03                             ; F572 85 03                    ..
         lda     #$23                            ; F574 A9 23                    .#
-        sta     M32PTR2                         ; F576 85 E4                    ..
+        sta     M32PTR2                         ; F576 85 04                    ..
         lda     #$0A                            ; F578 A9 0A                    ..
-        sta     $E5                             ; F57A 85 E5                    ..
+        sta     $05                             ; F57A 85 05                    ..
         lda     #$39                            ; F57C A9 39                    .9
-        sta     M32PTR3                         ; F57E 85 E6                    ..
+        sta     M32PTR3                         ; F57E 85 06                    ..
         lda     #$0A                            ; F580 A9 0A                    ..
-        sta     $E7                             ; F582 85 E7                    ..
+        sta     $07                             ; F582 85 07                    ..
         pla                                     ; F584 68                       h
         jsr     MATH_ADD32                      ; F585 20 A1 08                  ..
         ldx     SECTORSPERCLUSTER               ; F588 AE 03 0A                 ...
@@ -950,17 +951,17 @@ LF58B:  lda     #$01                            ; F58B A9 01                    
         jsr     CF_READ_SECTOR                  ; F5AC 20 BF 03                  ..
         pha                                     ; F5AF 48                       H
         lda     CF_BUFFER                       ; F5B0 AD C8 09                 ...
-        sta     MOVE_FROM                       ; F5B3 85 EA                    ..
+        sta     MOVE_FROM                       ; F5B3 85 0A                    ..
         lda     $09C9                           ; F5B5 AD C9 09                 ...
-        sta     $EB                             ; F5B8 85 EB                    ..
+        sta     $0B                             ; F5B8 85 0B                    ..
         lda     FILEDEST                        ; F5BA AD 33 0A                 .3.
-        sta     MOVE_TO                         ; F5BD 85 EC                    ..
+        sta     MOVE_TO                         ; F5BD 85 0C                    ..
         lda     $0A34                           ; F5BF AD 34 0A                 .4.
-        sta     $ED                             ; F5C2 85 ED                    ..
+        sta     $0D                             ; F5C2 85 0D                    ..
         lda     #$00                            ; F5C4 A9 00                    ..
-        sta     MOVE_SIZE                       ; F5C6 85 EE                    ..
+        sta     MOVE_SIZE                       ; F5C6 85 0E                    ..
         lda     #$02                            ; F5C8 A9 02                    ..
-        sta     $EF                             ; F5CA 85 EF                    ..
+        sta     $0F                             ; F5CA 85 0F                    ..
         jsr     MOVEDOWN                        ; F5CC 20 A1 09                  ..
         pla                                     ; F5CF 68                       h
         inc     CURRENTSECTOR                   ; F5D0 EE 39 0A                 .9.
@@ -983,36 +984,36 @@ LF5E2:  inc     $0A34                           ; F5E2 EE 34 0A                 
         rol     $0A38                           ; F5FB 2E 38 0A                 .8.
         pha                                     ; F5FE 48                       H
         lda     #$35                            ; F5FF A9 35                    .5
-        sta     M32PTR1                         ; F601 85 E2                    ..
+        sta     M32PTR1                         ; F601 85 02                    ..
         lda     #$0A                            ; F603 A9 0A                    ..
-        sta     $E3                             ; F605 85 E3                    ..
+        sta     $03                             ; F605 85 03                    ..
         lda     #$FF                            ; F607 A9 FF                    ..
-        sta     M32PTR2                         ; F609 85 E4                    ..
+        sta     M32PTR2                         ; F609 85 04                    ..
         lda     #$09                            ; F60B A9 09                    ..
-        sta     $E5                             ; F60D 85 E5                    ..
+        sta     $05                             ; F60D 85 05                    ..
         lda     #$F3                            ; F60F A9 F3                    ..
-        sta     M32PTR3                         ; F611 85 E6                    ..
+        sta     M32PTR3                         ; F611 85 06                    ..
         lda     #$09                            ; F613 A9 09                    ..
-        sta     $E7                             ; F615 85 E7                    ..
+        sta     $07                             ; F615 85 07                    ..
         lda     #$F7                            ; F617 A9 F7                    ..
-        sta     M32PTR4                         ; F619 85 E8                    ..
+        sta     M32PTR4                         ; F619 85 08                    ..
         lda     #$09                            ; F61B A9 09                    ..
-        sta     $E9                             ; F61D 85 E9                    ..
+        sta     $09                             ; F61D 85 09                    ..
         pla                                     ; F61F 68                       h
         jsr     MATH_DIV32                      ; F620 20 24 09                  $.
         pha                                     ; F623 48                       H
         lda     #$F3                            ; F624 A9 F3                    ..
-        sta     M32PTR1                         ; F626 85 E2                    ..
+        sta     M32PTR1                         ; F626 85 02                    ..
         lda     #$09                            ; F628 A9 09                    ..
-        sta     $E3                             ; F62A 85 E3                    ..
+        sta     $03                             ; F62A 85 03                    ..
         lda     #$17                            ; F62C A9 17                    ..
-        sta     M32PTR2                         ; F62E 85 E4                    ..
+        sta     M32PTR2                         ; F62E 85 04                    ..
         lda     #$0A                            ; F630 A9 0A                    ..
-        sta     $E5                             ; F632 85 E5                    ..
+        sta     $05                             ; F632 85 05                    ..
         lda     #$F3                            ; F634 A9 F3                    ..
-        sta     M32PTR3                         ; F636 85 E6                    ..
+        sta     M32PTR3                         ; F636 85 06                    ..
         lda     #$09                            ; F638 A9 09                    ..
-        sta     $E7                             ; F63A 85 E7                    ..
+        sta     $07                             ; F63A 85 07                    ..
         pla                                     ; F63C 68                       h
         jsr     MATH_ADD32                      ; F63D 20 A1 08                  ..
         pha                                     ; F640 48                       H
@@ -1027,18 +1028,18 @@ LF5E2:  inc     $0A34                           ; F5E2 EE 34 0A                 
         pla                                     ; F659 68                       h
         jsr     CF_READ_SECTOR                  ; F65A 20 BF 03                  ..
         lda     CF_BUFFER                       ; F65D AD C8 09                 ...
-        sta     CF_BUFFERPOINTER                ; F660 85 E0                    ..
+        sta     CF_BUFFERPOINTER                ; F660 85 00                    ..
         lda     $09C9                           ; F662 AD C9 09                 ...
-        sta     $E1                             ; F665 85 E1                    ..
-        lda     $E1                             ; F667 A5 E1                    ..
+        sta     $01                             ; F665 85 01                    ..
+        lda     $01                             ; F667 A5 01                    ..
         clc                                     ; F669 18                       .
         adc     $09F8                           ; F66A 6D F8 09                 m..
-        sta     $E1                             ; F66D 85 E1                    ..
+        sta     $01                             ; F66D 85 01                    ..
         ldy     TMP2                            ; F66F AC F7 09                 ...
-        lda     (CF_BUFFERPOINTER),y            ; F672 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; F672 B1 00                    ..
         sta     CURRENTCLUSTER                  ; F674 8D 35 0A                 .5.
         iny                                     ; F677 C8                       .
-        lda     (CF_BUFFERPOINTER),y            ; F678 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; F678 B1 00                    ..
         sta     $0A36                           ; F67A 8D 36 0A                 .6.
         jsr     FAT_VALIDATE_CLUSTER            ; F67D 20 0F 06                  ..
         lda     FAT_STATUS                      ; F680 AD 3F 0A                 .?.
@@ -1063,17 +1064,17 @@ LF692:  pha                                     ; F692 48                       
         jsr     CF_READ_SECTOR                  ; F6AC 20 BF 03                  ..
         pha                                     ; F6AF 48                       H
         lda     CF_BUFFER                       ; F6B0 AD C8 09                 ...
-        sta     MOVE_FROM                       ; F6B3 85 EA                    ..
+        sta     MOVE_FROM                       ; F6B3 85 0A                    ..
         lda     $09C9                           ; F6B5 AD C9 09                 ...
-        sta     $EB                             ; F6B8 85 EB                    ..
+        sta     $0B                             ; F6B8 85 0B                    ..
         lda     FILEDEST                        ; F6BA AD 33 0A                 .3.
-        sta     MOVE_TO                         ; F6BD 85 EC                    ..
+        sta     MOVE_TO                         ; F6BD 85 0C                    ..
         lda     $0A34                           ; F6BF AD 34 0A                 .4.
-        sta     $ED                             ; F6C2 85 ED                    ..
+        sta     $0D                             ; F6C2 85 0D                    ..
         lda     REMAININGBYTES                  ; F6C4 AD 3D 0A                 .=.
-        sta     MOVE_SIZE                       ; F6C7 85 EE                    ..
+        sta     MOVE_SIZE                       ; F6C7 85 0E                    ..
         lda     $0A3E                           ; F6C9 AD 3E 0A                 .>.
-        sta     $EF                             ; F6CC 85 EF                    ..
+        sta     $0F                             ; F6CC 85 0F                    ..
         jsr     MOVEDOWN                        ; F6CE 20 A1 09                  ..
         pla                                     ; F6D1 68                       h
 LF6D2:  lda     #$00                            ; F6D2 A9 00                    ..
@@ -1092,9 +1093,9 @@ LF6D7:  ply                                     ; F6D7 7A                       
         php                                     ; F6E0 08                       .
         ldy     #$00                            ; F6E1 A0 00                    ..
 LF6E3:  plp                                     ; F6E3 28                       (
-        lda     (M32PTR1),y                     ; F6E4 B1 E2                    ..
-        adc     (M32PTR2),y                     ; F6E6 71 E4                    q.
-        sta     (M32PTR3),y                     ; F6E8 91 E6                    ..
+        lda     (M32PTR1),y                     ; F6E4 B1 02                    ..
+        adc     (M32PTR2),y                     ; F6E6 71 04                    q.
+        sta     (M32PTR3),y                     ; F6E8 91 06                    ..
         php                                     ; F6EA 08                       .
         iny                                     ; F6EB C8                       .
         cpy     #$04                            ; F6EC C0 04                    ..
@@ -1111,9 +1112,9 @@ LF6E3:  plp                                     ; F6E3 28                       
         php                                     ; F6F7 08                       .
         ldy     #$00                            ; F6F8 A0 00                    ..
 LF6FA:  plp                                     ; F6FA 28                       (
-        lda     (M32PTR1),y                     ; F6FB B1 E2                    ..
-        sbc     (M32PTR2),y                     ; F6FD F1 E4                    ..
-        sta     (M32PTR3),y                     ; F6FF 91 E6                    ..
+        lda     (M32PTR1),y                     ; F6FB B1 02                    ..
+        sbc     (M32PTR2),y                     ; F6FD F1 04                    ..
+        sta     (M32PTR3),y                     ; F6FF 91 06                    ..
         php                                     ; F701 08                       .
         iny                                     ; F702 C8                       .
         cpy     #$04                            ; F703 C0 04                    ..
@@ -1127,12 +1128,12 @@ LF6FA:  plp                                     ; F6FA 28                       
         pha                                     ; F70B 48                       H
         phy                                     ; F70C 5A                       Z
         ldy     #$00                            ; F70D A0 00                    ..
-LF70F:  lda     (M32PTR1),y                     ; F70F B1 E2                    ..
+LF70F:  lda     (M32PTR1),y                     ; F70F B1 02                    ..
         sta     RESULT,y                        ; F711 99 40 0A                 .@.
-        lda     (M32PTR2),y                     ; F714 B1 E4                    ..
+        lda     (M32PTR2),y                     ; F714 B1 04                    ..
         sta     DIVISOR,y                       ; F716 99 44 0A                 .D.
         lda     #$00                            ; F719 A9 00                    ..
-        sta     (M32PTR3),y                     ; F71B 91 E6                    ..
+        sta     (M32PTR3),y                     ; F71B 91 06                    ..
         iny                                     ; F71D C8                       .
         cpy     #$04                            ; F71E C0 04                    ..
         bne     LF70F                           ; F720 D0 ED                    ..
@@ -1145,9 +1146,9 @@ LF722:  lsr     $0A47                           ; F722 4E 47 0A                 
         clc                                     ; F732 18                       .
         php                                     ; F733 08                       .
 LF734:  plp                                     ; F734 28                       (
-        lda     (M32PTR3),y                     ; F735 B1 E6                    ..
+        lda     (M32PTR3),y                     ; F735 B1 06                    ..
         adc     RESULT,y                        ; F737 79 40 0A                 y@.
-        sta     (M32PTR3),y                     ; F73A 91 E6                    ..
+        sta     (M32PTR3),y                     ; F73A 91 06                    ..
         php                                     ; F73C 08                       .
         iny                                     ; F73D C8                       .
         cpy     #$04                            ; F73E C0 04                    ..
@@ -1171,9 +1172,9 @@ LF743:  asl     RESULT                          ; F743 0E 40 0A                 
         phx                                     ; F761 DA                       .
         phy                                     ; F762 5A                       Z
         ldy     #$00                            ; F763 A0 00                    ..
-LF765:  lda     (M32PTR1),y                     ; F765 B1 E2                    ..
+LF765:  lda     (M32PTR1),y                     ; F765 B1 02                    ..
         sta     RESULT,y                        ; F767 99 40 0A                 .@.
-        lda     (M32PTR2),y                     ; F76A B1 E4                    ..
+        lda     (M32PTR2),y                     ; F76A B1 04                    ..
         sta     DIVISOR,y                       ; F76C 99 44 0A                 .D.
         lda     #$00                            ; F76F A9 00                    ..
         sta     REMAINDER,y                     ; F771 99 48 0A                 .H.
@@ -1215,9 +1216,9 @@ LF7C5:  dex                                     ; F7C5 CA                       
         bne     LF77B                           ; F7C6 D0 B3                    ..
         ldy     #$00                            ; F7C8 A0 00                    ..
 LF7CA:  lda     RESULT,y                        ; F7CA B9 40 0A                 .@.
-        sta     (M32PTR3),y                     ; F7CD 91 E6                    ..
+        sta     (M32PTR3),y                     ; F7CD 91 06                    ..
         lda     REMAINDER,y                     ; F7CF B9 48 0A                 .H.
-        sta     (M32PTR4),y                     ; F7D2 91 E8                    ..
+        sta     (M32PTR4),y                     ; F7D2 91 08                    ..
         iny                                     ; F7D4 C8                       .
         cpy     #$04                            ; F7D5 C0 04                    ..
         bne     LF7CA                           ; F7D7 D0 F1                    ..
@@ -1231,20 +1232,20 @@ LF7CA:  lda     RESULT,y                        ; F7CA B9 40 0A                 
         phx                                     ; F7DE DA                       .
         phy                                     ; F7DF 5A                       Z
         ldy     #$00                            ; F7E0 A0 00                    ..
-        ldx     $EF                             ; F7E2 A6 EF                    ..
+        ldx     $0F                             ; F7E2 A6 0F                    ..
         beq     LF7F4                           ; F7E4 F0 0E                    ..
-LF7E6:  lda     (MOVE_FROM),y                   ; F7E6 B1 EA                    ..
-        sta     (MOVE_TO),y                     ; F7E8 91 EC                    ..
+LF7E6:  lda     (MOVE_FROM),y                   ; F7E6 B1 0A                    ..
+        sta     (MOVE_TO),y                     ; F7E8 91 0C                    ..
         iny                                     ; F7EA C8                       .
         bne     LF7E6                           ; F7EB D0 F9                    ..
-        inc     $EB                             ; F7ED E6 EB                    ..
-        inc     $ED                             ; F7EF E6 ED                    ..
+        inc     $0B                             ; F7ED E6 0B                    ..
+        inc     $0D                             ; F7EF E6 0D                    ..
         dex                                     ; F7F1 CA                       .
         bne     LF7E6                           ; F7F2 D0 F2                    ..
-LF7F4:  ldx     MOVE_SIZE                       ; F7F4 A6 EE                    ..
+LF7F4:  ldx     MOVE_SIZE                       ; F7F4 A6 0E                    ..
         beq     LF800                           ; F7F6 F0 08                    ..
-LF7F8:  lda     (MOVE_FROM),y                   ; F7F8 B1 EA                    ..
-        sta     (MOVE_TO),y                     ; F7FA 91 EC                    ..
+LF7F8:  lda     (MOVE_FROM),y                   ; F7F8 B1 0A                    ..
+        sta     (MOVE_TO),y                     ; F7FA 91 0C                    ..
         iny                                     ; F7FC C8                       .
         dex                                     ; F7FD CA                       .
         bne     LF7F8                           ; F7FE D0 F8                    ..
@@ -1296,12 +1297,26 @@ LF864:  .byte   $FF                             ; F864 FF                       
 LF878:  .byte   $FF                             ; F878 FF                       .
 LF879:  .byte   $FF                             ; F879 FF                       .
         .byte   $FF                             ; F87A FF                       .
+LFFEF:  .byte   $FF                             ; FFEF FF                       .
+
+.segment        "INFO": absolute
+
+        bbr2    $CA,L0047                       ; FFF0 2F CA 54                 /.T
+        .byte   $5B                             ; FFF3 5B                       [
+        bpl     LFFF9                           ; FFF4 10 03                    ..
+
+; End of "INFO" segment
+; ----------------------------------------------------------------------------
+.code
+
+        .byte   $FF                             ; FFF6 FF                       .
+        .byte   $FF                             ; FFF7 FF                       .
 LFFF8:  .byte   $FF                             ; FFF8 FF                       .
-        .byte   $FF                             ; FFF9 FF                       .
+LFFF9:  .byte   $FF                             ; FFF9 FF                       .
 
 .segment        "VECTORS": absolute
 
-        bit     $02,x                           ; FFFA 3C 02 00                 <..
+        bit     M32PTR1,x                       ; FFFA 3C 02 00                 <..
         beq     L003B                           ; FFFD F0 3C                    .<
         .byte   $02                             ; FFFF 02                       .
 
@@ -1310,7 +1325,7 @@ LFFF8:  .byte   $FF                             ; FFF8 FF                       
 .code
 
 ; da65 V2.17 - Git N/A
-; Created:    2018-07-22 00:06:50
+; Created:    2018-07-22 12:17:42
 ; Input file: /tmp/debuginfo/DATA.out
 ; Page:       1
 
@@ -1318,14 +1333,14 @@ LFFF8:  .byte   $FF                             ; FFF8 FF                       
         .setcpu "65C02"
 
 ; ----------------------------------------------------------------------------
-CF_BUFFERPOINTER:= $00E0
-M32PTR1         := $00E2
-M32PTR2         := $00E4
-M32PTR3         := $00E6
-M32PTR4         := $00E8
-MOVE_FROM       := $00EA
-MOVE_TO         := $00EC
-MOVE_SIZE       := $00EE
+CF_BUFFERPOINTER:= $0000
+M32PTR1         := $0002
+M32PTR2         := $0004
+M32PTR3         := $0006
+M32PTR4         := $0008
+MOVE_FROM       := $000A
+MOVE_TO         := $000C
+MOVE_SIZE       := $000E
 IRQ0            := $0201
 IRQ1            := $0205
 IRQ2            := $0209
@@ -1481,7 +1496,7 @@ S_AUTOEXECBIN:
         eor     #$4E                            ; 09E8 49 4E                    IN
         brk                                     ; 09EA 00                       .
 ; da65 V2.17 - Git N/A
-; Created:    2018-07-22 00:06:50
+; Created:    2018-07-22 12:17:42
 ; Input file: /tmp/debuginfo/LOWCODE.out
 ; Page:       1
 
@@ -1489,14 +1504,14 @@ S_AUTOEXECBIN:
         .setcpu "65C02"
 
 ; ----------------------------------------------------------------------------
-CF_BUFFERPOINTER:= $00E0
-M32PTR1         := $00E2
-M32PTR2         := $00E4
-M32PTR3         := $00E6
-M32PTR4         := $00E8
-MOVE_FROM       := $00EA
-MOVE_TO         := $00EC
-MOVE_SIZE       := $00EE
+CF_BUFFERPOINTER:= $0000
+M32PTR1         := $0002
+M32PTR2         := $0004
+M32PTR3         := $0006
+M32PTR4         := $0008
+MOVE_FROM       := $000A
+MOVE_TO         := $000C
+MOVE_SIZE       := $000E
 IRQ0            := $0201
 IRQ1            := $0205
 IRQ2            := $0209
@@ -1565,9 +1580,9 @@ L4              := $F118
 ; ----------------------------------------------------------------------------
 CF_INIT:pha                                     ; 0300 48                       H
         lda     CF_BUFFER                       ; 0301 AD C8 09                 ...
-        sta     CF_BUFFERPOINTER                ; 0304 85 E0                    ..
+        sta     CF_BUFFERPOINTER                ; 0304 85 00                    ..
         lda     $09C9                           ; 0306 AD C9 09                 ...
-        sta     $E1                             ; 0309 85 E1                    ..
+        sta     $01                             ; 0309 85 01                    ..
         lda     #$00                            ; 030B A9 00                    ..
         sta     CF_LBA                          ; 030D 8D EB 09                 ...
         sta     $09EC                           ; 0310 8D EC 09                 ...
@@ -1643,17 +1658,17 @@ RD_CMD: jsr     LOOP_BUSY                       ; 0386 20 3E 03                 
         and     #$01                            ; 039C 29 01                    ).
         bne     RD_CMD                          ; 039E D0 E6                    ..
         lda     CF_BUFFER                       ; 03A0 AD C8 09                 ...
-        sta     CF_BUFFERPOINTER                ; 03A3 85 E0                    ..
+        sta     CF_BUFFERPOINTER                ; 03A3 85 00                    ..
         lda     $09C9                           ; 03A5 AD C9 09                 ...
-        sta     $E1                             ; 03A8 85 E1                    ..
+        sta     $01                             ; 03A8 85 01                    ..
         ldy     #$00                            ; 03AA A0 00                    ..
         ldx     #$02                            ; 03AC A2 02                    ..
 RD_SECT:jsr     LOOP_DAT_RDY                    ; 03AE 20 50 03                  P.
         lda     CFDATA                          ; 03B1 AD 00 11                 ...
-        sta     (CF_BUFFERPOINTER),y            ; 03B4 91 E0                    ..
+        sta     (CF_BUFFERPOINTER),y            ; 03B4 91 00                    ..
         iny                                     ; 03B6 C8                       .
         bne     RD_SECT                         ; 03B7 D0 F5                    ..
-        inc     $E1                             ; 03B9 E6 E1                    ..
+        inc     $01                             ; 03B9 E6 01                    ..
         dex                                     ; 03BB CA                       .
         bne     RD_SECT                         ; 03BC D0 F0                    ..
         rts                                     ; 03BE 60                       `
@@ -1697,82 +1712,82 @@ FAT_INIT_BEGIN:
         pla                                     ; 03F4 68                       h
         jsr     CF_READ_SECTOR                  ; 03F5 20 BF 03                  ..
         lda     CF_BUFFER                       ; 03F8 AD C8 09                 ...
-        sta     CF_BUFFERPOINTER                ; 03FB 85 E0                    ..
+        sta     CF_BUFFERPOINTER                ; 03FB 85 00                    ..
         lda     $09C9                           ; 03FD AD C9 09                 ...
-        sta     $E1                             ; 0400 85 E1                    ..
+        sta     $01                             ; 0400 85 01                    ..
         ldy     #$0B                            ; 0402 A0 0B                    ..
-        lda     (CF_BUFFERPOINTER),y            ; 0404 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; 0404 B1 00                    ..
         sta     BYTESPERSECTOR                  ; 0406 8D FF 09                 ...
         iny                                     ; 0409 C8                       .
-        lda     (CF_BUFFERPOINTER),y            ; 040A B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; 040A B1 00                    ..
         sta     $0A00                           ; 040C 8D 00 0A                 ...
         iny                                     ; 040F C8                       .
-        lda     (CF_BUFFERPOINTER),y            ; 0410 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; 0410 B1 00                    ..
         sta     SECTORSPERCLUSTER               ; 0412 8D 03 0A                 ...
         iny                                     ; 0415 C8                       .
-        lda     (CF_BUFFERPOINTER),y            ; 0416 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; 0416 B1 00                    ..
         sta     RESERVEDSECTORS                 ; 0418 8D 07 0A                 ...
         iny                                     ; 041B C8                       .
-        lda     (CF_BUFFERPOINTER),y            ; 041C B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; 041C B1 00                    ..
         sta     $0A08                           ; 041E 8D 08 0A                 ...
         iny                                     ; 0421 C8                       .
-        lda     (CF_BUFFERPOINTER),y            ; 0422 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; 0422 B1 00                    ..
         sta     FATCOPIES                       ; 0424 8D 0B 0A                 ...
         iny                                     ; 0427 C8                       .
-        lda     (CF_BUFFERPOINTER),y            ; 0428 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; 0428 B1 00                    ..
         sta     ROOTENTRIES                     ; 042A 8D 0F 0A                 ...
         iny                                     ; 042D C8                       .
-        lda     (CF_BUFFERPOINTER),y            ; 042E B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; 042E B1 00                    ..
         sta     $0A10                           ; 0430 8D 10 0A                 ...
         ldy     #$16                            ; 0433 A0 16                    ..
-        lda     (CF_BUFFERPOINTER),y            ; 0435 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; 0435 B1 00                    ..
         sta     SECTORSPERFAT                   ; 0437 8D 13 0A                 ...
         iny                                     ; 043A C8                       .
-        lda     (CF_BUFFERPOINTER),y            ; 043B B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; 043B B1 00                    ..
         sta     $0A14                           ; 043D 8D 14 0A                 ...
         pha                                     ; 0440 48                       H
         lda     #$EF                            ; 0441 A9 EF                    ..
-        sta     M32PTR1                         ; 0443 85 E2                    ..
+        sta     M32PTR1                         ; 0443 85 02                    ..
         lda     #$09                            ; 0445 A9 09                    ..
-        sta     $E3                             ; 0447 85 E3                    ..
+        sta     $03                             ; 0447 85 03                    ..
         lda     #$07                            ; 0449 A9 07                    ..
-        sta     M32PTR2                         ; 044B 85 E4                    ..
+        sta     M32PTR2                         ; 044B 85 04                    ..
         lda     #$0A                            ; 044D A9 0A                    ..
-        sta     $E5                             ; 044F 85 E5                    ..
+        sta     $05                             ; 044F 85 05                    ..
         lda     #$17                            ; 0451 A9 17                    ..
-        sta     M32PTR3                         ; 0453 85 E6                    ..
+        sta     M32PTR3                         ; 0453 85 06                    ..
         lda     #$0A                            ; 0455 A9 0A                    ..
-        sta     $E7                             ; 0457 85 E7                    ..
+        sta     $07                             ; 0457 85 07                    ..
         pla                                     ; 0459 68                       h
         jsr     MATH_ADD32                      ; 045A 20 A1 08                  ..
         pha                                     ; 045D 48                       H
         lda     #$13                            ; 045E A9 13                    ..
-        sta     M32PTR1                         ; 0460 85 E2                    ..
+        sta     M32PTR1                         ; 0460 85 02                    ..
         lda     #$0A                            ; 0462 A9 0A                    ..
-        sta     $E3                             ; 0464 85 E3                    ..
+        sta     $03                             ; 0464 85 03                    ..
         lda     #$0B                            ; 0466 A9 0B                    ..
-        sta     M32PTR2                         ; 0468 85 E4                    ..
+        sta     M32PTR2                         ; 0468 85 04                    ..
         lda     #$0A                            ; 046A A9 0A                    ..
-        sta     $E5                             ; 046C 85 E5                    ..
+        sta     $05                             ; 046C 85 05                    ..
         lda     #$1B                            ; 046E A9 1B                    ..
-        sta     M32PTR3                         ; 0470 85 E6                    ..
+        sta     M32PTR3                         ; 0470 85 06                    ..
         lda     #$0A                            ; 0472 A9 0A                    ..
-        sta     $E7                             ; 0474 85 E7                    ..
+        sta     $07                             ; 0474 85 07                    ..
         pla                                     ; 0476 68                       h
         jsr     MATH_MUL32                      ; 0477 20 CF 08                  ..
         pha                                     ; 047A 48                       H
         lda     #$17                            ; 047B A9 17                    ..
-        sta     M32PTR1                         ; 047D 85 E2                    ..
+        sta     M32PTR1                         ; 047D 85 02                    ..
         lda     #$0A                            ; 047F A9 0A                    ..
-        sta     $E3                             ; 0481 85 E3                    ..
+        sta     $03                             ; 0481 85 03                    ..
         lda     #$1B                            ; 0483 A9 1B                    ..
-        sta     M32PTR2                         ; 0485 85 E4                    ..
+        sta     M32PTR2                         ; 0485 85 04                    ..
         lda     #$0A                            ; 0487 A9 0A                    ..
-        sta     $E5                             ; 0489 85 E5                    ..
+        sta     $05                             ; 0489 85 05                    ..
         lda     #$1B                            ; 048B A9 1B                    ..
-        sta     M32PTR3                         ; 048D 85 E6                    ..
+        sta     M32PTR3                         ; 048D 85 06                    ..
         lda     #$0A                            ; 048F A9 0A                    ..
-        sta     $E7                             ; 0491 85 E7                    ..
+        sta     $07                             ; 0491 85 07                    ..
         pla                                     ; 0493 68                       h
         jsr     MATH_ADD32                      ; 0494 20 A1 08                  ..
         lda     #$20                            ; 0497 A9 20                    . 
@@ -1785,98 +1800,98 @@ FAT_INIT_BEGIN:
         sta     $09FA                           ; 04A8 8D FA 09                 ...
         pha                                     ; 04AB 48                       H
         lda     #$0F                            ; 04AC A9 0F                    ..
-        sta     M32PTR1                         ; 04AE 85 E2                    ..
+        sta     M32PTR1                         ; 04AE 85 02                    ..
         lda     #$0A                            ; 04B0 A9 0A                    ..
-        sta     $E3                             ; 04B2 85 E3                    ..
+        sta     $03                             ; 04B2 85 03                    ..
         lda     #$F7                            ; 04B4 A9 F7                    ..
-        sta     M32PTR2                         ; 04B6 85 E4                    ..
+        sta     M32PTR2                         ; 04B6 85 04                    ..
         lda     #$09                            ; 04B8 A9 09                    ..
-        sta     $E5                             ; 04BA 85 E5                    ..
+        sta     $05                             ; 04BA 85 05                    ..
         lda     #$1F                            ; 04BC A9 1F                    ..
-        sta     M32PTR3                         ; 04BE 85 E6                    ..
+        sta     M32PTR3                         ; 04BE 85 06                    ..
         lda     #$0A                            ; 04C0 A9 0A                    ..
-        sta     $E7                             ; 04C2 85 E7                    ..
+        sta     $07                             ; 04C2 85 07                    ..
         pla                                     ; 04C4 68                       h
         jsr     MATH_MUL32                      ; 04C5 20 CF 08                  ..
         pha                                     ; 04C8 48                       H
         lda     #$1F                            ; 04C9 A9 1F                    ..
-        sta     M32PTR1                         ; 04CB 85 E2                    ..
+        sta     M32PTR1                         ; 04CB 85 02                    ..
         lda     #$0A                            ; 04CD A9 0A                    ..
-        sta     $E3                             ; 04CF 85 E3                    ..
+        sta     $03                             ; 04CF 85 03                    ..
         lda     #$FF                            ; 04D1 A9 FF                    ..
-        sta     M32PTR2                         ; 04D3 85 E4                    ..
+        sta     M32PTR2                         ; 04D3 85 04                    ..
         lda     #$09                            ; 04D5 A9 09                    ..
-        sta     $E5                             ; 04D7 85 E5                    ..
+        sta     $05                             ; 04D7 85 05                    ..
         lda     #$1F                            ; 04D9 A9 1F                    ..
-        sta     M32PTR3                         ; 04DB 85 E6                    ..
+        sta     M32PTR3                         ; 04DB 85 06                    ..
         lda     #$0A                            ; 04DD A9 0A                    ..
-        sta     $E7                             ; 04DF 85 E7                    ..
+        sta     $07                             ; 04DF 85 07                    ..
         lda     #$FB                            ; 04E1 A9 FB                    ..
-        sta     M32PTR4                         ; 04E3 85 E8                    ..
+        sta     M32PTR4                         ; 04E3 85 08                    ..
         lda     #$09                            ; 04E5 A9 09                    ..
-        sta     $E9                             ; 04E7 85 E9                    ..
+        sta     $09                             ; 04E7 85 09                    ..
         pla                                     ; 04E9 68                       h
         jsr     MATH_DIV32                      ; 04EA 20 24 09                  $.
         lda     #$02                            ; 04ED A9 02                    ..
         sta     TMP2                            ; 04EF 8D F7 09                 ...
         pha                                     ; 04F2 48                       H
         lda     #$03                            ; 04F3 A9 03                    ..
-        sta     M32PTR1                         ; 04F5 85 E2                    ..
+        sta     M32PTR1                         ; 04F5 85 02                    ..
         lda     #$0A                            ; 04F7 A9 0A                    ..
-        sta     $E3                             ; 04F9 85 E3                    ..
+        sta     $03                             ; 04F9 85 03                    ..
         lda     #$F7                            ; 04FB A9 F7                    ..
-        sta     M32PTR2                         ; 04FD 85 E4                    ..
+        sta     M32PTR2                         ; 04FD 85 04                    ..
         lda     #$09                            ; 04FF A9 09                    ..
-        sta     $E5                             ; 0501 85 E5                    ..
+        sta     $05                             ; 0501 85 05                    ..
         lda     #$F3                            ; 0503 A9 F3                    ..
-        sta     M32PTR3                         ; 0505 85 E6                    ..
+        sta     M32PTR3                         ; 0505 85 06                    ..
         lda     #$09                            ; 0507 A9 09                    ..
-        sta     $E7                             ; 0509 85 E7                    ..
+        sta     $07                             ; 0509 85 07                    ..
         pla                                     ; 050B 68                       h
         jsr     MATH_MUL32                      ; 050C 20 CF 08                  ..
         pha                                     ; 050F 48                       H
         lda     #$1B                            ; 0510 A9 1B                    ..
-        sta     M32PTR1                         ; 0512 85 E2                    ..
+        sta     M32PTR1                         ; 0512 85 02                    ..
         lda     #$0A                            ; 0514 A9 0A                    ..
-        sta     $E3                             ; 0516 85 E3                    ..
+        sta     $03                             ; 0516 85 03                    ..
         lda     #$1F                            ; 0518 A9 1F                    ..
-        sta     M32PTR2                         ; 051A 85 E4                    ..
+        sta     M32PTR2                         ; 051A 85 04                    ..
         lda     #$0A                            ; 051C A9 0A                    ..
-        sta     $E5                             ; 051E 85 E5                    ..
+        sta     $05                             ; 051E 85 05                    ..
         lda     #$23                            ; 0520 A9 23                    .#
-        sta     M32PTR3                         ; 0522 85 E6                    ..
+        sta     M32PTR3                         ; 0522 85 06                    ..
         lda     #$0A                            ; 0524 A9 0A                    ..
-        sta     $E7                             ; 0526 85 E7                    ..
+        sta     $07                             ; 0526 85 07                    ..
         pla                                     ; 0528 68                       h
         jsr     MATH_ADD32                      ; 0529 20 A1 08                  ..
         pha                                     ; 052C 48                       H
         lda     #$23                            ; 052D A9 23                    .#
-        sta     M32PTR1                         ; 052F 85 E2                    ..
+        sta     M32PTR1                         ; 052F 85 02                    ..
         lda     #$0A                            ; 0531 A9 0A                    ..
-        sta     $E3                             ; 0533 85 E3                    ..
+        sta     $03                             ; 0533 85 03                    ..
         lda     #$F3                            ; 0535 A9 F3                    ..
-        sta     M32PTR2                         ; 0537 85 E4                    ..
+        sta     M32PTR2                         ; 0537 85 04                    ..
         lda     #$09                            ; 0539 A9 09                    ..
-        sta     $E5                             ; 053B 85 E5                    ..
+        sta     $05                             ; 053B 85 05                    ..
         lda     #$23                            ; 053D A9 23                    .#
-        sta     M32PTR3                         ; 053F 85 E6                    ..
+        sta     M32PTR3                         ; 053F 85 06                    ..
         lda     #$0A                            ; 0541 A9 0A                    ..
-        sta     $E7                             ; 0543 85 E7                    ..
+        sta     $07                             ; 0543 85 07                    ..
         pla                                     ; 0545 68                       h
         jsr     MATH_SUB32                      ; 0546 20 B8 08                  ..
         pha                                     ; 0549 48                       H
         lda     #$03                            ; 054A A9 03                    ..
-        sta     M32PTR1                         ; 054C 85 E2                    ..
+        sta     M32PTR1                         ; 054C 85 02                    ..
         lda     #$0A                            ; 054E A9 0A                    ..
-        sta     $E3                             ; 0550 85 E3                    ..
+        sta     $03                             ; 0550 85 03                    ..
         lda     #$FF                            ; 0552 A9 FF                    ..
-        sta     M32PTR2                         ; 0554 85 E4                    ..
+        sta     M32PTR2                         ; 0554 85 04                    ..
         lda     #$09                            ; 0556 A9 09                    ..
-        sta     $E5                             ; 0558 85 E5                    ..
+        sta     $05                             ; 0558 85 05                    ..
         lda     #$27                            ; 055A A9 27                    .'
-        sta     M32PTR3                         ; 055C 85 E6                    ..
+        sta     M32PTR3                         ; 055C 85 06                    ..
         lda     #$0A                            ; 055E A9 0A                    ..
-        sta     $E7                             ; 0560 85 E7                    ..
+        sta     $07                             ; 0560 85 07                    ..
         pla                                     ; 0562 68                       h
         jsr     MATH_MUL32                      ; 0563 20 CF 08                  ..
         lda     #$FF                            ; 0566 A9 FF                    ..
@@ -1907,13 +1922,13 @@ CHECK_FAT:
         lda     CF_BUFFER                       ; 0592 AD C8 09                 ...
         clc                                     ; 0595 18                       .
         adc     #$36                            ; 0596 69 36                    i6
-        sta     CF_BUFFERPOINTER                ; 0598 85 E0                    ..
+        sta     CF_BUFFERPOINTER                ; 0598 85 00                    ..
         lda     $09C9                           ; 059A AD C9 09                 ...
         adc     #$00                            ; 059D 69 00                    i.
-        sta     $E1                             ; 059F 85 E1                    ..
+        sta     $01                             ; 059F 85 01                    ..
         ldy     #$07                            ; 05A1 A0 07                    ..
 CHECK_FAT_LOOP:
-        lda     (CF_BUFFERPOINTER),y            ; 05A3 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; 05A3 B1 00                    ..
         cmp     S_FAT16,y                       ; 05A5 D9 D6 09                 ...
         bne     NO_FAT                          ; 05A8 D0 06                    ..
         dey                                     ; 05AA 88                       .
@@ -1926,12 +1941,12 @@ NO_FAT: ldx     #$04                            ; 05B0 A2 04                    
         lda     CF_BUFFER                       ; 05B4 AD C8 09                 ...
         clc                                     ; 05B7 18                       .
         adc     #$C2                            ; 05B8 69 C2                    i.
-        sta     CF_BUFFERPOINTER                ; 05BA 85 E0                    ..
+        sta     CF_BUFFERPOINTER                ; 05BA 85 00                    ..
         lda     $09C9                           ; 05BC AD C9 09                 ...
         adc     #$01                            ; 05BF 69 01                    i.
-        sta     $E1                             ; 05C1 85 E1                    ..
+        sta     $01                             ; 05C1 85 01                    ..
 CHECK_MBR:
-        lda     (CF_BUFFERPOINTER),y            ; 05C3 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; 05C3 B1 00                    ..
         cmp     #$04                            ; 05C5 C9 04                    ..
         beq     FOUND_FAT_MBR                   ; 05C7 F0 12                    ..
         cmp     #$06                            ; 05C9 C9 06                    ..
@@ -1951,13 +1966,13 @@ FOUND_FAT_MBR:
         lda     CF_BUFFER                       ; 05DB AD C8 09                 ...
         clc                                     ; 05DE 18                       .
         adc     #$C6                            ; 05DF 69 C6                    i.
-        sta     CF_BUFFERPOINTER                ; 05E1 85 E0                    ..
+        sta     CF_BUFFERPOINTER                ; 05E1 85 00                    ..
         lda     $09C9                           ; 05E3 AD C9 09                 ...
         adc     #$01                            ; 05E6 69 01                    i.
-        sta     $E1                             ; 05E8 85 E1                    ..
+        sta     $01                             ; 05E8 85 01                    ..
         ldx     #$00                            ; 05EA A2 00                    ..
 FOUND_FAT_MBR_LOOP:
-        lda     (CF_BUFFERPOINTER),y            ; 05EC B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; 05EC B1 00                    ..
         sta     BOOTBLOCK,x                     ; 05EE 9D EF 09                 ...
         iny                                     ; 05F1 C8                       .
         inx                                     ; 05F2 E8                       .
@@ -2036,30 +2051,30 @@ L0:     lda     CF_LBA,y                        ; 0660 B9 EB 09                 
 SECTORLOOP:
         jsr     CF_READ_SECTOR                  ; 066D 20 BF 03                  ..
         lda     CF_BUFFER                       ; 0670 AD C8 09                 ...
-        sta     CF_BUFFERPOINTER                ; 0673 85 E0                    ..
+        sta     CF_BUFFERPOINTER                ; 0673 85 00                    ..
         lda     $09C9                           ; 0675 AD C9 09                 ...
-        sta     $E1                             ; 0678 85 E1                    ..
+        sta     $01                             ; 0678 85 01                    ..
         bra     READENTRY                       ; 067A 80 15                    ..
 NEXTENTRY:
-        lda     CF_BUFFERPOINTER                ; 067C A5 E0                    ..
+        lda     CF_BUFFERPOINTER                ; 067C A5 00                    ..
         clc                                     ; 067E 18                       .
         adc     #$20                            ; 067F 69 20                    i 
-        sta     CF_BUFFERPOINTER                ; 0681 85 E0                    ..
+        sta     CF_BUFFERPOINTER                ; 0681 85 00                    ..
         bcc     READENTRY                       ; 0683 90 0C                    ..
-        lda     $E1                             ; 0685 A5 E1                    ..
+        lda     $01                             ; 0685 A5 01                    ..
         cmp     $09C9                           ; 0687 CD C9 09                 ...
         bne     NEXTSECTOR                      ; 068A D0 C3                    ..
         clc                                     ; 068C 18                       .
         adc     #$01                            ; 068D 69 01                    i.
-        sta     $E1                             ; 068F 85 E1                    ..
+        sta     $01                             ; 068F 85 01                    ..
 READENTRY:
         ldy     #$0B                            ; 0691 A0 0B                    ..
-        lda     (CF_BUFFERPOINTER),y            ; 0693 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; 0693 B1 00                    ..
         and     #$DE                            ; 0695 29 DE                    ).
         bne     NEXTENTRY                       ; 0697 D0 E3                    ..
         dey                                     ; 0699 88                       .
 FILENAME_COMPARE:
-        lda     (CF_BUFFERPOINTER),y            ; 069A B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; 069A B1 00                    ..
         cmp     FILENAME,y                      ; 069C D9 CA 09                 ...
         bne     NEXTENTRY                       ; 069F D0 DB                    ..
         dey                                     ; 06A1 88                       .
@@ -2078,17 +2093,17 @@ NOT_FOUND:
 ; ----------------------------------------------------------------------------
 FOUND_FILE:
         ldy     #$1A                            ; 06B5 A0 1A                    ..
-        lda     (CF_BUFFERPOINTER),y            ; 06B7 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; 06B7 B1 00                    ..
         sta     STARTCLUSTER                    ; 06B9 8D 2B 0A                 .+.
         iny                                     ; 06BC C8                       .
-        lda     (CF_BUFFERPOINTER),y            ; 06BD B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; 06BD B1 00                    ..
         sta     $0A2C                           ; 06BF 8D 2C 0A                 .,.
         lda     #$00                            ; 06C2 A9 00                    ..
         sta     $0A2D                           ; 06C4 8D 2D 0A                 .-.
         sta     $0A2E                           ; 06C7 8D 2E 0A                 ...
         ldx     #$00                            ; 06CA A2 00                    ..
         iny                                     ; 06CC C8                       .
-L1:     lda     (CF_BUFFERPOINTER),y            ; 06CD B1 E0                    ..
+L1:     lda     (CF_BUFFERPOINTER),y            ; 06CD B1 00                    ..
         sta     FILESIZE,x                      ; 06CF 9D 2F 0A                 ./.
         iny                                     ; 06D2 C8                       .
         inx                                     ; 06D3 E8                       .
@@ -2132,32 +2147,32 @@ VALID_START:
         sta     RESULT                          ; 070F 8D 40 0A                 .@.
 L0:     pha                                     ; 0712 48                       H
         lda     #$35                            ; 0713 A9 35                    .5
-        sta     M32PTR1                         ; 0715 85 E2                    ..
+        sta     M32PTR1                         ; 0715 85 02                    ..
         lda     #$0A                            ; 0717 A9 0A                    ..
-        sta     $E3                             ; 0719 85 E3                    ..
+        sta     $03                             ; 0719 85 03                    ..
         lda     #$03                            ; 071B A9 03                    ..
-        sta     M32PTR2                         ; 071D 85 E4                    ..
+        sta     M32PTR2                         ; 071D 85 04                    ..
         lda     #$0A                            ; 071F A9 0A                    ..
-        sta     $E5                             ; 0721 85 E5                    ..
+        sta     $05                             ; 0721 85 05                    ..
         lda     #$39                            ; 0723 A9 39                    .9
-        sta     M32PTR3                         ; 0725 85 E6                    ..
+        sta     M32PTR3                         ; 0725 85 06                    ..
         lda     #$0A                            ; 0727 A9 0A                    ..
-        sta     $E7                             ; 0729 85 E7                    ..
+        sta     $07                             ; 0729 85 07                    ..
         pla                                     ; 072B 68                       h
         jsr     MATH_MUL32                      ; 072C 20 CF 08                  ..
         pha                                     ; 072F 48                       H
         lda     #$39                            ; 0730 A9 39                    .9
-        sta     M32PTR1                         ; 0732 85 E2                    ..
+        sta     M32PTR1                         ; 0732 85 02                    ..
         lda     #$0A                            ; 0734 A9 0A                    ..
-        sta     $E3                             ; 0736 85 E3                    ..
+        sta     $03                             ; 0736 85 03                    ..
         lda     #$23                            ; 0738 A9 23                    .#
-        sta     M32PTR2                         ; 073A 85 E4                    ..
+        sta     M32PTR2                         ; 073A 85 04                    ..
         lda     #$0A                            ; 073C A9 0A                    ..
-        sta     $E5                             ; 073E 85 E5                    ..
+        sta     $05                             ; 073E 85 05                    ..
         lda     #$39                            ; 0740 A9 39                    .9
-        sta     M32PTR3                         ; 0742 85 E6                    ..
+        sta     M32PTR3                         ; 0742 85 06                    ..
         lda     #$0A                            ; 0744 A9 0A                    ..
-        sta     $E7                             ; 0746 85 E7                    ..
+        sta     $07                             ; 0746 85 07                    ..
         pla                                     ; 0748 68                       h
         jsr     MATH_ADD32                      ; 0749 20 A1 08                  ..
         ldx     SECTORSPERCLUSTER               ; 074C AE 03 0A                 ...
@@ -2177,17 +2192,17 @@ L1:     lda     #$01                            ; 074F A9 01                    
         jsr     CF_READ_SECTOR                  ; 0770 20 BF 03                  ..
         pha                                     ; 0773 48                       H
         lda     CF_BUFFER                       ; 0774 AD C8 09                 ...
-        sta     MOVE_FROM                       ; 0777 85 EA                    ..
+        sta     MOVE_FROM                       ; 0777 85 0A                    ..
         lda     $09C9                           ; 0779 AD C9 09                 ...
-        sta     $EB                             ; 077C 85 EB                    ..
+        sta     $0B                             ; 077C 85 0B                    ..
         lda     FILEDEST                        ; 077E AD 33 0A                 .3.
-        sta     MOVE_TO                         ; 0781 85 EC                    ..
+        sta     MOVE_TO                         ; 0781 85 0C                    ..
         lda     $0A34                           ; 0783 AD 34 0A                 .4.
-        sta     $ED                             ; 0786 85 ED                    ..
+        sta     $0D                             ; 0786 85 0D                    ..
         lda     #$00                            ; 0788 A9 00                    ..
-        sta     MOVE_SIZE                       ; 078A 85 EE                    ..
+        sta     MOVE_SIZE                       ; 078A 85 0E                    ..
         lda     #$02                            ; 078C A9 02                    ..
-        sta     $EF                             ; 078E 85 EF                    ..
+        sta     $0F                             ; 078E 85 0F                    ..
         jsr     MOVEDOWN                        ; 0790 20 A1 09                  ..
         pla                                     ; 0793 68                       h
         inc     CURRENTSECTOR                   ; 0794 EE 39 0A                 .9.
@@ -2211,36 +2226,36 @@ NEXTCLUSTER:
         rol     $0A38                           ; 07BF 2E 38 0A                 .8.
         pha                                     ; 07C2 48                       H
         lda     #$35                            ; 07C3 A9 35                    .5
-        sta     M32PTR1                         ; 07C5 85 E2                    ..
+        sta     M32PTR1                         ; 07C5 85 02                    ..
         lda     #$0A                            ; 07C7 A9 0A                    ..
-        sta     $E3                             ; 07C9 85 E3                    ..
+        sta     $03                             ; 07C9 85 03                    ..
         lda     #$FF                            ; 07CB A9 FF                    ..
-        sta     M32PTR2                         ; 07CD 85 E4                    ..
+        sta     M32PTR2                         ; 07CD 85 04                    ..
         lda     #$09                            ; 07CF A9 09                    ..
-        sta     $E5                             ; 07D1 85 E5                    ..
+        sta     $05                             ; 07D1 85 05                    ..
         lda     #$F3                            ; 07D3 A9 F3                    ..
-        sta     M32PTR3                         ; 07D5 85 E6                    ..
+        sta     M32PTR3                         ; 07D5 85 06                    ..
         lda     #$09                            ; 07D7 A9 09                    ..
-        sta     $E7                             ; 07D9 85 E7                    ..
+        sta     $07                             ; 07D9 85 07                    ..
         lda     #$F7                            ; 07DB A9 F7                    ..
-        sta     M32PTR4                         ; 07DD 85 E8                    ..
+        sta     M32PTR4                         ; 07DD 85 08                    ..
         lda     #$09                            ; 07DF A9 09                    ..
-        sta     $E9                             ; 07E1 85 E9                    ..
+        sta     $09                             ; 07E1 85 09                    ..
         pla                                     ; 07E3 68                       h
         jsr     MATH_DIV32                      ; 07E4 20 24 09                  $.
         pha                                     ; 07E7 48                       H
         lda     #$F3                            ; 07E8 A9 F3                    ..
-        sta     M32PTR1                         ; 07EA 85 E2                    ..
+        sta     M32PTR1                         ; 07EA 85 02                    ..
         lda     #$09                            ; 07EC A9 09                    ..
-        sta     $E3                             ; 07EE 85 E3                    ..
+        sta     $03                             ; 07EE 85 03                    ..
         lda     #$17                            ; 07F0 A9 17                    ..
-        sta     M32PTR2                         ; 07F2 85 E4                    ..
+        sta     M32PTR2                         ; 07F2 85 04                    ..
         lda     #$0A                            ; 07F4 A9 0A                    ..
-        sta     $E5                             ; 07F6 85 E5                    ..
+        sta     $05                             ; 07F6 85 05                    ..
         lda     #$F3                            ; 07F8 A9 F3                    ..
-        sta     M32PTR3                         ; 07FA 85 E6                    ..
+        sta     M32PTR3                         ; 07FA 85 06                    ..
         lda     #$09                            ; 07FC A9 09                    ..
-        sta     $E7                             ; 07FE 85 E7                    ..
+        sta     $07                             ; 07FE 85 07                    ..
         pla                                     ; 0800 68                       h
         jsr     MATH_ADD32                      ; 0801 20 A1 08                  ..
         pha                                     ; 0804 48                       H
@@ -2255,18 +2270,18 @@ NEXTCLUSTER:
         pla                                     ; 081D 68                       h
         jsr     CF_READ_SECTOR                  ; 081E 20 BF 03                  ..
         lda     CF_BUFFER                       ; 0821 AD C8 09                 ...
-        sta     CF_BUFFERPOINTER                ; 0824 85 E0                    ..
+        sta     CF_BUFFERPOINTER                ; 0824 85 00                    ..
         lda     $09C9                           ; 0826 AD C9 09                 ...
-        sta     $E1                             ; 0829 85 E1                    ..
-        lda     $E1                             ; 082B A5 E1                    ..
+        sta     $01                             ; 0829 85 01                    ..
+        lda     $01                             ; 082B A5 01                    ..
         clc                                     ; 082D 18                       .
         adc     $09F8                           ; 082E 6D F8 09                 m..
-        sta     $E1                             ; 0831 85 E1                    ..
+        sta     $01                             ; 0831 85 01                    ..
         ldy     TMP2                            ; 0833 AC F7 09                 ...
-        lda     (CF_BUFFERPOINTER),y            ; 0836 B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; 0836 B1 00                    ..
         sta     CURRENTCLUSTER                  ; 0838 8D 35 0A                 .5.
         iny                                     ; 083B C8                       .
-        lda     (CF_BUFFERPOINTER),y            ; 083C B1 E0                    ..
+        lda     (CF_BUFFERPOINTER),y            ; 083C B1 00                    ..
         sta     $0A36                           ; 083E 8D 36 0A                 .6.
         jsr     FAT_VALIDATE_CLUSTER            ; 0841 20 0F 06                  ..
         lda     FAT_STATUS                      ; 0844 AD 3F 0A                 .?.
@@ -2292,17 +2307,17 @@ LS1:    pha                                     ; 0856 48                       
         jsr     CF_READ_SECTOR                  ; 0870 20 BF 03                  ..
         pha                                     ; 0873 48                       H
         lda     CF_BUFFER                       ; 0874 AD C8 09                 ...
-        sta     MOVE_FROM                       ; 0877 85 EA                    ..
+        sta     MOVE_FROM                       ; 0877 85 0A                    ..
         lda     $09C9                           ; 0879 AD C9 09                 ...
-        sta     $EB                             ; 087C 85 EB                    ..
+        sta     $0B                             ; 087C 85 0B                    ..
         lda     FILEDEST                        ; 087E AD 33 0A                 .3.
-        sta     MOVE_TO                         ; 0881 85 EC                    ..
+        sta     MOVE_TO                         ; 0881 85 0C                    ..
         lda     $0A34                           ; 0883 AD 34 0A                 .4.
-        sta     $ED                             ; 0886 85 ED                    ..
+        sta     $0D                             ; 0886 85 0D                    ..
         lda     REMAININGBYTES                  ; 0888 AD 3D 0A                 .=.
-        sta     MOVE_SIZE                       ; 088B 85 EE                    ..
+        sta     MOVE_SIZE                       ; 088B 85 0E                    ..
         lda     $0A3E                           ; 088D AD 3E 0A                 .>.
-        sta     $EF                             ; 0890 85 EF                    ..
+        sta     $0F                             ; 0890 85 0F                    ..
         jsr     MOVEDOWN                        ; 0892 20 A1 09                  ..
         pla                                     ; 0895 68                       h
 RETURN_OK:
@@ -2324,9 +2339,9 @@ MATH_ADD32:
         php                                     ; 08A4 08                       .
         ldy     #$00                            ; 08A5 A0 00                    ..
 LOOP:   plp                                     ; 08A7 28                       (
-        lda     (M32PTR1),y                     ; 08A8 B1 E2                    ..
-        adc     (M32PTR2),y                     ; 08AA 71 E4                    q.
-        sta     (M32PTR3),y                     ; 08AC 91 E6                    ..
+        lda     (M32PTR1),y                     ; 08A8 B1 02                    ..
+        adc     (M32PTR2),y                     ; 08AA 71 04                    q.
+        sta     (M32PTR3),y                     ; 08AC 91 06                    ..
         php                                     ; 08AE 08                       .
         iny                                     ; 08AF C8                       .
         cpy     #$04                            ; 08B0 C0 04                    ..
@@ -2344,9 +2359,9 @@ MATH_SUB32:
         php                                     ; 08BB 08                       .
         ldy     #$00                            ; 08BC A0 00                    ..
 LOOP:   plp                                     ; 08BE 28                       (
-        lda     (M32PTR1),y                     ; 08BF B1 E2                    ..
-        sbc     (M32PTR2),y                     ; 08C1 F1 E4                    ..
-        sta     (M32PTR3),y                     ; 08C3 91 E6                    ..
+        lda     (M32PTR1),y                     ; 08BF B1 02                    ..
+        sbc     (M32PTR2),y                     ; 08C1 F1 04                    ..
+        sta     (M32PTR3),y                     ; 08C3 91 06                    ..
         php                                     ; 08C5 08                       .
         iny                                     ; 08C6 C8                       .
         cpy     #$04                            ; 08C7 C0 04                    ..
@@ -2362,12 +2377,12 @@ MATH_MUL32:
         phy                                     ; 08D0 5A                       Z
         ldy     #$00                            ; 08D1 A0 00                    ..
 LOOP_INIT:
-        lda     (M32PTR1),y                     ; 08D3 B1 E2                    ..
+        lda     (M32PTR1),y                     ; 08D3 B1 02                    ..
         sta     RESULT,y                        ; 08D5 99 40 0A                 .@.
-        lda     (M32PTR2),y                     ; 08D8 B1 E4                    ..
+        lda     (M32PTR2),y                     ; 08D8 B1 04                    ..
         sta     DIVISOR,y                       ; 08DA 99 44 0A                 .D.
         lda     #$00                            ; 08DD A9 00                    ..
-        sta     (M32PTR3),y                     ; 08DF 91 E6                    ..
+        sta     (M32PTR3),y                     ; 08DF 91 06                    ..
         iny                                     ; 08E1 C8                       .
         cpy     #$04                            ; 08E2 C0 04                    ..
         bne     LOOP_INIT                       ; 08E4 D0 ED                    ..
@@ -2381,9 +2396,9 @@ LOOP:   lsr     $0A47                           ; 08E6 4E 47 0A                 
         php                                     ; 08F7 08                       .
 LOOP_ADD:
         plp                                     ; 08F8 28                       (
-        lda     (M32PTR3),y                     ; 08F9 B1 E6                    ..
+        lda     (M32PTR3),y                     ; 08F9 B1 06                    ..
         adc     RESULT,y                        ; 08FB 79 40 0A                 y@.
-        sta     (M32PTR3),y                     ; 08FE 91 E6                    ..
+        sta     (M32PTR3),y                     ; 08FE 91 06                    ..
         php                                     ; 0900 08                       .
         iny                                     ; 0901 C8                       .
         cpy     #$04                            ; 0902 C0 04                    ..
@@ -2410,9 +2425,9 @@ MATH_DIV32:
         phy                                     ; 0926 5A                       Z
         ldy     #$00                            ; 0927 A0 00                    ..
 LOOP_INIT:
-        lda     (M32PTR1),y                     ; 0929 B1 E2                    ..
+        lda     (M32PTR1),y                     ; 0929 B1 02                    ..
         sta     RESULT,y                        ; 092B 99 40 0A                 .@.
-        lda     (M32PTR2),y                     ; 092E B1 E4                    ..
+        lda     (M32PTR2),y                     ; 092E B1 04                    ..
         sta     DIVISOR,y                       ; 0930 99 44 0A                 .D.
         lda     #$00                            ; 0933 A9 00                    ..
         sta     REMAINDER,y                     ; 0935 99 48 0A                 .H.
@@ -2456,9 +2471,9 @@ SKIP:   dex                                     ; 0989 CA                       
         ldy     #$00                            ; 098C A0 00                    ..
 LOOP_COPY_RESULT:
         lda     RESULT,y                        ; 098E B9 40 0A                 .@.
-        sta     (M32PTR3),y                     ; 0991 91 E6                    ..
+        sta     (M32PTR3),y                     ; 0991 91 06                    ..
         lda     REMAINDER,y                     ; 0993 B9 48 0A                 .H.
-        sta     (M32PTR4),y                     ; 0996 91 E8                    ..
+        sta     (M32PTR4),y                     ; 0996 91 08                    ..
         iny                                     ; 0998 C8                       .
         cpy     #$04                            ; 0999 C0 04                    ..
         bne     LOOP_COPY_RESULT                ; 099B D0 F1                    ..
@@ -2473,20 +2488,20 @@ MOVEDOWN:
         phx                                     ; 09A2 DA                       .
         phy                                     ; 09A3 5A                       Z
         ldy     #$00                            ; 09A4 A0 00                    ..
-        ldx     $EF                             ; 09A6 A6 EF                    ..
+        ldx     $0F                             ; 09A6 A6 0F                    ..
         beq     MD2                             ; 09A8 F0 0E                    ..
-MD1:    lda     (MOVE_FROM),y                   ; 09AA B1 EA                    ..
-        sta     (MOVE_TO),y                     ; 09AC 91 EC                    ..
+MD1:    lda     (MOVE_FROM),y                   ; 09AA B1 0A                    ..
+        sta     (MOVE_TO),y                     ; 09AC 91 0C                    ..
         iny                                     ; 09AE C8                       .
         bne     MD1                             ; 09AF D0 F9                    ..
-        inc     $EB                             ; 09B1 E6 EB                    ..
-        inc     $ED                             ; 09B3 E6 ED                    ..
+        inc     $0B                             ; 09B1 E6 0B                    ..
+        inc     $0D                             ; 09B3 E6 0D                    ..
         dex                                     ; 09B5 CA                       .
         bne     MD1                             ; 09B6 D0 F2                    ..
-MD2:    ldx     MOVE_SIZE                       ; 09B8 A6 EE                    ..
+MD2:    ldx     MOVE_SIZE                       ; 09B8 A6 0E                    ..
         beq     MD4                             ; 09BA F0 08                    ..
-MD3:    lda     (MOVE_FROM),y                   ; 09BC B1 EA                    ..
-        sta     (MOVE_TO),y                     ; 09BE 91 EC                    ..
+MD3:    lda     (MOVE_FROM),y                   ; 09BC B1 0A                    ..
+        sta     (MOVE_TO),y                     ; 09BE 91 0C                    ..
         iny                                     ; 09C0 C8                       .
         dex                                     ; 09C1 CA                       .
         bne     MD3                             ; 09C2 D0 F8                    ..
@@ -2497,7 +2512,7 @@ MD4:    ply                                     ; 09C4 7A                       
 
 ; ----------------------------------------------------------------------------
 ; da65 V2.17 - Git N/A
-; Created:    2018-07-22 00:06:51
+; Created:    2018-07-22 12:17:42
 ; Input file: /tmp/debuginfo/VECTORTABLE.out
 ; Page:       1
 
@@ -2505,14 +2520,14 @@ MD4:    ply                                     ; 09C4 7A                       
         .setcpu "65C02"
 
 ; ----------------------------------------------------------------------------
-CF_BUFFERPOINTER:= $00E0
-M32PTR1         := $00E2
-M32PTR2         := $00E4
-M32PTR3         := $00E6
-M32PTR4         := $00E8
-MOVE_FROM       := $00EA
-MOVE_TO         := $00EC
-MOVE_SIZE       := $00EE
+CF_BUFFERPOINTER:= $0000
+M32PTR1         := $0002
+M32PTR2         := $0004
+M32PTR3         := $0006
+M32PTR4         := $0008
+MOVE_FROM       := $000A
+MOVE_TO         := $000C
+MOVE_SIZE       := $000E
 BRK_VECTOR      := $023C
 CF_INIT         := $0300
 LOOP_BUSY       := $033E
@@ -2638,18 +2653,18 @@ L3              := $F112
 L4              := $F118
 ; ----------------------------------------------------------------------------
         .byte   $4C                             ; 0200 4C                       L
-IRQ0:   bit     $02,x                           ; 0201 3C 02 00                 <..
+IRQ0:   bit     M32PTR1,x                       ; 0201 3C 02 00                 <..
         .byte   $4C                             ; 0204 4C                       L
-IRQ1:   bit     $02,x                           ; 0205 3C 02 00                 <..
+IRQ1:   bit     M32PTR1,x                       ; 0205 3C 02 00                 <..
         .byte   $4C                             ; 0208 4C                       L
-IRQ2:   bit     $02,x                           ; 0209 3C 02 00                 <..
+IRQ2:   bit     M32PTR1,x                       ; 0209 3C 02 00                 <..
         .byte   $4C                             ; 020C 4C                       L
-IRQ3:   bit     $02,x                           ; 020D 3C 02 00                 <..
+IRQ3:   bit     M32PTR1,x                       ; 020D 3C 02 00                 <..
         .byte   $4C                             ; 0210 4C                       L
-IRQ4:   bit     $02,x                           ; 0211 3C 02 00                 <..
+IRQ4:   bit     M32PTR1,x                       ; 0211 3C 02 00                 <..
         .byte   $4C                             ; 0214 4C                       L
-IRQ5:   bit     $02,x                           ; 0215 3C 02 00                 <..
+IRQ5:   bit     M32PTR1,x                       ; 0215 3C 02 00                 <..
         .byte   $4C                             ; 0218 4C                       L
-IRQ6:   bit     $02,x                           ; 0219 3C 02 00                 <..
+IRQ6:   bit     M32PTR1,x                       ; 0219 3C 02 00                 <..
         .byte   $4C                             ; 021C 4C                       L
-IRQ7:   bit     $02,x                           ; 021D 3C 02 00                 <..
+IRQ7:   bit     M32PTR1,x                       ; 021D 3C 02 00                 <..
