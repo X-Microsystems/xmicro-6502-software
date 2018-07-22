@@ -39,6 +39,7 @@ fi
 #Assemble all ASM sources to a temporary directory
 find $SOURCEDIR/*.[sS] -maxdepth 3 -type f -execdir ca65 --cpu 65c02 -g -o /tmp/cc65/{}.o -l /tmp/cc65/{}.lst {} \;
 
+mkdir -p $DESTDIR
 cd $DESTDIR
 
 #Link all assembled object files
