@@ -1,0 +1,25 @@
+; ---------------------------------------------------------------------------
+; VECTORS.MAC
+; Macro to initialize the XMICRO-6502's Interrupt Vector Table
+; ---------------------------------------------------------------------------
+
+.IF !.DEFINEDMACRO(VTINIT)	;DON'T DEFINE MACROS IF THEY EXIST ALREADY
+
+.INCLUDE "MOVE.MAC"
+
+.IMPORT __VECTORTABLE_LOAD__, __VECTORTABLE_RUN__, __VECTORTABLE_SIZE__
+.IMPORT BRK_VECTOR
+
+;-----------------------------------------------------------------------------
+; VTINIT - MACRO TO INITIALIZE VECTOR TABLE
+; POPULATES IVT WITH VECTORTABLE SEGMENT
+; POPULATES THE BRK VECTOR WITH AN RTI INSTRUCTION
+;-----------------------------------------------------------------------------
+.MACRO VTINIT			;Interrupt Vector Table initialization
+	ROM_MOVE #__VECTORTABLE_LOAD__, #__VECTORTABLE_RUN__, #__VECTORTABLE_SIZE__
+
+	LDA #$40		;RTI
+	STA BRK_VECTOR		;Place RTI at the BRK vector
+.ENDMACRO
+
+.ENDIF

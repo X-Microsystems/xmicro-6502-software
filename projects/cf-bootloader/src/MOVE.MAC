@@ -1,0 +1,53 @@
+;-----------------------------------------------------------------------------
+; MOVE.MAC
+; PROCEDURE CALL MACROS FOR THE MOVE LIBRARY
+; 2018-04-20
+;-----------------------------------------------------------------------------
+.IF !.DEFINEDMACRO(MOVE)	;DON'T DEFINE MACROS IF THEY EXIST ALREADY
+
+.INCLUDE "INSTRUCTIONS.MAC"
+
+.IMPORT MOVEDOWN, ROM_MOVEDOWN, ZERO_FILL
+.IMPORTZP MOVE_FROM, MOVE_TO, MOVE_SIZE
+
+;-----------------------------------------------------------------------------
+; MOVE
+; COPIES A BLOCK OF MEMORY STARTING AT THE LOWEST ADDRESS
+; *CAN'T BE USED ON OVERLAPPING BLOCKS WHERE THE DESTINATION IS HIGHER*
+;-----------------------------------------------------------------------------
+.MACRO MOVE FROM, TO, SIZE
+	PHA
+	MWA FROM, MOVE_FROM
+	MWA TO, MOVE_TO
+	MWA SIZE, MOVE_SIZE
+	JSR MOVEDOWN
+	PLA
+.ENDMACRO
+
+;-----------------------------------------------------------------------------
+; ROM_MOVE
+; COPIES A BLOCK OF MEMORY STARTING AT THE LOWEST ADDRESS (CODE LIVES IN ROM)
+; *CAN'T BE USED ON OVERLAPPING BLOCKS WHERE THE DESTINATION IS HIGHER*
+;-----------------------------------------------------------------------------
+.MACRO ROM_MOVE FROM, TO, SIZE
+	PHA
+	MWA FROM, MOVE_FROM
+	MWA TO, MOVE_TO
+	MWA SIZE, MOVE_SIZE
+	JSR ROM_MOVEDOWN
+	PLA
+.ENDMACRO
+
+;-----------------------------------------------------------------------------
+; ZEROFILL
+; COPIES ALL ZEROS TO SPECIFIED RANGE
+;-----------------------------------------------------------------------------
+.MACRO ZEROFILL TO, SIZE
+	PHA
+	MWA TO, MOVE_TO
+	MWA SIZE, MOVE_SIZE
+	JSR ZERO_FILL
+	PLA
+.ENDMACRO
+
+.ENDIF
