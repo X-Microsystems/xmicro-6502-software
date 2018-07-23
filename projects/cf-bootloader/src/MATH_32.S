@@ -15,13 +15,12 @@
 	M32PTR3:	.RES 2
 	M32PTR4:	.RES 2
 
-.SEGMENT "BSS"
 	TMP1:		.RES 4		;TEMPORARY 32-BIT VARIABLES
 	TMP2:		.RES 4
 	TMP3:		.RES 4
 	TMP4:		.RES 4
 
-.SEGMENT "LOWCODE"
+.SEGMENT "CODE"
 
 ;-----------------------------------------------------------------------------
 ; MATH_ADD32 (M32PTR1, M32PTR2, M32PTR3)

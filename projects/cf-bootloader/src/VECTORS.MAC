@@ -16,7 +16,7 @@
 ; POPULATES THE BRK VECTOR WITH AN RTI INSTRUCTION
 ;-----------------------------------------------------------------------------
 .MACRO VTINIT			;Interrupt Vector Table initialization
-	ROM_MOVE #__VECTORTABLE_LOAD__, #__VECTORTABLE_RUN__, #__VECTORTABLE_SIZE__
+	MOVE #__VECTORTABLE_LOAD__, #__VECTORTABLE_RUN__, #__VECTORTABLE_SIZE__
 
 	LDA #$40		;RTI
 	STA BRK_VECTOR		;Place RTI at the BRK vector

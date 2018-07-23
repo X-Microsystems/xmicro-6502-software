@@ -8,7 +8,7 @@
 
 .IMPORT CF_INIT, CF_READ_SECTOR			;PROCEDURES
 .IMPORT CF_BUFFER				;CONSTANTS
-.IMPORT CF_LBA					;VARIABLES
+.IMPORTZP CF_LBA				;VARIABLES
 .IMPORTZP CF_BUFFERPOINTER			;ZERO-PAGE VARIABLES
 
 ;-----------------------------------------------------------------------------
