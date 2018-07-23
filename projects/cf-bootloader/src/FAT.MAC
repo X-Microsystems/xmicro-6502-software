@@ -1,7 +1,6 @@
 ;-----------------------------------------------------------------------------
 ; FAT.MAC
 ; PROCEDURE CALL MACROS FOR THE FAT16 DRIVER
-; 2018-05-09
 ;-----------------------------------------------------------------------------
 .IFNDEF FAT_INIT
 
@@ -10,8 +9,8 @@
 .INCLUDE "MATH_32.MAC"
 .INCLUDE "CFDRIVER.MAC"
 
-.IMPORT FAT_INIT, FAT_FIND, FAT_LOAD
-.IMPORT FILENAME, FILESIZE, FILEDEST, DESTSIZE, FAT_STATUS, FAT_ERROR
+.IMPORT FAT_INIT, FAT_FIND, FAT_LOAD						;PROCEDURES
+.IMPORT FILENAME, FILESIZE, FILEDEST, DESTSIZE, FAT_STATUS, FAT_ERROR		;VARIABLES
 
 ;-----------------------------------------------------------------------------
 ; FS_INIT

@@ -1,14 +1,13 @@
 ;-----------------------------------------------------------------------------
 ; MOVE.S
 ; BLOCK MEMORY MOVE PROCEDURES
-; ADAPTED FROM http://www.6502.org/source/general/memory_move.html
-; 2018-04-20
+; ADAPTED FROM HTTP://WWW.6502.ORG/SOURCE/GENERAL/MEMORY_MOVE.HTML
 ;-----------------------------------------------------------------------------
 
 .INCLUDE "INSTRUCTIONS.MAC"
 
-.EXPORT MOVEDOWN, ROM_MOVEDOWN, ZERO_FILL
-.EXPORTZP MOVE_FROM, MOVE_TO, MOVE_SIZE
+.EXPORT MOVEDOWN, ROM_MOVEDOWN, ZERO_FILL	;PROCEDURES
+.EXPORTZP MOVE_FROM, MOVE_TO, MOVE_SIZE		;ZERO-PAGE VARIABLES
 
 .SEGMENT "ZEROPAGE"
 	MOVE_FROM:	.RES 2
@@ -22,16 +21,16 @@
 ; COPIES A BLOCK OF MEMORY STARTING AT THE LOWEST ADDRESS
 ; *CAN'T BE USED ON OVERLAPPING BLOCKS WHERE THE DESTINATION IS HIGHER*
 ;
-; MOVE_FROM = source start address
-; MOVE_TO = destination start address
-; MOVE_SIZE = number of bytes to move
+; MOVE_FROM = SOURCE START ADDRESS
+; MOVE_TO = DESTINATION START ADDRESS
+; MOVE_SIZE = NUMBER OF BYTES TO MOVE
 ;-----------------------------------------------------------------------------
 .PROC MOVEDOWN
 	PUSH_AXY
 	LDY #00
 	LDX MOVE_SIZE+1
 	BEQ MD2
-MD1:	LDA (MOVE_FROM),Y ; move a page at a time
+MD1:	LDA (MOVE_FROM),Y	;MOVE A PAGE AT A TIME
 	STA (MOVE_TO),Y
 	INY
 	BNE MD1
@@ -41,7 +40,7 @@ MD1:	LDA (MOVE_FROM),Y ; move a page at a time
 	BNE MD1
 MD2:	LDX MOVE_SIZE
 	BEQ MD4
-MD3:	LDA (MOVE_FROM),Y ; move the remaining bytes
+MD3:	LDA (MOVE_FROM),Y	;MOVE THE REMAINING BYTES
 	STA (MOVE_TO),Y
 	INY
 	DEX
@@ -58,16 +57,16 @@ MD4:	PULL_AXY
 ; COPIES A BLOCK OF MEMORY STARTING AT THE LOWEST ADDRESS (CODE LIVES IN ROM)
 ; *CAN'T BE USED ON OVERLAPPING BLOCKS WHERE THE DESTINATION IS HIGHER*
 ;
-; MOVE_FROM = source start address
-; MOVE_TO = destination start address
-; MOVE_SIZE = number of bytes to move
+; MOVE_FROM = SOURCE START ADDRESS
+; MOVE_TO = DESTINATION START ADDRESS
+; MOVE_SIZE = NUMBER OF BYTES TO MOVE
 ;-----------------------------------------------------------------------------
 .PROC ROM_MOVEDOWN
 	PUSH_AXY
 	LDY #00
 	LDX MOVE_SIZE+1
 	BEQ MD2
-MD1:	LDA (MOVE_FROM),Y ; move a page at a time
+MD1:	LDA (MOVE_FROM),Y	;MOVE A PAGE AT A TIME
 	STA (MOVE_TO),Y
 	INY
 	BNE MD1
@@ -77,7 +76,7 @@ MD1:	LDA (MOVE_FROM),Y ; move a page at a time
 	BNE MD1
 MD2:	LDX MOVE_SIZE
 	BEQ MD4
-MD3:	LDA (MOVE_FROM),Y ; move the remaining bytes
+MD3:	LDA (MOVE_FROM),Y	;MOVE THE REMAINING BYTES
 	STA (MOVE_TO),Y
 	INY
 	DEX
@@ -89,8 +88,8 @@ MD4:	PULL_AXY
 ;-----------------------------------------------------------------------------
 ; ZEROFILL
 ; COPIES ALL ZEROS TO SPECIFIED RANGE
-; MOVE_TO = destination start address
-; MOVE_SIZE = number of bytes to zero
+; MOVE_TO = DESTINATION START ADDRESS
+; MOVE_SIZE = NUMBER OF BYTES TO ZERO
 ;-----------------------------------------------------------------------------
 .PROC ZERO_FILL
 	PUSH_AXY

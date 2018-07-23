@@ -1,15 +1,14 @@
-;=====================================================================================================
-;	CompactFlash FAT16 Detection
-;	Checks the CompactFlash card for the presence of a FAT16 partition
-;	If found, displays the lower 2 bytes of the first sector's LBA on an XMICRO-7SEG in slot 5.
-;	2018-4-21
-;=====================================================================================================
+;-----------------------------------------------------------------------------
+; MAIN.S
+; CODE TO EXECUTE AFTER INITIALIZING THE SYSTEM
+;-----------------------------------------------------------------------------
 
 .INCLUDE "INSTRUCTIONS.MAC"
 .INCLUDE "FAT.MAC"
 
-.IMPORT __BANK0_START__, __BANK0_SIZE__
-.EXPORT _MAIN
+.IMPORT __BANK0_START__, __BANK0_SIZE__			;SEGMENT INFORMATION
+
+.EXPORT _MAIN						;CODE LABELS
 
 .SEGMENT "DATA"
 	S_AUTOEXECBIN:		.ASCIIZ "AUTOEXECBIN"

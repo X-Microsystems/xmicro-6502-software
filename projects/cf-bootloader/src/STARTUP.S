@@ -1,25 +1,21 @@
-;=====================================================================================================
-;	CompactFlash FAT16 Detection
-;	Checks the CompactFlash card for the presence of a FAT16 partition
-;	If found, displays the lower 2 bytes of the first sector's LBA on an XMICRO-7SEG in slot 5.
-;	2018-4-21
-;=====================================================================================================
-.PC02
+;-----------------------------------------------------------------------------
+; STARTUP.S
+; SYSTEM INITIALIZATION
+;-----------------------------------------------------------------------------
 
-;Macros
 .INCLUDE "INSTRUCTIONS.MAC"
 .INCLUDE "VECTORS.MAC"
 .INCLUDE "MOVE.MAC"
 .INCLUDE "CFDRIVER.MAC"
 .INCLUDE "FAT.MAC"
 
-.EXPORT XMICRO_MEMORY = $1100
+.IMPORT __LOWCODE_LOAD__, __LOWCODE_RUN__, __LOWCODE_SIZE__			;SEGMENT INFORMATION
+.IMPORT __DATA_LOAD__, __DATA_RUN__, __DATA_SIZE__				;SEGMENT INFORMATION
+.IMPORT __BSS_RUN__, __BSS_SIZE__						;SEGMENT INFORMATION
+.IMPORT _MAIN									;CODE LABEL
 
-.IMPORT __LOWCODE_LOAD__, __LOWCODE_RUN__, __LOWCODE_SIZE__
-.IMPORT __DATA_LOAD__, __DATA_RUN__, __DATA_SIZE__
-.IMPORT __BSS_RUN__, __BSS_SIZE__
-.IMPORT _MAIN
-.EXPORT _INIT
+.EXPORT _INIT									;CODE LABEL
+.EXPORT XMICRO_MEMORY = $1100							;ASSEMBLER CONSTANTS
 
 .SEGMENT "STARTUP"
 _INIT:

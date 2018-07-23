@@ -1,14 +1,14 @@
 ;-----------------------------------------------------------------------------
 ; MOVE.MAC
 ; PROCEDURE CALL MACROS FOR THE MOVE LIBRARY
-; 2018-04-20
 ;-----------------------------------------------------------------------------
 .IF !.DEFINEDMACRO(MOVE)	;DON'T DEFINE MACROS IF THEY EXIST ALREADY
 
 .INCLUDE "INSTRUCTIONS.MAC"
 
-.IMPORT MOVEDOWN, ROM_MOVEDOWN, ZERO_FILL
-.IMPORTZP MOVE_FROM, MOVE_TO, MOVE_SIZE
+.IMPORT MOVEDOWN, ROM_MOVEDOWN, ZERO_FILL	;PROCEDURES
+
+.IMPORTZP MOVE_FROM, MOVE_TO, MOVE_SIZE		;ZERO-PAGE VARIABLES
 
 ;-----------------------------------------------------------------------------
 ; MOVE

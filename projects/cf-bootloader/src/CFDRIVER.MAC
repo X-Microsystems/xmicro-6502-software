@@ -1,18 +1,18 @@
 ;-----------------------------------------------------------------------------
 ; CFDRIVER.MAC
 ; PROCEDURE CALL MACROS FOR THE COMPACTFLASH DRIVER LIBRARY
-; 2018-04-20
 ;-----------------------------------------------------------------------------
 .IF !.DEFINEDMACRO(CF_READ)	;DON'T DEFINE MACROS IF THEY EXIST ALREADY
 
 .INCLUDE "INSTRUCTIONS.MAC"
 
-.IMPORT CF_INIT, CF_READ_SECTOR
-.IMPORTZP CF_BUFFERPOINTER
-.IMPORT CF_BUFFER, CF_LBA
+.IMPORT CF_INIT, CF_READ_SECTOR			;PROCEDURES
+.IMPORT CF_BUFFER				;CONSTANTS
+.IMPORT CF_LBA					;VARIABLES
+.IMPORTZP CF_BUFFERPOINTER			;ZERO-PAGE VARIABLES
 
 ;-----------------------------------------------------------------------------
-;
+; CF_READ
 ;-----------------------------------------------------------------------------
 .MACRO CF_READ LBA
 	.IFNBLANK LBA		;COPY THE NEW LBA IF ONE IS SPECIFIED
