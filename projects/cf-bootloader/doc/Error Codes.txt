@@ -1,9 +1,11 @@
 CF Bootloader Error Codes
 
-CF card not inserted: $0C
-CF timeout
+CF Card Errors
+CF card not inserted: $01
+CF timeout: $02
 
-FAT
-Invalid Cluster: $02
-File not found: $FF
-Oversize file (reading) $03
+FAT Filesystem Errors
+FAT16 filesystem not found: $10
+File not found: $11
+Oversize file (reading) $12
+Invalid Cluster: $13
