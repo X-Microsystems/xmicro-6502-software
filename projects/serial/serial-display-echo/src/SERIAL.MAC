@@ -1,0 +1,9 @@
+;-----------------------------------------------------------------------------
+; SERIAL.MAC
+;-----------------------------------------------------------------------------
+.IF !.DEFINED(SERIAL_BUFFER)	;DON'T DEFINE MACROS IF THEY EXIST ALREADY
+
+.IMPORTZP SERIAL_BUFFER
+.IMPORT SERIAL_INIT
+
+.ENDIF
