@@ -10,6 +10,8 @@ of $B000. Once the file is successfully loaded, the CPU jumps to $4000 and
 executes it. Although this ROM does some initialization, the system should be
 considered uninitialized at the beginning of execution.
 
+In its present state, the XMICRO-MEMORY card must be present in Slot 1.
+
 
 Error Codes
 -----------------------------------
