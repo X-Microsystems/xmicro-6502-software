@@ -1,0 +1,54 @@
+;-----------------------------------------------------------------------------
+; XM7SEG.MAC
+; PROCEDURE CALL MACROS FOR THE XMICRO-7SEG DRIVER LIBRARY
+; 2018-04-21
+;-----------------------------------------------------------------------------
+.IF !.DEFINEDMACRO(XM7SEG_WORD)	;DON'T DEFINE MACROS IF THEY EXIST ALREADY
+
+.INCLUDE "INSTRUCTIONS.MAC"
+
+.IMPORT XM7SEG_INIT, XM7SEG_WRITE
+.IMPORT XM7SEG_BUFFER
+.IMPORTZP XM7SEG_ADDRESS
+
+;-----------------------------------------------------------------------------
+; XM7SEG_WORD
+; WRITES THE BUFFER VALUES TO THE CARD REGISTERS
+; AN ADDRESS OR IMMEDIATE VALUE MAY BE PASSED TO THE HEX DISPLAY
+;-----------------------------------------------------------------------------
+.MACRO XM7SEG_WORD SRC
+	PHA
+	.IFNBLANK SRC
+		MWA SRC, XM7SEG_BUFFER
+	.ENDIF
+	JSR XM7SEG_WRITE
+	PLA
+.ENDMACRO
+
+;-----------------------------------------------------------------------------
+; XM7SEG_ON
+; ENABLES THE HEX DISPLAY
+;-----------------------------------------------------------------------------
+.MACRO XM7SEG_ON
+	PHA
+	LDA XM7SEG_BUFFER+3
+	AND #%00111111
+	STA XM7SEG_BUFFER+3
+	JSR XM7SEG_WRITE
+	PLA
+.ENDMACRO
+
+;-----------------------------------------------------------------------------
+; XM7SEG_ON
+; DISABLES THE HEX DISPLAY
+;-----------------------------------------------------------------------------
+.MACRO XM7SEG_OFF
+	PHA
+	LDA XM7SEG_BUFFER+3
+	ORA #%11000000
+	STA XM7SEG_BUFFER+3
+	JSR XM7SEG_WRITE
+	PLA
+.ENDMACRO
+
+.ENDIF

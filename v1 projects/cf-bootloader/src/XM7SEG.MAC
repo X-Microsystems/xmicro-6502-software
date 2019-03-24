@@ -1,0 +1,14 @@
+;-----------------------------------------------------------------------------
+; XM7SEG.MAC
+; PROCEDURE CALL MACROS FOR THE XMICRO-7SEG DRIVER LIBRARY
+; 2018-04-21
+;-----------------------------------------------------------------------------
+.IF !.DEFINED(XM7SEG_BUFFER)	;DON'T IMPORT IT TWICE
+
+.INCLUDE "INSTRUCTIONS.MAC"
+
+.IMPORT XM7SEG_ERRORCODE, XM7SEG_WRITE
+.IMPORTZP XM7SEG_BUFFER
+.IMPORTZP XM7SEG_ADDRESS
+
+.ENDIF

@@ -1,0 +1,55 @@
+;-----------------------------------------------------------------------------
+; FAT.MAC
+; PROCEDURE CALL MACROS FOR THE FAT16 DRIVER
+;-----------------------------------------------------------------------------
+.IFNDEF FAT_INIT
+
+.INCLUDE "INSTRUCTIONS.MAC"
+.INCLUDE "MOVE.MAC"
+.INCLUDE "MATH_32.MAC"
+.INCLUDE "CFDRIVER.MAC"
+
+.IMPORT FAT_INIT, FAT_FIND, FAT_LOAD						;PROCEDURES
+.IMPORTZP FILENAME, FILESIZE, FILEDEST, DESTSIZE, FAT_STATUS			;VARIABLES
+
+;-----------------------------------------------------------------------------
+; FS_INIT
+; FIND A FAT16 PARTITION AND INITIALIZE THE DRIVER
+;-----------------------------------------------------------------------------
+.MACRO FS_INIT
+	JSR FAT_INIT
+.ENDMACRO
+
+;-----------------------------------------------------------------------------
+; FS_LOAD
+; FNAME: 11-BYTE FAT16 FILENAME (8.3 FORMAT WITHOUT THE DOT)
+; FDEST: DESTINATION ADDRESS TO LOAD THE FILE TO
+; DSIZE: MAXIMUM SIZE THAT CAN BE LOADED TO THE DESTINATION ADDRESS
+;-----------------------------------------------------------------------------
+.MACRO FS_LOAD FNAME, FDEST, DSIZE
+	.IFNBLANK FNAME
+		MOVE #FNAME, #FILENAME, #$0B					;COPY THE FILENAME FROM A MEMORY LOCATION
+		JSR FAT_FIND
+		LDA FAT_STATUS
+		BEQ GOOD_FNAME
+		JMP ERROR_HALT
+		GOOD_FNAME:
+	.ENDIF
+
+	.IFNBLANK DSIZE
+	MWA DSIZE, DESTSIZE
+	.ELSE
+	MWA #FFFF, DESTSIZE
+	.ENDIF
+
+	.IFNBLANK FDEST
+		MWA #FDEST, FILEDEST
+	.ENDIF
+	JSR FAT_LOAD
+	LDA FAT_STATUS
+	BEQ GOOD_LOAD
+	JMP ERROR_HALT
+	GOOD_LOAD:
+.ENDMACRO
+
+.ENDIF
