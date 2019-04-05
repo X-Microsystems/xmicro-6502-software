@@ -31,7 +31,7 @@ fi
 
 if [ -z $4 ]
 then
-	STARTADDR=F000
+	STARTADDR=8000
 else
 	STARTADDR=$4
 fi
