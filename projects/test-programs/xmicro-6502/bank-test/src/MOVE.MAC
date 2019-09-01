@@ -1,0 +1,39 @@
+;-----------------------------------------------------------------------------
+; MOVE.MAC
+; PROCEDURE CALL MACROS FOR THE MOVE LIBRARY
+;-----------------------------------------------------------------------------
+.IF !.DEFINEDMACRO(MOVE)	;DON'T DEFINE MACROS IF THEY EXIST ALREADY
+
+.INCLUDE "INSTRUCTIONS.MAC"
+
+.IMPORT MOVEDOWN, ZERO_FILL			;PROCEDURES
+
+.IMPORTZP MOVE_FROM, MOVE_TO, MOVE_SIZE		;ZERO-PAGE VARIABLES
+
+;-----------------------------------------------------------------------------
+; MOVE
+; COPIES A BLOCK OF MEMORY STARTING AT THE LOWEST ADDRESS
+; *CAN'T BE USED ON OVERLAPPING BLOCKS WHERE THE DESTINATION IS HIGHER*
+;-----------------------------------------------------------------------------
+.MACRO MOVE FROM, TO, SIZE
+	PHA
+	MWA FROM, MOVE_FROM
+	MWA TO, MOVE_TO
+	MWA SIZE, MOVE_SIZE
+	JSR MOVEDOWN
+	PLA
+.ENDMACRO
+
+;-----------------------------------------------------------------------------
+; ZEROFILL
+; COPIES ALL ZEROS TO SPECIFIED RANGE
+;-----------------------------------------------------------------------------
+.MACRO ZEROFILL TO, SIZE
+	PHA
+	MWA TO, MOVE_TO
+	MWA SIZE, MOVE_SIZE
+	JSR ZERO_FILL
+	PLA
+.ENDMACRO
+
+.ENDIF
