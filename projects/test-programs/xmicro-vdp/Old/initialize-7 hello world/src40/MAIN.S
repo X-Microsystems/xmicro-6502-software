@@ -64,17 +64,19 @@ _INIT:
 	XM7SEG_WORD #$1111
 
 ;----VDP INIT----
-;	WREG %00000000, 0	;$00, $80	;TEXT1 MODE
-;	WREG %01010000, 1	;$50, $81
-
-	WREG %00000100, 0	;$04, $80	;TEXT2 MODE
+	WREG %00000000, 0	;$00, $80	;TEXT1 MODE
 	WREG %01010000, 1	;$50, $81
+
+;	WREG %00000100, 0	;$04, $80	;TEXT2 MODE
+;	WREG %01010000, 1	;$50, $81
 
 ;	WREG %00000100, 0	;$04, $80	;MC MODE
 ;	WREG %01011000, 1	;$58, $81
 
 
-	WREG %00000011, 2	;$00, $82
+
+	WREG %00000000, 2	;$00, $82
+;	WREG %00000011, 2	;$00, $82
 	WREG %00101111, 3
 	WREG %00000010, 4	;$01, $84
 	WREG %11110000, 7	;$F0, $87
@@ -177,5 +179,5 @@ MVA #%01000000, VDP+1		;SET UP ADDRESS ($0000), WRITE-MODE
 JMP @MD4
 
 .SEGMENT "RODATA"
-TEXT:	.ASCIIZ "HELLO WORLD! This is a test of the 80-column text mode with an ASCII character  set. The quick brown fox jumps over the lazy dog."
+TEXT:	.ASCIIZ "HELLO WORLD! This is a test of the 40   column text mode with an ASCII characterset. The quick brown fox jumps over the lazy dog."
 FONT_TABLE:	.INCBIN "MSXFONT.ALF", $07

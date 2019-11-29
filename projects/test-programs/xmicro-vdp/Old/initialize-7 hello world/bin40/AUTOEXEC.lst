@@ -1,0 +1,1980 @@
+; da65 V2.17 - Git N/A
+; Created:    2019-11-27 00:00:29
+; Input file: AUTOEXEC.BIN
+; Page:       1
+
+
+        .setcpu "65C02"
+
+; ----------------------------------------------------------------------------
+SECONDS_BUFFER  := $0000
+MOVE_FROM       := $0002
+XM7SEG_ID       := $0003
+MOVE_TO         := $0004
+MOVE_SIZE       := $0006
+HIGHSLOT        := $0007
+XM7SEG_ADDRESS  := $0008
+L0010           := $0010
+L0020           := $0020
+L0040           := $0040
+L0050           := $0050
+L0070           := $0070
+L00C0           := $00C0
+L0810           := $0810
+L1010           := $1010
+L1820           := $1820
+L2000           := $2000
+L2010           := $2010
+L2020           := $2020
+L204F           := $204F
+L2061           := $2061
+L2070           := $2070
+L20F8           := $20F8
+L4020           := $4020
+L44C0           := $44C0
+L5000           := $5000
+L5020           := $5020
+L5050           := $5050
+L5CE2           := $5CE2
+L6000           := $6000
+L60A0           := $60A0
+L6863           := $6863
+L6874           := $6874
+L6F66           := $6F66
+SLOT0           := $7000
+L7010           := $7010
+L7020           := $7020
+L7050           := $7050
+L70A8           := $70A8
+XMICRO_MEMORY   := $7100
+RTC             := $7110
+L7262           := $7262
+VDP             := $7300
+L7369           := $7369
+L756A           := $756A
+L766F           := $766F
+L7820           := $7820
+L7A61           := $7A61
+L7CFE           := $7CFE
+L7E12           := $7E12
+XM7SEG_BUFFER   := $8A4B
+L8A7E           := $8A7E
+LA000           := $A000
+LA060           := $A060
+LA078           := $A078
+LA870           := $A870
+LA8A8           := $A8A8
+LF800           := $F800
+LF820           := $F820
+LF850           := $F850
+LFEFE           := $FEFE
+; ----------------------------------------------------------------------------
+
+.segment        "STARTUP": absolute
+
+_INIT:  sei                                     ; 8000 78                       x
+        clc                                     ; 8001 18                       .
+        ldx     #$FF                            ; 8002 A2 FF                    ..
+        txs                                     ; 8004 9A                       .
+        lda     #$00                            ; 8005 A9 00                    ..
+        sta     $711C                           ; 8007 8D 1C 71                 ..q
+        jsr     XM7SEG_INIT                     ; 800A 20 74 81                  t.
+        pha                                     ; 800D 48                       H
+        lda     $8A4E                           ; 800E AD 4E 8A                 .N.
+        and     #$3F                            ; 8011 29 3F                    )?
+        sta     $8A4E                           ; 8013 8D 4E 8A                 .N.
+        jsr     XM7SEG_WRITE                    ; 8016 20 BE 81                  ..
+        pla                                     ; 8019 68                       h
+        pha                                     ; 801A 48                       H
+        lda     #$11                            ; 801B A9 11                    ..
+        sta     XM7SEG_BUFFER                   ; 801D 8D 4B 8A                 .K.
+        lda     #$11                            ; 8020 A9 11                    ..
+        sta     $8A4C                           ; 8022 8D 4C 8A                 .L.
+        jsr     XM7SEG_WRITE                    ; 8025 20 BE 81                  ..
+        pla                                     ; 8028 68                       h
+        lda     #$00                            ; 8029 A9 00                    ..
+        sta     $7301                           ; 802B 8D 01 73                 ..s
+        lda     #$80                            ; 802E A9 80                    ..
+        sta     $7301                           ; 8030 8D 01 73                 ..s
+        lda     #$50                            ; 8033 A9 50                    .P
+        sta     $7301                           ; 8035 8D 01 73                 ..s
+        lda     #$81                            ; 8038 A9 81                    ..
+        sta     $7301                           ; 803A 8D 01 73                 ..s
+        lda     #$00                            ; 803D A9 00                    ..
+        .byte   $8D                             ; 803F 8D                       .
+L8040:  ora     ($73,x)                         ; 8040 01 73                    .s
+        lda     #$82                            ; 8042 A9 82                    ..
+        sta     $7301                           ; 8044 8D 01 73                 ..s
+        lda     #$2F                            ; 8047 A9 2F                    ./
+        sta     $7301                           ; 8049 8D 01 73                 ..s
+        lda     #$83                            ; 804C A9 83                    ..
+        sta     $7301                           ; 804E 8D 01 73                 ..s
+        lda     #$02                            ; 8051 A9 02                    ..
+        sta     $7301                           ; 8053 8D 01 73                 ..s
+        lda     #$84                            ; 8056 A9 84                    ..
+        sta     $7301                           ; 8058 8D 01 73                 ..s
+        lda     #$F0                            ; 805B A9 F0                    ..
+        sta     $7301                           ; 805D 8D 01 73                 ..s
+        lda     #$87                            ; 8060 A9 87                    ..
+        sta     $7301                           ; 8062 8D 01 73                 ..s
+        lda     #$08                            ; 8065 A9 08                    ..
+        sta     $7301                           ; 8067 8D 01 73                 ..s
+        lda     #$88                            ; 806A A9 88                    ..
+        sta     $7301                           ; 806C 8D 01 73                 ..s
+        lda     #$00                            ; 806F A9 00                    ..
+        sta     $7301                           ; 8071 8D 01 73                 ..s
+        lda     #$89                            ; 8074 A9 89                    ..
+        sta     $7301                           ; 8076 8D 01 73                 ..s
+        lda     #$00                            ; 8079 A9 00                    ..
+        sta     $7301                           ; 807B 8D 01 73                 ..s
+        lda     #$8A                            ; 807E A9 8A                    ..
+        sta     $7301                           ; 8080 8D 01 73                 ..s
+        lda     #$04                            ; 8083 A9 04                    ..
+        sta     $7301                           ; 8085 8D 01 73                 ..s
+        lda     #$99                            ; 8088 A9 99                    ..
+        sta     $7301                           ; 808A 8D 01 73                 ..s
+        lda     #$00                            ; 808D A9 00                    ..
+        tax                                     ; 808F AA                       .
+        tay                                     ; 8090 A8                       .
+        lda     #$00                            ; 8091 A9 00                    ..
+        sta     $7301                           ; 8093 8D 01 73                 ..s
+        lda     #$8E                            ; 8096 A9 8E                    ..
+        sta     $7301                           ; 8098 8D 01 73                 ..s
+        lda     #$00                            ; 809B A9 00                    ..
+        sta     $7301                           ; 809D 8D 01 73                 ..s
+        lda     #$40                            ; 80A0 A9 40                    .@
+        sta     $7301                           ; 80A2 8D 01 73                 ..s
+        ldx     #$00                            ; 80A5 A2 00                    ..
+        ldy     #$09                            ; 80A7 A0 09                    ..
+        lda     #$00                            ; 80A9 A9 00                    ..
+@1:     sta     VDP                             ; 80AB 8D 00 73                 ..s
+        nop                                     ; 80AE EA                       .
+        nop                                     ; 80AF EA                       .
+        nop                                     ; 80B0 EA                       .
+        nop                                     ; 80B1 EA                       .
+        nop                                     ; 80B2 EA                       .
+        nop                                     ; 80B3 EA                       .
+        nop                                     ; 80B4 EA                       .
+        nop                                     ; 80B5 EA                       .
+        nop                                     ; 80B6 EA                       .
+        nop                                     ; 80B7 EA                       .
+        dex                                     ; 80B8 CA                       .
+        bne     @1                              ; 80B9 D0 F0                    ..
+        dey                                     ; 80BB 88                       .
+        bne     @1                              ; 80BC D0 ED                    ..
+PATTERN_GEN_INIT:
+        lda     #$4B                            ; 80BE A9 4B                    .K
+        sta     MOVE_FROM                       ; 80C0 85 02                    ..
+        lda     #$82                            ; 80C2 A9 82                    ..
+        sta     XM7SEG_ID                       ; 80C4 85 03                    ..
+        lda     #$00                            ; 80C6 A9 00                    ..
+        sta     MOVE_SIZE                       ; 80C8 85 06                    ..
+        lda     #$08                            ; 80CA A9 08                    ..
+        sta     HIGHSLOT                        ; 80CC 85 07                    ..
+        lda     #$00                            ; 80CE A9 00                    ..
+        sta     $7301                           ; 80D0 8D 01 73                 ..s
+        lda     #$8E                            ; 80D3 A9 8E                    ..
+        sta     $7301                           ; 80D5 8D 01 73                 ..s
+        lda     #$00                            ; 80D8 A9 00                    ..
+        sta     $7301                           ; 80DA 8D 01 73                 ..s
+        lda     #$50                            ; 80DD A9 50                    .P
+        sta     $7301                           ; 80DF 8D 01 73                 ..s
+        ldy     #$00                            ; 80E2 A0 00                    ..
+        ldx     HIGHSLOT                        ; 80E4 A6 07                    ..
+        beq     @MD2                            ; 80E6 F0 17                    ..
+@MD1:   lda     (MOVE_FROM),y                   ; 80E8 B1 02                    ..
+        sta     VDP                             ; 80EA 8D 00 73                 ..s
+        nop                                     ; 80ED EA                       .
+        nop                                     ; 80EE EA                       .
+        nop                                     ; 80EF EA                       .
+        nop                                     ; 80F0 EA                       .
+        nop                                     ; 80F1 EA                       .
+        nop                                     ; 80F2 EA                       .
+        nop                                     ; 80F3 EA                       .
+        nop                                     ; 80F4 EA                       .
+        nop                                     ; 80F5 EA                       .
+        nop                                     ; 80F6 EA                       .
+        iny                                     ; 80F7 C8                       .
+        bne     @MD1                            ; 80F8 D0 EE                    ..
+        inc     XM7SEG_ID                       ; 80FA E6 03                    ..
+        dex                                     ; 80FC CA                       .
+        .byte   $D0                             ; 80FD D0                       .
+L80FE:  .byte   $E9                             ; 80FE E9                       .
+@MD2:   ldx     MOVE_SIZE                       ; 80FF A6 06                    ..
+        beq     @MD4                            ; 8101 F0 13                    ..
+@MD3:   lda     (MOVE_FROM),y                   ; 8103 B1 02                    ..
+        sta     VDP                             ; 8105 8D 00 73                 ..s
+        nop                                     ; 8108 EA                       .
+        nop                                     ; 8109 EA                       .
+        nop                                     ; 810A EA                       .
+        nop                                     ; 810B EA                       .
+        nop                                     ; 810C EA                       .
+        nop                                     ; 810D EA                       .
+        nop                                     ; 810E EA                       .
+        nop                                     ; 810F EA                       .
+        nop                                     ; 8110 EA                       .
+        nop                                     ; 8111 EA                       .
+        iny                                     ; 8112 C8                       .
+        dex                                     ; 8113 CA                       .
+        bne     @MD3                            ; 8114 D0 ED                    ..
+@MD4:   jmp     _MAIN                           ; 8116 4C 19 81                 L..
+
+; ----------------------------------------------------------------------------
+
+; End of "STARTUP" segment
+; ----------------------------------------------------------------------------
+.code
+
+
+.segment        "CODE": absolute
+
+_MAIN:  lda     #$C9                            ; 8119 A9 C9                    ..
+        sta     MOVE_FROM                       ; 811B 85 02                    ..
+        lda     #$81                            ; 811D A9 81                    ..
+        sta     XM7SEG_ID                       ; 811F 85 03                    ..
+        lda     #$82                            ; 8121 A9 82                    ..
+        sta     MOVE_SIZE                       ; 8123 85 06                    ..
+        lda     #$00                            ; 8125 A9 00                    ..
+        sta     HIGHSLOT                        ; 8127 85 07                    ..
+        lda     #$00                            ; 8129 A9 00                    ..
+        sta     $7301                           ; 812B 8D 01 73                 ..s
+        lda     #$8E                            ; 812E A9 8E                    ..
+        sta     $7301                           ; 8130 8D 01 73                 ..s
+        lda     #$00                            ; 8133 A9 00                    ..
+        sta     $7301                           ; 8135 8D 01 73                 ..s
+        lda     #$40                            ; 8138 A9 40                    .@
+        sta     $7301                           ; 813A 8D 01 73                 ..s
+        ldy     #$00                            ; 813D A0 00                    ..
+        ldx     HIGHSLOT                        ; 813F A6 07                    ..
+        beq     @MD2                            ; 8141 F0 17                    ..
+@MD1:   lda     (MOVE_FROM),y                   ; 8143 B1 02                    ..
+        sta     VDP                             ; 8145 8D 00 73                 ..s
+        nop                                     ; 8148 EA                       .
+        nop                                     ; 8149 EA                       .
+        nop                                     ; 814A EA                       .
+        nop                                     ; 814B EA                       .
+        nop                                     ; 814C EA                       .
+        nop                                     ; 814D EA                       .
+        nop                                     ; 814E EA                       .
+        nop                                     ; 814F EA                       .
+        nop                                     ; 8150 EA                       .
+        nop                                     ; 8151 EA                       .
+        iny                                     ; 8152 C8                       .
+        bne     @MD1                            ; 8153 D0 EE                    ..
+        inc     XM7SEG_ID                       ; 8155 E6 03                    ..
+        dex                                     ; 8157 CA                       .
+        bne     @MD1                            ; 8158 D0 E9                    ..
+@MD2:   ldx     MOVE_SIZE                       ; 815A A6 06                    ..
+        beq     @MD4                            ; 815C F0 13                    ..
+@MD3:   lda     (MOVE_FROM),y                   ; 815E B1 02                    ..
+        sta     VDP                             ; 8160 8D 00 73                 ..s
+        nop                                     ; 8163 EA                       .
+        nop                                     ; 8164 EA                       .
+        nop                                     ; 8165 EA                       .
+        nop                                     ; 8166 EA                       .
+        nop                                     ; 8167 EA                       .
+        nop                                     ; 8168 EA                       .
+        nop                                     ; 8169 EA                       .
+        nop                                     ; 816A EA                       .
+        nop                                     ; 816B EA                       .
+        nop                                     ; 816C EA                       .
+        iny                                     ; 816D C8                       .
+        dex                                     ; 816E CA                       .
+        bne     @MD3                            ; 816F D0 ED                    ..
+@MD4:   jmp     @MD4                            ; 8171 4C 71 81                 Lq.
+
+; ----------------------------------------------------------------------------
+XM7SEG_INIT:
+        pha                                     ; 8174 48                       H
+        txa                                     ; 8175 8A                       .
+        pha                                     ; 8176 48                       H
+        tya                                     ; 8177 98                       .
+        pha                                     ; 8178 48                       H
+        lda     #$00                            ; 8179 A9 00                    ..
+        sta     XM7SEG_BUFFER                   ; 817B 8D 4B 8A                 .K.
+        lda     #$00                            ; 817E A9 00                    ..
+        sta     $8A4C                           ; 8180 8D 4C 8A                 .L.
+        lda     #$00                            ; 8183 A9 00                    ..
+        sta     $8A4D                           ; 8185 8D 4D 8A                 .M.
+        lda     #$FC                            ; 8188 A9 FC                    ..
+        sta     $8A4E                           ; 818A 8D 4E 8A                 .N.
+        ldx     #$07                            ; 818D A2 07                    ..
+        ldy     #$FF                            ; 818F A0 FF                    ..
+        lda     #$00                            ; 8191 A9 00                    ..
+        sta     XM7SEG_ADDRESS                  ; 8193 85 08                    ..
+        lda     #$70                            ; 8195 A9 70                    .p
+        sta     $09                             ; 8197 85 09                    ..
+L0:     lda     (XM7SEG_ADDRESS),y              ; 8199 B1 08                    ..
+        cmp     #$03                            ; 819B C9 03                    ..
+        beq     SUCCESS                         ; 819D F0 16                    ..
+        inc     $09                             ; 819F E6 09                    ..
+        dex                                     ; 81A1 CA                       .
+        bmi     FAIL                            ; 81A2 30 03                    0.
+        jmp     L0                              ; 81A4 4C 99 81                 L..
+
+; ----------------------------------------------------------------------------
+FAIL:   lda     #$FF                            ; 81A7 A9 FF                    ..
+        sta     XM7SEG_ADDRESS                  ; 81A9 85 08                    ..
+        lda     #$FF                            ; 81AB A9 FF                    ..
+        sta     $09                             ; 81AD 85 09                    ..
+        pla                                     ; 81AF 68                       h
+        tay                                     ; 81B0 A8                       .
+        pla                                     ; 81B1 68                       h
+        tax                                     ; 81B2 AA                       .
+        pla                                     ; 81B3 68                       h
+        rts                                     ; 81B4 60                       `
+
+; ----------------------------------------------------------------------------
+SUCCESS:jsr     XM7SEG_WRITE                    ; 81B5 20 BE 81                  ..
+        pla                                     ; 81B8 68                       h
+        tay                                     ; 81B9 A8                       .
+        pla                                     ; 81BA 68                       h
+        tax                                     ; 81BB AA                       .
+        pla                                     ; 81BC 68                       h
+        rts                                     ; 81BD 60                       `
+
+; ----------------------------------------------------------------------------
+XM7SEG_WRITE:
+        ldy     #$03                            ; 81BE A0 03                    ..
+L0:     lda     XM7SEG_BUFFER,y                 ; 81C0 B9 4B 8A                 .K.
+        sta     (XM7SEG_ADDRESS),y              ; 81C3 91 08                    ..
+        dey                                     ; 81C5 88                       .
+        bpl     L0                              ; 81C6 10 F8                    ..
+        rts                                     ; 81C8 60                       `
+
+; ----------------------------------------------------------------------------
+
+; End of "CODE" segment
+; ----------------------------------------------------------------------------
+.code
+
+
+.segment        "RODATA": absolute
+
+TEXT:   pha                                     ; 81C9 48                       H
+        eor     $4C                             ; 81CA 45 4C                    EL
+        jmp     L204F                           ; 81CC 4C 4F 20                 LO 
+
+; ----------------------------------------------------------------------------
+        rmb5    $4F                             ; 81CF 57 4F                    WO
+        eor     ($4C)                           ; 81D1 52 4C                    RL
+        .byte   $44                             ; 81D3 44                       D
+        and     (L0020,x)                       ; 81D4 21 20                    ! 
+        .byte   $54                             ; 81D6 54                       T
+        pla                                     ; 81D7 68                       h
+        adc     #$73                            ; 81D8 69 73                    is
+        jsr     L7369                           ; 81DA 20 69 73                  is
+        jsr     L2061                           ; 81DD 20 61 20                  a 
+        stz     $65,x                           ; 81E0 74 65                    te
+        .byte   $73                             ; 81E2 73                       s
+        stz     L0020,x                         ; 81E3 74 20                    t 
+        bbr6    $66,L8208                       ; 81E5 6F 66 20                 of 
+        stz     $68,x                           ; 81E8 74 68                    th
+        adc     L0020                           ; 81EA 65 20                    e 
+        bit     $30,x                           ; 81EC 34 30                    40
+        jsr     L2020                           ; 81EE 20 20 20                    
+        .byte   $63                             ; 81F1 63                       c
+        bbr6    $6C,L826A                       ; 81F2 6F 6C 75                 olu
+        adc     $206E                           ; 81F5 6D 6E 20                 mn 
+        stz     $65,x                           ; 81F8 74 65                    te
+        sei                                     ; 81FA 78                       x
+        stz     L0020,x                         ; 81FB 74 20                    t 
+        adc     $646F                           ; 81FD 6D 6F 64                 mod
+        adc     L0020                           ; 8200 65 20                    e 
+        rmb7    $69                             ; 8202 77 69                    wi
+        stz     $68,x                           ; 8204 74 68                    th
+        .byte   $20                             ; 8206 20                        
+        .byte   $61                             ; 8207 61                       a
+L8208:  ror     $4120                           ; 8208 6E 20 41                 n A
+        .byte   $53                             ; 820B 53                       S
+        .byte   $43                             ; 820C 43                       C
+        eor     #$49                            ; 820D 49 49                    II
+        jsr     L6863                           ; 820F 20 63 68                  ch
+        adc     ($72,x)                         ; 8212 61 72                    ar
+        adc     ($63,x)                         ; 8214 61 63                    ac
+        stz     $65,x                           ; 8216 74 65                    te
+        adc     ($73)                           ; 8218 72 73                    rs
+        adc     $74                             ; 821A 65 74                    et
+        rol     $5420                           ; 821C 2E 20 54                 . T
+        pla                                     ; 821F 68                       h
+        adc     L0020                           ; 8220 65 20                    e 
+        adc     ($75),y                         ; 8222 71 75                    qu
+        adc     #$63                            ; 8224 69 63                    ic
+        .byte   $6B                             ; 8226 6B                       k
+        jsr     L7262                           ; 8227 20 62 72                  br
+        bbr6    $77,L829B                       ; 822A 6F 77 6E                 own
+        jsr     L6F66                           ; 822D 20 66 6F                  fo
+        sei                                     ; 8230 78                       x
+        jsr     L756A                           ; 8231 20 6A 75                  ju
+        adc     $7370                           ; 8234 6D 70 73                 mps
+        jsr     L766F                           ; 8237 20 6F 76                  ov
+        adc     $72                             ; 823A 65 72                    er
+L823C:  jsr     L6874                           ; 823C 20 74 68                  th
+        adc     L0020                           ; 823F 65 20                    e 
+        jmp     (L7A61)                         ; 8241 6C 61 7A                 laz
+
+; ----------------------------------------------------------------------------
+        adc     $6420,y                         ; 8244 79 20 64                 y d
+        bbr6    $67,L8278                       ; 8247 6F 67 2E                 og.
+        brk                                     ; 824A 00                       .
+FONT_TABLE:
+        brk                                     ; 824B 00                       .
+        brk                                     ; 824C 00                       .
+        brk                                     ; 824D 00                       .
+        brk                                     ; 824E 00                       .
+        brk                                     ; 824F 00                       .
+        brk                                     ; 8250 00                       .
+        brk                                     ; 8251 00                       .
+        brk                                     ; 8252 00                       .
+        bit     $A542,x                         ; 8253 3C 42 A5                 <B.
+        sta     ($A5,x)                         ; 8256 81 A5                    ..
+        sta     $3C42,y                         ; 8258 99 42 3C                 .B<
+        bit     $DB7E,x                         ; 825B 3C 7E DB                 <~.
+        bbs7    $FF,L823C                       ; 825E FF FF DB                 ...
+        ror     $3C                             ; 8261 66 3C                    f<
+        jmp     (LFEFE)                         ; 8263 6C FE FE                 l..
+
+; ----------------------------------------------------------------------------
+        inc     $387C,x                         ; 8266 FE 7C 38                 .|8
+        .byte   $10                             ; 8269 10                       .
+L826A:  brk                                     ; 826A 00                       .
+        bpl     L82A5                           ; 826B 10 38                    .8
+        jmp     (L7CFE,x)                       ; 826D 7C FE 7C                 |.|
+        sec                                     ; 8270 38                       8
+        bpl     L8273                           ; 8271 10 00                    ..
+L8273:  bpl     L82AD                           ; 8273 10 38                    .8
+        .byte   $54                             ; 8275 54                       T
+        .byte   $FE                             ; 8276 FE                       .
+        .byte   $54                             ; 8277 54                       T
+L8278:  bpl     L82B2                           ; 8278 10 38                    .8
+        brk                                     ; 827A 00                       .
+        bpl     L82B5                           ; 827B 10 38                    .8
+        jmp     (LFEFE,x)                       ; 827D 7C FE FE                 |..
+        bpl     L82BA                           ; 8280 10 38                    .8
+        brk                                     ; 8282 00                       .
+        brk                                     ; 8283 00                       .
+        brk                                     ; 8284 00                       .
+        brk                                     ; 8285 00                       .
+        bmi     L82B8                           ; 8286 30 30                    00
+        brk                                     ; 8288 00                       .
+        brk                                     ; 8289 00                       .
+        brk                                     ; 828A 00                       .
+        .byte   $FF                             ; 828B FF                       .
+        .byte   $FF                             ; 828C FF                       .
+L828D:  bbs7    $E7,$8277                       ; 828D FF E7 E7                 ...
+        .byte   $FF                             ; 8290 FF                       .
+        .byte   $FF                             ; 8291 FF                       .
+L8292:  bbs7    $38,$82D9                       ; 8292 FF 38 44                 .8D
+        .byte   $82                             ; 8295 82                       .
+        .byte   $82                             ; 8296 82                       .
+        .byte   $82                             ; 8297 82                       .
+        .byte   $44                             ; 8298 44                       D
+        sec                                     ; 8299 38                       8
+        brk                                     ; 829A 00                       .
+L829B:  smb4    $BB                             ; 829B C7 BB                    ..
+        adc     $7D7D,x                         ; 829D 7D 7D 7D                 }}}
+        .byte   $BB                             ; 82A0 BB                       .
+        smb4    $FF                             ; 82A1 C7 FF                    ..
+        .byte   $0F                             ; 82A3 0F                       .
+        .byte   $03                             ; 82A4 03                       .
+L82A5:  ora     $79                             ; 82A5 05 79                    .y
+        dey                                     ; 82A7 88                       .
+        dey                                     ; 82A8 88                       .
+        dey                                     ; 82A9 88                       .
+        bvs     L82E4                           ; 82AA 70 38                    p8
+        .byte   $44                             ; 82AC 44                       D
+L82AD:  .byte   $44                             ; 82AD 44                       D
+        .byte   $44                             ; 82AE 44                       D
+        sec                                     ; 82AF 38                       8
+        bpl     L832E                           ; 82B0 10 7C                    .|
+L82B2:  bpl     L82E4                           ; 82B2 10 30                    .0
+        plp                                     ; 82B4 28                       (
+L82B5:  bit     $24                             ; 82B5 24 24                    $$
+        plp                                     ; 82B7 28                       (
+L82B8:  .byte   $20                             ; 82B8 20                        
+        .byte   $E0                             ; 82B9 E0                       .
+L82BA:  cpy     #$3C                            ; 82BA C0 3C                    .<
+L82BC:  bit     $3C                             ; 82BC 24 3C                    $<
+        bit     $24                             ; 82BE 24 24                    $$
+        cpx     $DC                             ; 82C0 E4 DC                    ..
+        clc                                     ; 82C2 18                       .
+        bpl     L8319                           ; 82C3 10 54                    .T
+        sec                                     ; 82C5 38                       8
+        inc     $5438                           ; 82C6 EE 38 54                 .8T
+        bpl     L82CB                           ; 82C9 10 00                    ..
+L82CB:  bpl     L82DD                           ; 82CB 10 10                    ..
+        bpl     L834B                           ; 82CD 10 7C                    .|
+        bpl     L82E1                           ; 82CF 10 10                    ..
+        bpl     L82E3                           ; 82D1 10 10                    ..
+        bpl     L82E5                           ; 82D3 10 10                    ..
+        .byte   $10                             ; 82D5 10                       .
+L82D6:  .byte   $FF                             ; 82D6 FF                       .
+L82D7:  brk                                     ; 82D7 00                       .
+        brk                                     ; 82D8 00                       .
+        brk                                     ; 82D9 00                       .
+        brk                                     ; 82DA 00                       .
+        brk                                     ; 82DB 00                       .
+        brk                                     ; 82DC 00                       .
+L82DD:  brk                                     ; 82DD 00                       .
+        bbs7    L0010,L82F1                     ; 82DE FF 10 10                 ...
+L82E1:  bpl     L82F3                           ; 82E1 10 10                    ..
+L82E3:  .byte   $10                             ; 82E3 10                       .
+L82E4:  .byte   $10                             ; 82E4 10                       .
+L82E5:  bpl     L82D7                           ; 82E5 10 F0                    ..
+        bpl     L82F9                           ; 82E7 10 10                    ..
+        bpl     L82FB                           ; 82E9 10 10                    ..
+        bpl     L82FD                           ; 82EB 10 10                    ..
+        bpl     L830E                           ; 82ED 10 1F                    ..
+        bpl     L8301                           ; 82EF 10 10                    ..
+L82F1:  bpl     L8303                           ; 82F1 10 10                    ..
+L82F3:  bpl     L8305                           ; 82F3 10 10                    ..
+        .byte   $10                             ; 82F5 10                       .
+L82F6:  bbs7    L0010,L8309                     ; 82F6 FF 10 10                 ...
+L82F9:  bpl     L830B                           ; 82F9 10 10                    ..
+L82FB:  bpl     L830D                           ; 82FB 10 10                    ..
+L82FD:  bpl     L830F                           ; 82FD 10 10                    ..
+        bpl     L8311                           ; 82FF 10 10                    ..
+L8301:  bpl     L8313                           ; 8301 10 10                    ..
+L8303:  brk                                     ; 8303 00                       .
+        brk                                     ; 8304 00                       .
+L8305:  brk                                     ; 8305 00                       .
+        bbs7    SECONDS_BUFFER,L8309            ; 8306 FF 00 00                 ...
+L8309:  brk                                     ; 8309 00                       .
+        brk                                     ; 830A 00                       .
+L830B:  brk                                     ; 830B 00                       .
+        brk                                     ; 830C 00                       .
+L830D:  brk                                     ; 830D 00                       .
+L830E:  .byte   $1F                             ; 830E 1F                       .
+L830F:  bpl     L8321                           ; 830F 10 10                    ..
+L8311:  bpl     L8323                           ; 8311 10 10                    ..
+L8313:  brk                                     ; 8313 00                       .
+        brk                                     ; 8314 00                       .
+        brk                                     ; 8315 00                       .
+        .byte   $F0                             ; 8316 F0                       .
+L8317:  bpl     $8329                           ; 8317 10 10                    ..
+L8319:  bpl     L832B                           ; 8319 10 10                    ..
+        bpl     L832D                           ; 831B 10 10                    ..
+        bpl     L833E                           ; 831D 10 1F                    ..
+        brk                                     ; 831F 00                       .
+        brk                                     ; 8320 00                       .
+L8321:  brk                                     ; 8321 00                       .
+        brk                                     ; 8322 00                       .
+L8323:  bpl     L8335                           ; 8323 10 10                    ..
+        bpl     L8317                           ; 8325 10 F0                    ..
+        brk                                     ; 8327 00                       .
+L8328:  brk                                     ; 8328 00                       .
+        brk                                     ; 8329 00                       .
+        brk                                     ; 832A 00                       .
+L832B:  sta     ($42,x)                         ; 832B 81 42                    .B
+L832D:  .byte   $24                             ; 832D 24                       $
+L832E:  clc                                     ; 832E 18                       .
+        clc                                     ; 832F 18                       .
+        bit     $42                             ; 8330 24 42                    $B
+        sta     ($01,x)                         ; 8332 81 01                    ..
+        .byte   $02                             ; 8334 02                       .
+L8335:  tsb     XM7SEG_ADDRESS                  ; 8335 04 08                    ..
+        bpl     L8359                           ; 8337 10 20                    . 
+        rti                                     ; 8339 40                       @
+
+; ----------------------------------------------------------------------------
+        bra     L82BC                           ; 833A 80 80                    ..
+        rti                                     ; 833C 40                       @
+
+; ----------------------------------------------------------------------------
+        .byte   $20                             ; 833D 20                        
+L833E:  bpl     L8348                           ; 833E 10 08                    ..
+        tsb     MOVE_FROM                       ; 8340 04 02                    ..
+        ora     (SECONDS_BUFFER,x)              ; 8342 01 00                    ..
+        bpl     L8356                           ; 8344 10 10                    ..
+        .byte   $FF                             ; 8346 FF                       .
+        .byte   $10                             ; 8347 10                       .
+L8348:  bpl     L834A                           ; 8348 10 00                    ..
+L834A:  brk                                     ; 834A 00                       .
+L834B:  brk                                     ; 834B 00                       .
+        brk                                     ; 834C 00                       .
+        brk                                     ; 834D 00                       .
+        brk                                     ; 834E 00                       .
+        brk                                     ; 834F 00                       .
+        brk                                     ; 8350 00                       .
+        brk                                     ; 8351 00                       .
+        brk                                     ; 8352 00                       .
+        .byte   $20                             ; 8353 20                        
+        .byte   $20                             ; 8354 20                        
+L8355:  .byte   $20                             ; 8355 20                        
+L8356:  jsr     SECONDS_BUFFER                  ; 8356 20 00 00                  ..
+L8359:  jsr     L5000                           ; 8359 20 00 50                  .P
+        bvc     L83AE                           ; 835C 50 50                    PP
+        brk                                     ; 835E 00                       .
+        brk                                     ; 835F 00                       .
+L8360:  brk                                     ; 8360 00                       .
+        brk                                     ; 8361 00                       .
+        brk                                     ; 8362 00                       .
+        bvc     L83B5                           ; 8363 50 50                    PP
+L8365:  sed                                     ; 8365 F8                       .
+        bvc     L8360                           ; 8366 50 F8                    P.
+        bvc     L83BA                           ; 8368 50 50                    PP
+        brk                                     ; 836A 00                       .
+        .byte   $20                             ; 836B 20                        
+        sei                                     ; 836C 78                       x
+L836D:  ldy     #$70                            ; 836D A0 70                    .p
+        plp                                     ; 836F 28                       (
+        beq     L8392                           ; 8370 F0 20                    . 
+        brk                                     ; 8372 00                       .
+        cpy     #$C8                            ; 8373 C0 C8                    ..
+        bpl     L8397                           ; 8375 10 20                    . 
+        rti                                     ; 8377 40                       @
+
+; ----------------------------------------------------------------------------
+        tya                                     ; 8378 98                       .
+        clc                                     ; 8379 18                       .
+        brk                                     ; 837A 00                       .
+        rti                                     ; 837B 40                       @
+
+; ----------------------------------------------------------------------------
+        ldy     #$40                            ; 837C A0 40                    .@
+        tay                                     ; 837E A8                       .
+L837F:  bcc     L8319                           ; 837F 90 98                    ..
+        rts                                     ; 8381 60                       `
+
+; ----------------------------------------------------------------------------
+        brk                                     ; 8382 00                       .
+        bpl     L83A5                           ; 8383 10 20                    . 
+        rti                                     ; 8385 40                       @
+
+; ----------------------------------------------------------------------------
+        brk                                     ; 8386 00                       .
+        brk                                     ; 8387 00                       .
+        brk                                     ; 8388 00                       .
+        brk                                     ; 8389 00                       .
+        brk                                     ; 838A 00                       .
+        bpl     L83AD                           ; 838B 10 20                    . 
+        rti                                     ; 838D 40                       @
+
+; ----------------------------------------------------------------------------
+        rti                                     ; 838E 40                       @
+
+; ----------------------------------------------------------------------------
+        rti                                     ; 838F 40                       @
+
+; ----------------------------------------------------------------------------
+        .byte   $20                             ; 8390 20                        
+        .byte   $10                             ; 8391 10                       .
+L8392:  brk                                     ; 8392 00                       .
+        rti                                     ; 8393 40                       @
+
+; ----------------------------------------------------------------------------
+        .byte   $20                             ; 8394 20                        
+L8395:  bpl     $83A7                           ; 8395 10 10                    ..
+L8397:  .byte   $10                             ; 8397 10                       .
+L8398:  jsr     L0040                           ; 8398 20 40 00                  @.
+        .byte   $20                             ; 839B 20                        
+        tay                                     ; 839C A8                       .
+L839D:  bvs     $83BF                           ; 839D 70 20                    p 
+        bvs     $8349                           ; 839F 70 A8                    p.
+        jsr     SECONDS_BUFFER                  ; 83A1 20 00 00                  ..
+        .byte   $20                             ; 83A4 20                        
+L83A5:  jsr     L20F8                           ; 83A5 20 F8 20                  . 
+        jsr     SECONDS_BUFFER                  ; 83A8 20 00 00                  ..
+        brk                                     ; 83AB 00                       .
+        brk                                     ; 83AC 00                       .
+L83AD:  brk                                     ; 83AD 00                       .
+L83AE:  brk                                     ; 83AE 00                       .
+        brk                                     ; 83AF 00                       .
+        jsr     L4020                           ; 83B0 20 20 40                   @
+        brk                                     ; 83B3 00                       .
+        brk                                     ; 83B4 00                       .
+L83B5:  brk                                     ; 83B5 00                       .
+        sei                                     ; 83B6 78                       x
+        brk                                     ; 83B7 00                       .
+        brk                                     ; 83B8 00                       .
+        brk                                     ; 83B9 00                       .
+L83BA:  brk                                     ; 83BA 00                       .
+        brk                                     ; 83BB 00                       .
+        brk                                     ; 83BC 00                       .
+        brk                                     ; 83BD 00                       .
+        brk                                     ; 83BE 00                       .
+        brk                                     ; 83BF 00                       .
+        rts                                     ; 83C0 60                       `
+
+; ----------------------------------------------------------------------------
+        rts                                     ; 83C1 60                       `
+
+; ----------------------------------------------------------------------------
+        brk                                     ; 83C2 00                       .
+        brk                                     ; 83C3 00                       .
+        brk                                     ; 83C4 00                       .
+        php                                     ; 83C5 08                       .
+        bpl     L83E8                           ; 83C6 10 20                    . 
+        rti                                     ; 83C8 40                       @
+
+; ----------------------------------------------------------------------------
+        bra     L83CB                           ; 83C9 80 00                    ..
+L83CB:  bvs     L8355                           ; 83CB 70 88                    p.
+L83CD:  tya                                     ; 83CD 98                       .
+        tay                                     ; 83CE A8                       .
+        iny                                     ; 83CF C8                       .
+        dey                                     ; 83D0 88                       .
+        bvs     L83D3                           ; 83D1 70 00                    p.
+L83D3:  .byte   $20                             ; 83D3 20                        
+        rts                                     ; 83D4 60                       `
+
+; ----------------------------------------------------------------------------
+L83D5:  .byte   $A0                             ; 83D5 A0                       .
+L83D6:  jsr     L2020                           ; 83D6 20 20 20                    
+        sed                                     ; 83D9 F8                       .
+L83DA:  brk                                     ; 83DA 00                       .
+        bvs     L8365                           ; 83DB 70 88                    p.
+        php                                     ; 83DD 08                       .
+        bpl     L8440                           ; 83DE 10 60                    .`
+        bra     L83DA                           ; 83E0 80 F8                    ..
+        brk                                     ; 83E2 00                       .
+        bvs     L836D                           ; 83E3 70 88                    p.
+        php                                     ; 83E5 08                       .
+        .byte   $30                             ; 83E6 30                       0
+L83E7:  php                                     ; 83E7 08                       .
+L83E8:  dey                                     ; 83E8 88                       .
+        bvs     L83EB                           ; 83E9 70 00                    p.
+L83EB:  bpl     L841D                           ; 83EB 10 30                    .0
+        bvc     L837F                           ; 83ED 50 90                    P.
+L83EF:  sed                                     ; 83EF F8                       .
+L83F0:  bpl     L8402                           ; 83F0 10 10                    ..
+        brk                                     ; 83F2 00                       .
+        sed                                     ; 83F3 F8                       .
+        bra     L83D6                           ; 83F4 80 E0                    ..
+L83F6:  bpl     L8400                           ; 83F6 10 08                    ..
+L83F8:  bpl     L83DA                           ; 83F8 10 E0                    ..
+        brk                                     ; 83FA 00                       .
+        bmi     L843D                           ; 83FB 30 40                    0@
+        .byte   $80                             ; 83FD 80                       .
+L83FE:  beq     $8388                           ; 83FE F0 88                    ..
+L8400:  dey                                     ; 8400 88                       .
+        .byte   $70                             ; 8401 70                       p
+L8402:  brk                                     ; 8402 00                       .
+        sed                                     ; 8403 F8                       .
+        dey                                     ; 8404 88                       .
+        bpl     L8427                           ; 8405 10 20                    . 
+        jsr     L2020                           ; 8407 20 20 20                    
+        brk                                     ; 840A 00                       .
+        bvs     L8395                           ; 840B 70 88                    p.
+L840D:  dey                                     ; 840D 88                       .
+        bvs     L8398                           ; 840E 70 88                    p.
+        dey                                     ; 8410 88                       .
+        bvs     L8413                           ; 8411 70 00                    p.
+L8413:  bvs     L839D                           ; 8413 70 88                    p.
+        dey                                     ; 8415 88                       .
+        sei                                     ; 8416 78                       x
+        php                                     ; 8417 08                       .
+        bpl     L847A                           ; 8418 10 60                    .`
+        brk                                     ; 841A 00                       .
+        brk                                     ; 841B 00                       .
+        brk                                     ; 841C 00                       .
+L841D:  jsr     SECONDS_BUFFER                  ; 841D 20 00 00                  ..
+        jsr     SECONDS_BUFFER                  ; 8420 20 00 00                  ..
+        brk                                     ; 8423 00                       .
+        brk                                     ; 8424 00                       .
+        .byte   $20                             ; 8425 20                        
+        brk                                     ; 8426 00                       .
+L8427:  brk                                     ; 8427 00                       .
+        jsr     L4020                           ; 8428 20 20 40                   @
+        clc                                     ; 842B 18                       .
+        .byte   $30                             ; 842C 30                       0
+L842D:  rts                                     ; 842D 60                       `
+
+; ----------------------------------------------------------------------------
+        cpy     #$60                            ; 842E C0 60                    .`
+L8430:  bmi     L844A                           ; 8430 30 18                    0.
+L8432:  brk                                     ; 8432 00                       .
+        brk                                     ; 8433 00                       .
+        brk                                     ; 8434 00                       .
+        sed                                     ; 8435 F8                       .
+        brk                                     ; 8436 00                       .
+        sed                                     ; 8437 F8                       .
+        brk                                     ; 8438 00                       .
+        brk                                     ; 8439 00                       .
+        brk                                     ; 843A 00                       .
+        cpy     #$60                            ; 843B C0 60                    .`
+L843D:  bmi     L8457                           ; 843D 30 18                    0.
+L843F:  .byte   $30                             ; 843F 30                       0
+L8440:  rts                                     ; 8440 60                       `
+
+; ----------------------------------------------------------------------------
+        cpy     #$00                            ; 8441 C0 00                    ..
+        bvs     L83CD                           ; 8443 70 88                    p.
+        php                                     ; 8445 08                       .
+        bpl     L8468                           ; 8446 10 20                    . 
+        brk                                     ; 8448 00                       .
+        .byte   $20                             ; 8449 20                        
+L844A:  brk                                     ; 844A 00                       .
+        bvs     L83D5                           ; 844B 70 88                    p.
+L844D:  php                                     ; 844D 08                       .
+        pla                                     ; 844E 68                       h
+        tay                                     ; 844F A8                       .
+L8450:  tay                                     ; 8450 A8                       .
+        .byte   $70                             ; 8451 70                       p
+L8452:  brk                                     ; 8452 00                       .
+L8453:  .byte   $20                             ; 8453 20                        
+        .byte   $50                             ; 8454 50                       P
+L8455:  dey                                     ; 8455 88                       .
+        dey                                     ; 8456 88                       .
+L8457:  sed                                     ; 8457 F8                       .
+        dey                                     ; 8458 88                       .
+        dey                                     ; 8459 88                       .
+        brk                                     ; 845A 00                       .
+        beq     L84A5                           ; 845B F0 48                    .H
+L845D:  pha                                     ; 845D 48                       H
+        bvs     L84A8                           ; 845E 70 48                    pH
+        pha                                     ; 8460 48                       H
+        beq     L8463                           ; 8461 F0 00                    ..
+L8463:  bmi     L84AD                           ; 8463 30 48                    0H
+L8465:  bra     L83E7                           ; 8465 80 80                    ..
+        .byte   $80                             ; 8467 80                       .
+L8468:  pha                                     ; 8468 48                       H
+        .byte   $30                             ; 8469 30                       0
+L846A:  brk                                     ; 846A 00                       .
+L846B:  cpx     #$50                            ; 846B E0 50                    .P
+L846D:  pha                                     ; 846D 48                       H
+        pha                                     ; 846E 48                       H
+        pha                                     ; 846F 48                       H
+        bvc     L8452                           ; 8470 50 E0                    P.
+L8472:  brk                                     ; 8472 00                       .
+        sed                                     ; 8473 F8                       .
+        bra     L83F6                           ; 8474 80 80                    ..
+        beq     L83F8                           ; 8476 F0 80                    ..
+        bra     L8472                           ; 8478 80 F8                    ..
+L847A:  brk                                     ; 847A 00                       .
+        sed                                     ; 847B F8                       .
+        bra     L83FE                           ; 847C 80 80                    ..
+        beq     L8400                           ; 847E F0 80                    ..
+L8480:  bra     L8402                           ; 8480 80 80                    ..
+        brk                                     ; 8482 00                       .
+        bvs     L840D                           ; 8483 70 88                    p.
+        bra     L843F                           ; 8485 80 B8                    ..
+        dey                                     ; 8487 88                       .
+        dey                                     ; 8488 88                       .
+        bvs     L848B                           ; 8489 70 00                    p.
+L848B:  dey                                     ; 848B 88                       .
+        dey                                     ; 848C 88                       .
+        dey                                     ; 848D 88                       .
+L848E:  sed                                     ; 848E F8                       .
+        dey                                     ; 848F 88                       .
+        dey                                     ; 8490 88                       .
+        dey                                     ; 8491 88                       .
+        brk                                     ; 8492 00                       .
+        bvs     L84B5                           ; 8493 70 20                    p 
+        jsr     L2020                           ; 8495 20 20 20                    
+        .byte   $20                             ; 8498 20                        
+L8499:  bvs     $849B                           ; 8499 70 00                    p.
+        sec                                     ; 849B 38                       8
+        bpl     L84AE                           ; 849C 10 10                    ..
+        bpl     L8430                           ; 849E 10 90                    ..
+        bcc     L8502                           ; 84A0 90 60                    .`
+        brk                                     ; 84A2 00                       .
+        dey                                     ; 84A3 88                       .
+        .byte   $90                             ; 84A4 90                       .
+L84A5:  ldy     #$C0                            ; 84A5 A0 C0                    ..
+        .byte   $A0                             ; 84A7 A0                       .
+L84A8:  bcc     L8432                           ; 84A8 90 88                    ..
+L84AA:  brk                                     ; 84AA 00                       .
+        bra     L842D                           ; 84AB 80 80                    ..
+L84AD:  .byte   $80                             ; 84AD 80                       .
+L84AE:  bra     L8430                           ; 84AE 80 80                    ..
+        bra     L84AA                           ; 84B0 80 F8                    ..
+        brk                                     ; 84B2 00                       .
+        dey                                     ; 84B3 88                       .
+        cld                                     ; 84B4 D8                       .
+L84B5:  tay                                     ; 84B5 A8                       .
+        tay                                     ; 84B6 A8                       .
+        dey                                     ; 84B7 88                       .
+        dey                                     ; 84B8 88                       .
+        dey                                     ; 84B9 88                       .
+        brk                                     ; 84BA 00                       .
+        dey                                     ; 84BB 88                       .
+        iny                                     ; 84BC C8                       .
+        iny                                     ; 84BD C8                       .
+        tay                                     ; 84BE A8                       .
+        tya                                     ; 84BF 98                       .
+        tya                                     ; 84C0 98                       .
+        dey                                     ; 84C1 88                       .
+        brk                                     ; 84C2 00                       .
+        bvs     L844D                           ; 84C3 70 88                    p.
+        dey                                     ; 84C5 88                       .
+        dey                                     ; 84C6 88                       .
+        dey                                     ; 84C7 88                       .
+        dey                                     ; 84C8 88                       .
+        bvs     L84CB                           ; 84C9 70 00                    p.
+L84CB:  beq     L8455                           ; 84CB F0 88                    ..
+        dey                                     ; 84CD 88                       .
+        beq     L8450                           ; 84CE F0 80                    ..
+        bra     L8452                           ; 84D0 80 80                    ..
+        brk                                     ; 84D2 00                       .
+        bvs     L845D                           ; 84D3 70 88                    p.
+        dey                                     ; 84D5 88                       .
+        dey                                     ; 84D6 88                       .
+        tay                                     ; 84D7 A8                       .
+        bcc     L8542                           ; 84D8 90 68                    .h
+        brk                                     ; 84DA 00                       .
+        beq     L8465                           ; 84DB F0 88                    ..
+L84DD:  dey                                     ; 84DD 88                       .
+        beq     L8480                           ; 84DE F0 A0                    ..
+        bcc     L846A                           ; 84E0 90 88                    ..
+        brk                                     ; 84E2 00                       .
+        bvs     L846D                           ; 84E3 70 88                    p.
+        bra     L8557                           ; 84E5 80 70                    .p
+        php                                     ; 84E7 08                       .
+        dey                                     ; 84E8 88                       .
+        bvs     L84EB                           ; 84E9 70 00                    p.
+L84EB:  sed                                     ; 84EB F8                       .
+        jsr     L2020                           ; 84EC 20 20 20                    
+L84EF:  .byte   $20                             ; 84EF 20                        
+        .byte   $20                             ; 84F0 20                        
+L84F1:  jsr     L8800                           ; 84F1 20 00 88                  ..
+        dey                                     ; 84F4 88                       .
+        dey                                     ; 84F5 88                       .
+        dey                                     ; 84F6 88                       .
+        dey                                     ; 84F7 88                       .
+        dey                                     ; 84F8 88                       .
+        bvs     L84FB                           ; 84F9 70 00                    p.
+L84FB:  dey                                     ; 84FB 88                       .
+        dey                                     ; 84FC 88                       .
+        dey                                     ; 84FD 88                       .
+        dey                                     ; 84FE 88                       .
+L84FF:  bvc     L8551                           ; 84FF 50 50                    PP
+        .byte   $20                             ; 8501 20                        
+L8502:  brk                                     ; 8502 00                       .
+        dey                                     ; 8503 88                       .
+        dey                                     ; 8504 88                       .
+        dey                                     ; 8505 88                       .
+        tay                                     ; 8506 A8                       .
+        tay                                     ; 8507 A8                       .
+        cld                                     ; 8508 D8                       .
+        dey                                     ; 8509 88                       .
+        brk                                     ; 850A 00                       .
+        dey                                     ; 850B 88                       .
+L850C:  dey                                     ; 850C 88                       .
+        bvc     L852F                           ; 850D 50 20                    P 
+        bvc     L8499                           ; 850F 50 88                    P.
+        dey                                     ; 8511 88                       .
+        brk                                     ; 8512 00                       .
+        dey                                     ; 8513 88                       .
+        dey                                     ; 8514 88                       .
+        dey                                     ; 8515 88                       .
+        bvs     L8538                           ; 8516 70 20                    p 
+        .byte   $20                             ; 8518 20                        
+        .byte   $20                             ; 8519 20                        
+L851A:  brk                                     ; 851A 00                       .
+        sed                                     ; 851B F8                       .
+        php                                     ; 851C 08                       .
+        bpl     L853F                           ; 851D 10 20                    . 
+        rti                                     ; 851F 40                       @
+
+; ----------------------------------------------------------------------------
+        bra     L851A                           ; 8520 80 F8                    ..
+        brk                                     ; 8522 00                       .
+        bvs     L8565                           ; 8523 70 40                    p@
+        rti                                     ; 8525 40                       @
+
+; ----------------------------------------------------------------------------
+        rti                                     ; 8526 40                       @
+
+; ----------------------------------------------------------------------------
+L8527:  rti                                     ; 8527 40                       @
+
+; ----------------------------------------------------------------------------
+        rti                                     ; 8528 40                       @
+
+; ----------------------------------------------------------------------------
+        bvs     L852B                           ; 8529 70 00                    p.
+L852B:  brk                                     ; 852B 00                       .
+        brk                                     ; 852C 00                       .
+        bra     L856F                           ; 852D 80 40                    .@
+L852F:  jsr     L0810                           ; 852F 20 10 08                  ..
+        brk                                     ; 8532 00                       .
+        bvs     L8545                           ; 8533 70 10                    p.
+        bpl     L8547                           ; 8535 10 10                    ..
+        .byte   $10                             ; 8537 10                       .
+L8538:  bpl     L85AA                           ; 8538 10 70                    .p
+        brk                                     ; 853A 00                       .
+        jsr     L8850                           ; 853B 20 50 88                  P.
+        brk                                     ; 853E 00                       .
+L853F:  brk                                     ; 853F 00                       .
+        brk                                     ; 8540 00                       .
+        brk                                     ; 8541 00                       .
+L8542:  brk                                     ; 8542 00                       .
+        brk                                     ; 8543 00                       .
+        brk                                     ; 8544 00                       .
+L8545:  brk                                     ; 8545 00                       .
+        brk                                     ; 8546 00                       .
+L8547:  brk                                     ; 8547 00                       .
+        brk                                     ; 8548 00                       .
+        sed                                     ; 8549 F8                       .
+        brk                                     ; 854A 00                       .
+        rti                                     ; 854B 40                       @
+
+; ----------------------------------------------------------------------------
+        jsr     L0010                           ; 854C 20 10 00                  ..
+L854F:  brk                                     ; 854F 00                       .
+        brk                                     ; 8550 00                       .
+L8551:  brk                                     ; 8551 00                       .
+L8552:  brk                                     ; 8552 00                       .
+        brk                                     ; 8553 00                       .
+        brk                                     ; 8554 00                       .
+        bvs     L855F                           ; 8555 70 08                    p.
+L8557:  sei                                     ; 8557 78                       x
+        dey                                     ; 8558 88                       .
+        sei                                     ; 8559 78                       x
+        brk                                     ; 855A 00                       .
+        bra     L84DD                           ; 855B 80 80                    ..
+        bcs     L8527                           ; 855D B0 C8                    ..
+L855F:  dey                                     ; 855F 88                       .
+        iny                                     ; 8560 C8                       .
+L8561:  bcs     L8563                           ; 8561 B0 00                    ..
+L8563:  brk                                     ; 8563 00                       .
+        brk                                     ; 8564 00                       .
+L8565:  bvs     L84EF                           ; 8565 70 88                    p.
+        bra     L84F1                           ; 8567 80 88                    ..
+        bvs     L856B                           ; 8569 70 00                    p.
+L856B:  php                                     ; 856B 08                       .
+        php                                     ; 856C 08                       .
+        pla                                     ; 856D 68                       h
+        tya                                     ; 856E 98                       .
+L856F:  dey                                     ; 856F 88                       .
+        tya                                     ; 8570 98                       .
+        pla                                     ; 8571 68                       h
+        brk                                     ; 8572 00                       .
+        brk                                     ; 8573 00                       .
+        brk                                     ; 8574 00                       .
+        bvs     L84FF                           ; 8575 70 88                    p.
+        sed                                     ; 8577 F8                       .
+        bra     L85EA                           ; 8578 80 70                    .p
+        brk                                     ; 857A 00                       .
+        bpl     L85A5                           ; 857B 10 28                    .(
+        .byte   $20                             ; 857D 20                        
+L857E:  sed                                     ; 857E F8                       .
+        jsr     L2020                           ; 857F 20 20 20                    
+        brk                                     ; 8582 00                       .
+        brk                                     ; 8583 00                       .
+        brk                                     ; 8584 00                       .
+        pla                                     ; 8585 68                       h
+        tya                                     ; 8586 98                       .
+L8587:  tya                                     ; 8587 98                       .
+        pla                                     ; 8588 68                       h
+L8589:  php                                     ; 8589 08                       .
+        bvs     L850C                           ; 858A 70 80                    p.
+        bra     L857E                           ; 858C 80 F0                    ..
+        dey                                     ; 858E 88                       .
+        dey                                     ; 858F 88                       .
+        dey                                     ; 8590 88                       .
+        dey                                     ; 8591 88                       .
+        brk                                     ; 8592 00                       .
+        jsr     L6000                           ; 8593 20 00 60                  .`
+        .byte   $20                             ; 8596 20                        
+L8597:  jsr     L7020                           ; 8597 20 20 70                   p
+L859A:  brk                                     ; 859A 00                       .
+L859B:  bpl     L859D                           ; 859B 10 00                    ..
+L859D:  bmi     L85AF                           ; 859D 30 10                    0.
+        bpl     L85B1                           ; 859F 10 10                    ..
+        bcc     L8603                           ; 85A1 90 60                    .`
+        rti                                     ; 85A3 40                       @
+
+; ----------------------------------------------------------------------------
+        rti                                     ; 85A4 40                       @
+
+; ----------------------------------------------------------------------------
+L85A5:  pha                                     ; 85A5 48                       H
+        .byte   $50                             ; 85A6 50                       P
+L85A7:  rts                                     ; 85A7 60                       `
+
+; ----------------------------------------------------------------------------
+        bvc     L85F2                           ; 85A8 50 48                    PH
+L85AA:  brk                                     ; 85AA 00                       .
+        rts                                     ; 85AB 60                       `
+
+; ----------------------------------------------------------------------------
+        jsr     L2020                           ; 85AC 20 20 20                    
+L85AF:  .byte   $20                             ; 85AF 20                        
+        .byte   $20                             ; 85B0 20                        
+L85B1:  bvs     L85B3                           ; 85B1 70 00                    p.
+L85B3:  brk                                     ; 85B3 00                       .
+        brk                                     ; 85B4 00                       .
+        bne     L855F                           ; 85B5 D0 A8                    ..
+        tay                                     ; 85B7 A8                       .
+        tay                                     ; 85B8 A8                       .
+        tay                                     ; 85B9 A8                       .
+        brk                                     ; 85BA 00                       .
+        brk                                     ; 85BB 00                       .
+        brk                                     ; 85BC 00                       .
+        bcs     L8587                           ; 85BD B0 C8                    ..
+        dey                                     ; 85BF 88                       .
+        dey                                     ; 85C0 88                       .
+        dey                                     ; 85C1 88                       .
+        brk                                     ; 85C2 00                       .
+        brk                                     ; 85C3 00                       .
+        brk                                     ; 85C4 00                       .
+        bvs     L854F                           ; 85C5 70 88                    p.
+        dey                                     ; 85C7 88                       .
+        dey                                     ; 85C8 88                       .
+        bvs     L85CB                           ; 85C9 70 00                    p.
+L85CB:  brk                                     ; 85CB 00                       .
+        brk                                     ; 85CC 00                       .
+        bcs     L8597                           ; 85CD B0 C8                    ..
+L85CF:  iny                                     ; 85CF C8                       .
+        bcs     L8552                           ; 85D0 B0 80                    ..
+        bra     L85D4                           ; 85D2 80 00                    ..
+L85D4:  brk                                     ; 85D4 00                       .
+L85D5:  pla                                     ; 85D5 68                       h
+        tya                                     ; 85D6 98                       .
+        tya                                     ; 85D7 98                       .
+L85D8:  pla                                     ; 85D8 68                       h
+        php                                     ; 85D9 08                       .
+        php                                     ; 85DA 08                       .
+        brk                                     ; 85DB 00                       .
+        brk                                     ; 85DC 00                       .
+        bcs     L85A7                           ; 85DD B0 C8                    ..
+        bra     L8561                           ; 85DF 80 80                    ..
+        bra     L85E3                           ; 85E1 80 00                    ..
+L85E3:  brk                                     ; 85E3 00                       .
+        brk                                     ; 85E4 00                       .
+        sei                                     ; 85E5 78                       x
+        .byte   $80                             ; 85E6 80                       .
+L85E7:  .byte   $F0                             ; 85E7 F0                       .
+L85E8:  php                                     ; 85E8 08                       .
+        .byte   $F0                             ; 85E9 F0                       .
+L85EA:  brk                                     ; 85EA 00                       .
+        rti                                     ; 85EB 40                       @
+
+; ----------------------------------------------------------------------------
+        rti                                     ; 85EC 40                       @
+
+; ----------------------------------------------------------------------------
+        beq     L862F                           ; 85ED F0 40                    .@
+        rti                                     ; 85EF 40                       @
+
+; ----------------------------------------------------------------------------
+        pha                                     ; 85F0 48                       H
+        .byte   $30                             ; 85F1 30                       0
+L85F2:  brk                                     ; 85F2 00                       .
+        brk                                     ; 85F3 00                       .
+        brk                                     ; 85F4 00                       .
+        bcc     L8587                           ; 85F5 90 90                    ..
+        bcc     L8589                           ; 85F7 90 90                    ..
+        pla                                     ; 85F9 68                       h
+        brk                                     ; 85FA 00                       .
+        brk                                     ; 85FB 00                       .
+        brk                                     ; 85FC 00                       .
+        dey                                     ; 85FD 88                       .
+        dey                                     ; 85FE 88                       .
+        dey                                     ; 85FF 88                       .
+        bvc     L8622                           ; 8600 50 20                    P 
+        brk                                     ; 8602 00                       .
+L8603:  brk                                     ; 8603 00                       .
+        brk                                     ; 8604 00                       .
+        dey                                     ; 8605 88                       .
+L8606:  tay                                     ; 8606 A8                       .
+        tay                                     ; 8607 A8                       .
+L8608:  tay                                     ; 8608 A8                       .
+        bvc     L860B                           ; 8609 50 00                    P.
+L860B:  brk                                     ; 860B 00                       .
+        brk                                     ; 860C 00                       .
+        dey                                     ; 860D 88                       .
+        bvc     L8630                           ; 860E 50 20                    P 
+        bvc     L859A                           ; 8610 50 88                    P.
+        brk                                     ; 8612 00                       .
+        brk                                     ; 8613 00                       .
+        brk                                     ; 8614 00                       .
+        dey                                     ; 8615 88                       .
+        dey                                     ; 8616 88                       .
+        tya                                     ; 8617 98                       .
+        pla                                     ; 8618 68                       h
+        php                                     ; 8619 08                       .
+        bvs     L861C                           ; 861A 70 00                    p.
+L861C:  brk                                     ; 861C 00                       .
+        sed                                     ; 861D F8                       .
+        .byte   $10                             ; 861E 10                       .
+L861F:  jsr     $F840                           ; 861F 20 40 F8                  @.
+L8622:  brk                                     ; 8622 00                       .
+        clc                                     ; 8623 18                       .
+        jsr     L4020                           ; 8624 20 20 40                   @
+        jsr     L1820                           ; 8627 20 20 18                   .
+        brk                                     ; 862A 00                       .
+        jsr     L2020                           ; 862B 20 20 20                    
+        brk                                     ; 862E 00                       .
+L862F:  .byte   $20                             ; 862F 20                        
+L8630:  jsr     L0020                           ; 8630 20 20 00                   .
+        cpy     #$20                            ; 8633 C0 20                    . 
+        jsr     L2010                           ; 8635 20 10 20                  . 
+        jsr     L00C0                           ; 8638 20 C0 00                  ..
+        rti                                     ; 863B 40                       @
+
+; ----------------------------------------------------------------------------
+        tay                                     ; 863C A8                       .
+        bpl     L863F                           ; 863D 10 00                    ..
+L863F:  brk                                     ; 863F 00                       .
+L8640:  brk                                     ; 8640 00                       .
+        brk                                     ; 8641 00                       .
+        brk                                     ; 8642 00                       .
+        brk                                     ; 8643 00                       .
+        brk                                     ; 8644 00                       .
+        jsr     LF850                           ; 8645 20 50 F8                  P.
+        brk                                     ; 8648 00                       .
+        brk                                     ; 8649 00                       .
+        brk                                     ; 864A 00                       .
+        bvs     L85D5                           ; 864B 70 88                    p.
+        bra     L85CF                           ; 864D 80 80                    ..
+        dey                                     ; 864F 88                       .
+L8650:  bvs     L8672                           ; 8650 70 20                    p 
+        rts                                     ; 8652 60                       `
+
+; ----------------------------------------------------------------------------
+        bcc     L8655                           ; 8653 90 00                    ..
+L8655:  brk                                     ; 8655 00                       .
+        bcc     L85E8                           ; 8656 90 90                    ..
+        bcc     L86C2                           ; 8658 90 68                    .h
+        brk                                     ; 865A 00                       .
+        bpl     L867D                           ; 865B 10 20                    . 
+        bvs     L85E7                           ; 865D 70 88                    p.
+        sed                                     ; 865F F8                       .
+        bra     L86D2                           ; 8660 80 70                    .p
+        brk                                     ; 8662 00                       .
+        jsr     L7050                           ; 8663 20 50 70                  Pp
+        php                                     ; 8666 08                       .
+        sei                                     ; 8667 78                       x
+        dey                                     ; 8668 88                       .
+        sei                                     ; 8669 78                       x
+        brk                                     ; 866A 00                       .
+        pha                                     ; 866B 48                       H
+        brk                                     ; 866C 00                       .
+        bvs     L8677                           ; 866D 70 08                    p.
+        sei                                     ; 866F 78                       x
+        dey                                     ; 8670 88                       .
+        sei                                     ; 8671 78                       x
+L8672:  brk                                     ; 8672 00                       .
+        jsr     L7010                           ; 8673 20 10 70                  .p
+        php                                     ; 8676 08                       .
+L8677:  sei                                     ; 8677 78                       x
+        dey                                     ; 8678 88                       .
+L8679:  sei                                     ; 8679 78                       x
+        brk                                     ; 867A 00                       .
+        .byte   $20                             ; 867B 20                        
+        brk                                     ; 867C 00                       .
+L867D:  bvs     L8687                           ; 867D 70 08                    p.
+        sei                                     ; 867F 78                       x
+        dey                                     ; 8680 88                       .
+L8681:  sei                                     ; 8681 78                       x
+        brk                                     ; 8682 00                       .
+        brk                                     ; 8683 00                       .
+        bvs     L8606                           ; 8684 70 80                    p.
+        .byte   $80                             ; 8686 80                       .
+L8687:  bra     L86F9                           ; 8687 80 70                    .p
+L8689:  bpl     L86EB                           ; 8689 10 60                    .`
+        jsr     L7050                           ; 868B 20 50 70                  Pp
+        dey                                     ; 868E 88                       .
+        sed                                     ; 868F F8                       .
+        bra     L8702                           ; 8690 80 70                    .p
+        brk                                     ; 8692 00                       .
+        bvc     L8695                           ; 8693 50 00                    P.
+L8695:  bvs     L861F                           ; 8695 70 88                    p.
+        sed                                     ; 8697 F8                       .
+        bra     L870A                           ; 8698 80 70                    .p
+        brk                                     ; 869A 00                       .
+        jsr     L7010                           ; 869B 20 10 70                  .p
+        dey                                     ; 869E 88                       .
+L869F:  sed                                     ; 869F F8                       .
+        bra     L8712                           ; 86A0 80 70                    .p
+        brk                                     ; 86A2 00                       .
+        bvc     L86A5                           ; 86A3 50 00                    P.
+L86A5:  brk                                     ; 86A5 00                       .
+        rts                                     ; 86A6 60                       `
+
+; ----------------------------------------------------------------------------
+        .byte   $20                             ; 86A7 20                        
+L86A8:  jsr     L0070                           ; 86A8 20 70 00                  p.
+        jsr     L0050                           ; 86AB 20 50 00                  P.
+        rts                                     ; 86AE 60                       `
+
+; ----------------------------------------------------------------------------
+        jsr     L7020                           ; 86AF 20 20 70                   p
+        brk                                     ; 86B2 00                       .
+        rti                                     ; 86B3 40                       @
+
+; ----------------------------------------------------------------------------
+        jsr     L6000                           ; 86B4 20 00 60                  .`
+        jsr     L7020                           ; 86B7 20 20 70                   p
+        brk                                     ; 86BA 00                       .
+        bvc     L86BD                           ; 86BB 50 00                    P.
+L86BD:  jsr     L8850                           ; 86BD 20 50 88                  P.
+L86C0:  sed                                     ; 86C0 F8                       .
+        dey                                     ; 86C1 88                       .
+L86C2:  brk                                     ; 86C2 00                       .
+        jsr     L2000                           ; 86C3 20 00 20                  . 
+        bvc     L8650                           ; 86C6 50 88                    P.
+        sed                                     ; 86C8 F8                       .
+        dey                                     ; 86C9 88                       .
+L86CA:  brk                                     ; 86CA 00                       .
+        bpl     L86ED                           ; 86CB 10 20                    . 
+        sed                                     ; 86CD F8                       .
+        bra     L86C0                           ; 86CE 80 F0                    ..
+        bra     L86CA                           ; 86D0 80 F8                    ..
+L86D2:  brk                                     ; 86D2 00                       .
+        brk                                     ; 86D3 00                       .
+        brk                                     ; 86D4 00                       .
+        jmp     (L7E12)                         ; 86D5 6C 12 7E                 l.~
+
+; ----------------------------------------------------------------------------
+        bcc     L8748                           ; 86D8 90 6E                    .n
+        brk                                     ; 86DA 00                       .
+        rol     $9050,x                         ; 86DB 3E 50 90                 >P.
+        stz     $90F0                           ; 86DE 9C F0 90                 ...
+        stz     L6000,x                         ; 86E1 9E 00 60                 ..`
+        bcc     L86E6                           ; 86E4 90 00                    ..
+L86E6:  rts                                     ; 86E6 60                       `
+
+; ----------------------------------------------------------------------------
+        bcc     L8679                           ; 86E7 90 90                    ..
+        rts                                     ; 86E9 60                       `
+
+; ----------------------------------------------------------------------------
+        brk                                     ; 86EA 00                       .
+L86EB:  bcc     L86ED                           ; 86EB 90 00                    ..
+L86ED:  brk                                     ; 86ED 00                       .
+        rts                                     ; 86EE 60                       `
+
+; ----------------------------------------------------------------------------
+        bcc     L8681                           ; 86EF 90 90                    ..
+L86F1:  rts                                     ; 86F1 60                       `
+
+; ----------------------------------------------------------------------------
+        brk                                     ; 86F2 00                       .
+        rti                                     ; 86F3 40                       @
+
+; ----------------------------------------------------------------------------
+        jsr     L6000                           ; 86F4 20 00 60                  .`
+        .byte   $90                             ; 86F7 90                       .
+L86F8:  .byte   $90                             ; 86F8 90                       .
+L86F9:  rts                                     ; 86F9 60                       `
+
+; ----------------------------------------------------------------------------
+        brk                                     ; 86FA 00                       .
+        rti                                     ; 86FB 40                       @
+
+; ----------------------------------------------------------------------------
+        ldy     #$00                            ; 86FC A0 00                    ..
+        ldy     #$A0                            ; 86FE A0 A0                    ..
+        ldy     #$50                            ; 8700 A0 50                    .P
+L8702:  brk                                     ; 8702 00                       .
+        rti                                     ; 8703 40                       @
+
+; ----------------------------------------------------------------------------
+        jsr     LA000                           ; 8704 20 00 A0                  ..
+        ldy     #$A0                            ; 8707 A0 A0                    ..
+        .byte   $50                             ; 8709 50                       P
+L870A:  brk                                     ; 870A 00                       .
+        bcc     L870D                           ; 870B 90 00                    ..
+L870D:  bcc     L869F                           ; 870D 90 90                    ..
+        bcs     L8761                           ; 870F B0 50                    .P
+        .byte   $10                             ; 8711 10                       .
+L8712:  cpx     #$50                            ; 8712 E0 50                    .P
+        brk                                     ; 8714 00                       .
+        bvs     L869F                           ; 8715 70 88                    p.
+        dey                                     ; 8717 88                       .
+L8718:  dey                                     ; 8718 88                       .
+L8719:  bvs     L871B                           ; 8719 70 00                    p.
+L871B:  bvc     L871D                           ; 871B 50 00                    P.
+L871D:  dey                                     ; 871D 88                       .
+        dey                                     ; 871E 88                       .
+        dey                                     ; 871F 88                       .
+        dey                                     ; 8720 88                       .
+        bvs     L8723                           ; 8721 70 00                    p.
+L8723:  jsr     L7820                           ; 8723 20 20 78                   x
+        bra     L86A8                           ; 8726 80 80                    ..
+        sei                                     ; 8728 78                       x
+        jsr     L1820                           ; 8729 20 20 18                   .
+        bit     L0020                           ; 872C 24 20                    $ 
+        sed                                     ; 872E F8                       .
+        jsr     L5CE2                           ; 872F 20 E2 5C                  .\
+        brk                                     ; 8732 00                       .
+        dey                                     ; 8733 88                       .
+        bvc     L8756                           ; 8734 50 20                    P 
+        sed                                     ; 8736 F8                       .
+        jsr     L20F8                           ; 8737 20 F8 20                  . 
+        brk                                     ; 873A 00                       .
+        cpy     #$A0                            ; 873B C0 A0                    ..
+        ldy     #$C8                            ; 873D A0 C8                    ..
+        stz     L8888                           ; 873F 9C 88 88                 ...
+        sty     $2018                           ; 8742 8C 18 20                 .. 
+        jsr     L20F8                           ; 8745 20 F8 20                  . 
+L8748:  jsr     L4020                           ; 8748 20 20 40                   @
+        bpl     L876D                           ; 874B 10 20                    . 
+        bvs     L8757                           ; 874D 70 08                    p.
+L874F:  sei                                     ; 874F 78                       x
+        dey                                     ; 8750 88                       .
+        sei                                     ; 8751 78                       x
+        brk                                     ; 8752 00                       .
+        bpl     L8775                           ; 8753 10 20                    . 
+        brk                                     ; 8755 00                       .
+L8756:  rts                                     ; 8756 60                       `
+
+; ----------------------------------------------------------------------------
+L8757:  .byte   $20                             ; 8757 20                        
+L8758:  jsr     L0070                           ; 8758 20 70 00                  p.
+        jsr     L0040                           ; 875B 20 40 00                  @.
+        rts                                     ; 875E 60                       `
+
+; ----------------------------------------------------------------------------
+        bcc     L86F1                           ; 875F 90 90                    ..
+L8761:  rts                                     ; 8761 60                       `
+
+; ----------------------------------------------------------------------------
+        brk                                     ; 8762 00                       .
+        jsr     L0040                           ; 8763 20 40 00                  @.
+        bcc     L86F8                           ; 8766 90 90                    ..
+        bcc     L87D2                           ; 8768 90 68                    .h
+        brk                                     ; 876A 00                       .
+        bvc     L870D                           ; 876B 50 A0                    P.
+L876D:  brk                                     ; 876D 00                       .
+        ldy     #$D0                            ; 876E A0 D0                    ..
+        bcc     L8702                           ; 8770 90 90                    ..
+        brk                                     ; 8772 00                       .
+        plp                                     ; 8773 28                       (
+        .byte   $50                             ; 8774 50                       P
+L8775:  brk                                     ; 8775 00                       .
+        iny                                     ; 8776 C8                       .
+        tay                                     ; 8777 A8                       .
+L8778:  tya                                     ; 8778 98                       .
+        dey                                     ; 8779 88                       .
+        brk                                     ; 877A 00                       .
+        brk                                     ; 877B 00                       .
+        bvs     L8786                           ; 877C 70 08                    p.
+        sei                                     ; 877E 78                       x
+        dey                                     ; 877F 88                       .
+        sei                                     ; 8780 78                       x
+        brk                                     ; 8781 00                       .
+        sed                                     ; 8782 F8                       .
+        brk                                     ; 8783 00                       .
+        rts                                     ; 8784 60                       `
+
+; ----------------------------------------------------------------------------
+        .byte   $90                             ; 8785 90                       .
+L8786:  bcc     L8718                           ; 8786 90 90                    ..
+        rts                                     ; 8788 60                       `
+
+; ----------------------------------------------------------------------------
+L8789:  brk                                     ; 8789 00                       .
+        beq     L87AC                           ; 878A F0 20                    . 
+        brk                                     ; 878C 00                       .
+        jsr     L8040                           ; 878D 20 40 80                  @.
+        dey                                     ; 8790 88                       .
+        bvs     L8793                           ; 8791 70 00                    p.
+L8793:  brk                                     ; 8793 00                       .
+        brk                                     ; 8794 00                       .
+L8795:  brk                                     ; 8795 00                       .
+        sed                                     ; 8796 F8                       .
+        bra     L8719                           ; 8797 80 80                    ..
+        brk                                     ; 8799 00                       .
+        brk                                     ; 879A 00                       .
+        brk                                     ; 879B 00                       .
+        brk                                     ; 879C 00                       .
+        brk                                     ; 879D 00                       .
+        sed                                     ; 879E F8                       .
+        php                                     ; 879F 08                       .
+        php                                     ; 87A0 08                       .
+        brk                                     ; 87A1 00                       .
+        brk                                     ; 87A2 00                       .
+        sty     $88                             ; 87A3 84 88                    ..
+L87A5:  bcc     L874F                           ; 87A5 90 A8                    ..
+        .byte   $54                             ; 87A7 54                       T
+        sty     XM7SEG_ADDRESS                  ; 87A8 84 08                    ..
+        .byte   $1C                             ; 87AA 1C                       .
+        .byte   $84                             ; 87AB 84                       .
+L87AC:  dey                                     ; 87AC 88                       .
+        bcc     L8757                           ; 87AD 90 A8                    ..
+        cli                                     ; 87AF 58                       X
+        tay                                     ; 87B0 A8                       .
+        bit     $2008,x                         ; 87B1 3C 08 20                 <. 
+        brk                                     ; 87B4 00                       .
+        brk                                     ; 87B5 00                       .
+        jsr     L2020                           ; 87B6 20 20 20                    
+        jsr     SECONDS_BUFFER                  ; 87B9 20 00 00                  ..
+        brk                                     ; 87BC 00                       .
+        bit     $48                             ; 87BD 24 48                    $H
+        bcc     L8809                           ; 87BF 90 48                    .H
+        bit     SECONDS_BUFFER                  ; 87C1 24 00                    $.
+        brk                                     ; 87C3 00                       .
+        brk                                     ; 87C4 00                       .
+        bcc     L880F                           ; 87C5 90 48                    .H
+        bit     $48                             ; 87C7 24 48                    $H
+        bcc     L87CB                           ; 87C9 90 00                    ..
+L87CB:  plp                                     ; 87CB 28                       (
+        bvc     L87EE                           ; 87CC 50 20                    P 
+        bvc     L8758                           ; 87CE 50 88                    P.
+        sed                                     ; 87D0 F8                       .
+        dey                                     ; 87D1 88                       .
+L87D2:  brk                                     ; 87D2 00                       .
+        plp                                     ; 87D3 28                       (
+        bvc     L8846                           ; 87D4 50 70                    Pp
+        php                                     ; 87D6 08                       .
+        sei                                     ; 87D7 78                       x
+        dey                                     ; 87D8 88                       .
+        sei                                     ; 87D9 78                       x
+        brk                                     ; 87DA 00                       .
+        plp                                     ; 87DB 28                       (
+        bvc     L87DE                           ; 87DC 50 00                    P.
+L87DE:  bvs     L8800                           ; 87DE 70 20                    p 
+        jsr     L0070                           ; 87E0 20 70 00                  p.
+        plp                                     ; 87E3 28                       (
+        bvc     L87E6                           ; 87E4 50 00                    P.
+L87E6:  jsr     L2020                           ; 87E6 20 20 20                    
+        bvs     L87EB                           ; 87E9 70 00                    p.
+L87EB:  plp                                     ; 87EB 28                       (
+        bvc     L87EE                           ; 87EC 50 00                    P.
+L87EE:  bvs     L8778                           ; 87EE 70 88                    p.
+        dey                                     ; 87F0 88                       .
+        bvs     L87F3                           ; 87F1 70 00                    p.
+L87F3:  bvc     L8795                           ; 87F3 50 A0                    P.
+        brk                                     ; 87F5 00                       .
+        rts                                     ; 87F6 60                       `
+
+; ----------------------------------------------------------------------------
+        bcc     L8789                           ; 87F7 90 90                    ..
+        rts                                     ; 87F9 60                       `
+
+; ----------------------------------------------------------------------------
+        brk                                     ; 87FA 00                       .
+        plp                                     ; 87FB 28                       (
+        bvc     L87FE                           ; 87FC 50 00                    P.
+L87FE:  dey                                     ; 87FE 88                       .
+        dey                                     ; 87FF 88                       .
+L8800:  dey                                     ; 8800 88                       .
+        bvs     L8803                           ; 8801 70 00                    p.
+L8803:  bvc     L87A5                           ; 8803 50 A0                    P.
+        brk                                     ; 8805 00                       .
+        ldy     #$A0                            ; 8806 A0 A0                    ..
+        .byte   $A0                             ; 8808 A0                       .
+L8809:  bvc     L880B                           ; 8809 50 00                    P.
+L880B:  .byte   $FC                             ; 880B FC                       .
+        pha                                     ; 880C 48                       H
+        pha                                     ; 880D 48                       H
+        pha                                     ; 880E 48                       H
+L880F:  inx                                     ; 880F E8                       .
+        php                                     ; 8810 08                       .
+        bvc     L8833                           ; 8811 50 20                    P 
+        brk                                     ; 8813 00                       .
+        bvc     L8816                           ; 8814 50 00                    P.
+L8816:  bvc     L8868                           ; 8816 50 50                    PP
+        bvc     L882A                           ; 8818 50 10                    P.
+        jsr     L44C0                           ; 881A 20 C0 44                  .D
+        iny                                     ; 881D C8                       .
+        .byte   $54                             ; 881E 54                       T
+        cpx     $9E54                           ; 881F EC 54 9E                 .T.
+        tsb     L0010                           ; 8822 04 10                    ..
+        tay                                     ; 8824 A8                       .
+        rti                                     ; 8825 40                       @
+
+; ----------------------------------------------------------------------------
+        brk                                     ; 8826 00                       .
+        brk                                     ; 8827 00                       .
+        brk                                     ; 8828 00                       .
+        brk                                     ; 8829 00                       .
+L882A:  brk                                     ; 882A 00                       .
+        brk                                     ; 882B 00                       .
+        jsr     L8850                           ; 882C 20 50 88                  P.
+        bvc     L8851                           ; 882F 50 20                    P 
+        brk                                     ; 8831 00                       .
+        brk                                     ; 8832 00                       .
+L8833:  dey                                     ; 8833 88                       .
+        bpl     L8856                           ; 8834 10 20                    . 
+        rti                                     ; 8836 40                       @
+
+; ----------------------------------------------------------------------------
+        bra     L8861                           ; 8837 80 28                    .(
+        brk                                     ; 8839 00                       .
+        brk                                     ; 883A 00                       .
+        jmp     (LA8A8,x)                       ; 883B 7C A8 A8                 |..
+        pla                                     ; 883E 68                       h
+        plp                                     ; 883F 28                       (
+L8840:  plp                                     ; 8840 28                       (
+        plp                                     ; 8841 28                       (
+        brk                                     ; 8842 00                       .
+        sec                                     ; 8843 38                       8
+        rti                                     ; 8844 40                       @
+
+; ----------------------------------------------------------------------------
+L8845:  .byte   $30                             ; 8845 30                       0
+L8846:  pha                                     ; 8846 48                       H
+        pha                                     ; 8847 48                       H
+        bmi     L8852                           ; 8848 30 08                    0.
+        bvs     L884C                           ; 884A 70 00                    p.
+L884C:  brk                                     ; 884C 00                       .
+        brk                                     ; 884D 00                       .
+        brk                                     ; 884E 00                       .
+        brk                                     ; 884F 00                       .
+L8850:  brk                                     ; 8850 00                       .
+L8851:  .byte   $FF                             ; 8851 FF                       .
+L8852:  bbs7    $F0,L8845                       ; 8852 FF F0 F0                 ...
+        .byte   $F0                             ; 8855 F0                       .
+L8856:  beq     L8867                           ; 8856 F0 0F                    ..
+        bbr0    $0F,L886A                       ; 8858 0F 0F 0F                 ...
+        brk                                     ; 885B 00                       .
+        brk                                     ; 885C 00                       .
+        .byte   $FF                             ; 885D FF                       .
+        .byte   $FF                             ; 885E FF                       .
+L885F:  .byte   $FF                             ; 885F FF                       .
+        .byte   $FF                             ; 8860 FF                       .
+L8861:  .byte   $FF                             ; 8861 FF                       .
+        .byte   $FF                             ; 8862 FF                       .
+L8863:  bbs7    $FF,$8866                       ; 8863 FF FF 00                 ...
+        brk                                     ; 8866 00                       .
+L8867:  brk                                     ; 8867 00                       .
+L8868:  brk                                     ; 8868 00                       .
+        brk                                     ; 8869 00                       .
+L886A:  brk                                     ; 886A 00                       .
+        brk                                     ; 886B 00                       .
+        brk                                     ; 886C 00                       .
+        brk                                     ; 886D 00                       .
+        bit     $3C,x                           ; 886E 3C 3C 00                 <<.
+        brk                                     ; 8871 00                       .
+        brk                                     ; 8872 00                       .
+        .byte   $FF                             ; 8873 FF                       .
+        .byte   $FF                             ; 8874 FF                       .
+L8878:  .byte   $FF                             ; 8878 FF                       .
+        brk                                     ; 8879 00                       .
+L887A:  brk                                     ; 887A 00                       .
+        cpy     #$C0                            ; 887B C0 C0                    ..
+        cpy     #$C0                            ; 887D C0 C0                    ..
+        cpy     #$C0                            ; 887F C0 C0                    ..
+        cpy     #$C0                            ; 8881 C0 C0                    ..
+        bbr0    $0F,L8895                       ; 8883 0F 0F 0F                 ...
+        .byte   $0F                             ; 8886 0F                       .
+        .byte   $F0                             ; 8887 F0                       .
+L8888:  beq     L887A                           ; 8888 F0 F0                    ..
+        beq     L8888                           ; 888A F0 FC                    ..
+        .byte   $FC                             ; 888C FC                       .
+        .byte   $FC                             ; 888D FC                       .
+        .byte   $FC                             ; 888E FC                       .
+        .byte   $FC                             ; 888F FC                       .
+        .byte   $FC                             ; 8890 FC                       .
+        .byte   $FC                             ; 8891 FC                       .
+        .byte   $FC                             ; 8892 FC                       .
+        .byte   $03                             ; 8893 03                       .
+        .byte   $03                             ; 8894 03                       .
+L8895:  .byte   $03                             ; 8895 03                       .
+        .byte   $03                             ; 8896 03                       .
+        .byte   $03                             ; 8897 03                       .
+        .byte   $03                             ; 8898 03                       .
+L8899:  .byte   $03                             ; 8899 03                       .
+        .byte   $03                             ; 889A 03                       .
+        bbr3    $3F,L88DD                       ; 889B 3F 3F 3F                 ???
+        bbr3    $3F,L88E0                       ; 889E 3F 3F 3F                 ???
+        bbr3    $3F,L88B5                       ; 88A1 3F 3F 11                 ??.
+        .byte   $22                             ; 88A4 22                       "
+        .byte   $44                             ; 88A5 44                       D
+        dey                                     ; 88A6 88                       .
+        .byte   $11                             ; 88A7 11                       .
+L88A8:  .byte   $22                             ; 88A8 22                       "
+        .byte   $44                             ; 88A9 44                       D
+        dey                                     ; 88AA 88                       .
+        dey                                     ; 88AB 88                       .
+        .byte   $44                             ; 88AC 44                       D
+        .byte   $22                             ; 88AD 22                       "
+        ora     ($88),y                         ; 88AE 11 88                    ..
+        .byte   $44                             ; 88B0 44                       D
+        .byte   $22                             ; 88B1 22                       "
+        ora     ($FE),y                         ; 88B2 11 FE                    ..
+        .byte   $7C                             ; 88B4 7C                       |
+L88B5:  sec                                     ; 88B5 38                       8
+        bpl     L88B8                           ; 88B6 10 00                    ..
+L88B8:  brk                                     ; 88B8 00                       .
+        brk                                     ; 88B9 00                       .
+        brk                                     ; 88BA 00                       .
+        brk                                     ; 88BB 00                       .
+        brk                                     ; 88BC 00                       .
+        brk                                     ; 88BD 00                       .
+        brk                                     ; 88BE 00                       .
+        bpl     L88F9                           ; 88BF 10 38                    .8
+        jmp     (L80FE,x)                       ; 88C1 7C FE 80                 |..
+        cpy     #$E0                            ; 88C4 C0 E0                    ..
+        beq     L88A8                           ; 88C6 F0 E0                    ..
+        cpy     #$80                            ; 88C8 C0 80                    ..
+        brk                                     ; 88CA 00                       .
+        ora     (XM7SEG_ID,x)                   ; 88CB 01 03                    ..
+        rmb0    $0F                             ; 88CD 07 0F                    ..
+        rmb0    XM7SEG_ID                       ; 88CF 07 03                    ..
+        ora     (SECONDS_BUFFER,x)              ; 88D1 01 00                    ..
+        bbs7    $7E,L8912                       ; 88D3 FF 7E 3C                 .~<
+L88D6:  clc                                     ; 88D6 18                       .
+        clc                                     ; 88D7 18                       .
+        bit     $FF7E,x                         ; 88D8 3C 7E FF                 <~.
+        sta     ($C3,x)                         ; 88DB 81 C3                    ..
+L88DD:  smb6    $FF                             ; 88DD E7 FF                    ..
+L88DF:  .byte   $FF                             ; 88DF FF                       .
+L88E0:  .byte   $E7                             ; 88E0 E7                       .
+L88E1:  .byte   $C3                             ; 88E1 C3                       .
+        sta     ($F0,x)                         ; 88E2 81 F0                    ..
+        beq     L88D6                           ; 88E4 F0 F0                    ..
+        beq     L88E8                           ; 88E6 F0 00                    ..
+L88E8:  brk                                     ; 88E8 00                       .
+        brk                                     ; 88E9 00                       .
+        brk                                     ; 88EA 00                       .
+        brk                                     ; 88EB 00                       .
+        brk                                     ; 88EC 00                       .
+        brk                                     ; 88ED 00                       .
+        brk                                     ; 88EE 00                       .
+        .byte   $0F                             ; 88EF 0F                       .
+        .byte   $0F                             ; 88F0 0F                       .
+L88F1:  .byte   $0F                             ; 88F1 0F                       .
+        .byte   $0F                             ; 88F2 0F                       .
+L88F3:  bbr0    $0F,$8905                       ; 88F3 0F 0F 0F                 ...
+        .byte   $0F                             ; 88F6 0F                       .
+        brk                                     ; 88F7 00                       .
+L88F8:  brk                                     ; 88F8 00                       .
+L88F9:  brk                                     ; 88F9 00                       .
+        brk                                     ; 88FA 00                       .
+        brk                                     ; 88FB 00                       .
+        brk                                     ; 88FC 00                       .
+        brk                                     ; 88FD 00                       .
+        brk                                     ; 88FE 00                       .
+        beq     L88F1                           ; 88FF F0 F0                    ..
+L8901:  .byte   $F0                             ; 8901 F0                       .
+L8902:  .byte   $F0                             ; 8902 F0                       .
+L8903:  .byte   $33                             ; 8903 33                       3
+L8904:  .byte   $33                             ; 8904 33                       3
+        cpy     $33CC                           ; 8905 CC CC 33                 ..3
+L8908:  .byte   $33                             ; 8908 33                       3
+        cpy     a:$CC                           ; 8909 CC CC 00                 ...
+        jsr     L5020                           ; 890C 20 20 50                   P
+        bvc     L8899                           ; 890F 50 88                    P.
+        sed                                     ; 8911 F8                       .
+L8912:  brk                                     ; 8912 00                       .
+        jsr     L7020                           ; 8913 20 20 70                   p
+        jsr     L2070                           ; 8916 20 70 20                  p 
+        .byte   $20                             ; 8919 20                        
+        brk                                     ; 891A 00                       .
+L891B:  brk                                     ; 891B 00                       .
+        brk                                     ; 891C 00                       .
+        brk                                     ; 891D 00                       .
+        bvc     L88A8                           ; 891E 50 88                    P.
+        tay                                     ; 8920 A8                       .
+        bvc     L8923                           ; 8921 50 00                    P.
+L8923:  .byte   $FF                             ; 8923 FF                       .
+        .byte   $FF                             ; 8924 FF                       .
+L8925:  .byte   $FF                             ; 8925 FF                       .
+L8926:  .byte   $FF                             ; 8926 FF                       .
+L8927:  .byte   $FF                             ; 8927 FF                       .
+L8928:  .byte   $FF                             ; 8928 FF                       .
+L8929:  .byte   $FF                             ; 8929 FF                       .
+        .byte   $FF                             ; 892A FF                       .
+L892B:  brk                                     ; 892B 00                       .
+L892C:  brk                                     ; 892C 00                       .
+        brk                                     ; 892D 00                       .
+        brk                                     ; 892E 00                       .
+        .byte   $FF                             ; 892F FF                       .
+        .byte   $FF                             ; 8930 FF                       .
+L8931:  bbs7    $FF,$8924                       ; 8931 FF FF F0                 ...
+        beq     L8926                           ; 8934 F0 F0                    ..
+        beq     L8928                           ; 8936 F0 F0                    ..
+        beq     $892A                           ; 8938 F0 F0                    ..
+L893A:  beq     $894B                           ; 893A F0 0F                    ..
+        bbr0    $0F,$894E                       ; 893C 0F 0F 0F                 ...
+        bbr0    $0F,$8951                       ; 893F 0F 0F 0F                 ...
+        .byte   $0F                             ; 8942 0F                       .
+L8946:  bbs7    SECONDS_BUFFER,$8949            ; 8946 FF 00 00                 ...
+        brk                                     ; 8949 00                       .
+        brk                                     ; 894A 00                       .
+        brk                                     ; 894B 00                       .
+        brk                                     ; 894C 00                       .
+L894D:  pla                                     ; 894D 68                       h
+        bcc     L88E0                           ; 894E 90 90                    ..
+L8950:  bcc     L89BA                           ; 8950 90 68                    .h
+        brk                                     ; 8952 00                       .
+        bmi     L899D                           ; 8953 30 48                    0H
+        pha                                     ; 8955 48                       H
+        bvs     L89A0                           ; 8956 70 48                    pH
+L8958:  pha                                     ; 8958 48                       H
+        bvs     L891B                           ; 8959 70 C0                    p.
+        sed                                     ; 895B F8                       .
+        dey                                     ; 895C 88                       .
+        .byte   $80                             ; 895D 80                       .
+L895E:  bra     L88E0                           ; 895E 80 80                    ..
+        bra     $88E2                           ; 8960 80 80                    ..
+        brk                                     ; 8962 00                       .
+L8963:  sed                                     ; 8963 F8                       .
+        bvc     L89B6                           ; 8964 50 50                    PP
+        bvc     L89B8                           ; 8966 50 50                    PP
+        bvc     L8902                           ; 8968 50 98                    P.
+        brk                                     ; 896A 00                       .
+        sed                                     ; 896B F8                       .
+        dey                                     ; 896C 88                       .
+        rti                                     ; 896D 40                       @
+
+; ----------------------------------------------------------------------------
+        jsr     L8840                           ; 896E 20 40 88                  @.
+        sed                                     ; 8971 F8                       .
+        brk                                     ; 8972 00                       .
+        brk                                     ; 8973 00                       .
+        brk                                     ; 8974 00                       .
+        sei                                     ; 8975 78                       x
+        bcc     L8908                           ; 8976 90 90                    ..
+        bcc     L89DA                           ; 8978 90 60                    .`
+L897A:  brk                                     ; 897A 00                       .
+        brk                                     ; 897B 00                       .
+        bvc     L89CE                           ; 897C 50 50                    PP
+        bvc     L89D0                           ; 897E 50 50                    PP
+        pla                                     ; 8980 68                       h
+        bra     L8903                           ; 8981 80 80                    ..
+        brk                                     ; 8983 00                       .
+        bvc     L8926                           ; 8984 50 A0                    P.
+        jsr     L2020                           ; 8986 20 20 20                    
+        jsr     LF800                           ; 8989 20 00 F8                  ..
+        jsr     LA870                           ; 898C 20 70 A8                  p.
+        tay                                     ; 898F A8                       .
+        bvs     L89B2                           ; 8990 70 20                    p 
+        sed                                     ; 8992 F8                       .
+        jsr     L8850                           ; 8993 20 50 88                  P.
+        sed                                     ; 8996 F8                       .
+        dey                                     ; 8997 88                       .
+        bvc     L89BA                           ; 8998 50 20                    P 
+        brk                                     ; 899A 00                       .
+        bvs     L8925                           ; 899B 70 88                    p.
+L899D:  dey                                     ; 899D 88                       .
+        dey                                     ; 899E 88                       .
+        .byte   $50                             ; 899F 50                       P
+L89A0:  bvc     L897A                           ; 89A0 50 D8                    P.
+        brk                                     ; 89A2 00                       .
+        bmi     L89E5                           ; 89A3 30 40                    0@
+        rti                                     ; 89A5 40                       @
+
+; ----------------------------------------------------------------------------
+L89A6:  jsr     L5050                           ; 89A6 20 50 50                  PP
+L89A9:  bvc     L89CB                           ; 89A9 50 20                    P 
+        brk                                     ; 89AB 00                       .
+        brk                                     ; 89AC 00                       .
+        brk                                     ; 89AD 00                       .
+        bvc     L8958                           ; 89AE 50 A8                    P.
+        tay                                     ; 89B0 A8                       .
+        .byte   $50                             ; 89B1 50                       P
+L89B2:  brk                                     ; 89B2 00                       .
+        php                                     ; 89B3 08                       .
+        bvs     L895E                           ; 89B4 70 A8                    p.
+L89B6:  tay                                     ; 89B6 A8                       .
+L89B7:  tay                                     ; 89B7 A8                       .
+L89B8:  bvs     L893A                           ; 89B8 70 80                    p.
+L89BA:  brk                                     ; 89BA 00                       .
+        sec                                     ; 89BB 38                       8
+        rti                                     ; 89BC 40                       @
+
+; ----------------------------------------------------------------------------
+        bra     L89B7                           ; 89BD 80 F8                    ..
+        bra     L8A01                           ; 89BF 80 40                    .@
+        sec                                     ; 89C1 38                       8
+        brk                                     ; 89C2 00                       .
+        bvs     L894D                           ; 89C3 70 88                    p.
+        dey                                     ; 89C5 88                       .
+        dey                                     ; 89C6 88                       .
+        dey                                     ; 89C7 88                       .
+        dey                                     ; 89C8 88                       .
+        dey                                     ; 89C9 88                       .
+        brk                                     ; 89CA 00                       .
+L89CB:  brk                                     ; 89CB 00                       .
+        sed                                     ; 89CC F8                       .
+        brk                                     ; 89CD 00                       .
+L89CE:  sed                                     ; 89CE F8                       .
+        brk                                     ; 89CF 00                       .
+L89D0:  sed                                     ; 89D0 F8                       .
+        brk                                     ; 89D1 00                       .
+        brk                                     ; 89D2 00                       .
+        jsr     LF820                           ; 89D3 20 20 F8                   .
+        jsr     L0020                           ; 89D6 20 20 00                   .
+        sed                                     ; 89D9 F8                       .
+L89DA:  brk                                     ; 89DA 00                       .
+        cpy     #$30                            ; 89DB C0 30                    .0
+        php                                     ; 89DD 08                       .
+        bmi     L89A0                           ; 89DE 30 C0                    0.
+        brk                                     ; 89E0 00                       .
+        sed                                     ; 89E1 F8                       .
+        brk                                     ; 89E2 00                       .
+        clc                                     ; 89E3 18                       .
+        rts                                     ; 89E4 60                       `
+
+; ----------------------------------------------------------------------------
+L89E5:  bra     L8A47                           ; 89E5 80 60                    .`
+        clc                                     ; 89E7 18                       .
+        brk                                     ; 89E8 00                       .
+        sed                                     ; 89E9 F8                       .
+        brk                                     ; 89EA 00                       .
+        bpl     L8A15                           ; 89EB 10 28                    .(
+        jsr     L2020                           ; 89ED 20 20 20                    
+        jsr     L2020                           ; 89F0 20 20 20                    
+        jsr     L2020                           ; 89F3 20 20 20                    
+        jsr     L2020                           ; 89F6 20 20 20                    
+        ldy     #$40                            ; 89F9 A0 40                    .@
+        brk                                     ; 89FB 00                       .
+        jsr     LF800                           ; 89FC 20 00 F8                  ..
+        brk                                     ; 89FF 00                       .
+        .byte   $20                             ; 8A00 20                        
+L8A01:  brk                                     ; 8A01 00                       .
+        brk                                     ; 8A02 00                       .
+        brk                                     ; 8A03 00                       .
+        bvc     L89A6                           ; 8A04 50 A0                    P.
+        brk                                     ; 8A06 00                       .
+        bvc     L89A9                           ; 8A07 50 A0                    P.
+        brk                                     ; 8A09 00                       .
+        brk                                     ; 8A0A 00                       .
+        brk                                     ; 8A0B 00                       .
+        clc                                     ; 8A0C 18                       .
+        bit     $24                             ; 8A0D 24 24                    $$
+        clc                                     ; 8A0F 18                       .
+        brk                                     ; 8A10 00                       .
+        brk                                     ; 8A11 00                       .
+        brk                                     ; 8A12 00                       .
+        brk                                     ; 8A13 00                       .
+        .byte   $30                             ; 8A14 30                       0
+L8A15:  sei                                     ; 8A15 78                       x
+        sei                                     ; 8A16 78                       x
+        bmi     L8A19                           ; 8A17 30 00                    0.
+L8A19:  brk                                     ; 8A19 00                       .
+        brk                                     ; 8A1A 00                       .
+        brk                                     ; 8A1B 00                       .
+        brk                                     ; 8A1C 00                       .
+        brk                                     ; 8A1D 00                       .
+        brk                                     ; 8A1E 00                       .
+        bmi     L8A21                           ; 8A1F 30 00                    0.
+L8A21:  brk                                     ; 8A21 00                       .
+        brk                                     ; 8A22 00                       .
+        rol     L2020,x                         ; 8A23 3E 20 20                 >  
+        jsr     L60A0                           ; 8A26 20 A0 60                  .`
+        jsr     LA000                           ; 8A29 20 00 A0                  ..
+        bvc     L8A7E                           ; 8A2C 50 50                    PP
+        bvc     L8A30                           ; 8A2E 50 00                    P.
+L8A30:  brk                                     ; 8A30 00                       .
+        brk                                     ; 8A31 00                       .
+        brk                                     ; 8A32 00                       .
+        rti                                     ; 8A33 40                       @
+
+; ----------------------------------------------------------------------------
+        ldy     #$20                            ; 8A34 A0 20                    . 
+        rti                                     ; 8A36 40                       @
+
+; ----------------------------------------------------------------------------
+        cpx     #$00                            ; 8A37 E0 00                    ..
+        brk                                     ; 8A39 00                       .
+        brk                                     ; 8A3A 00                       .
+        brk                                     ; 8A3B 00                       .
+        sec                                     ; 8A3C 38                       8
+        sec                                     ; 8A3D 38                       8
+        sec                                     ; 8A3E 38                       8
+        sec                                     ; 8A3F 38                       8
+        sec                                     ; 8A40 38                       8
+        sec                                     ; 8A41 38                       8
+        brk                                     ; 8A42 00                       .
+        .byte   $FF                             ; 8A43 FF                       .
+        .byte   $FF                             ; 8A44 FF                       .
+L8A45:  .byte   $FF                             ; 8A45 FF                       .
+        .byte   $FF                             ; 8A46 FF                       .
+L8A47:  .byte   $FF                             ; 8A47 FF                       .
+        .byte   $FF                             ; 8A48 FF                       .
+L8A49:  .byte   $FF                             ; 8A49 FF                       .
+        .byte   $FF                             ; 8A4A FF                       .
+
+; End of "RODATA" segment
+; ----------------------------------------------------------------------------
+.code
+
