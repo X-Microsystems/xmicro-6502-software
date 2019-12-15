@@ -1,9 +1,0 @@
-;-----------------------------------------------------------------------------
-; SERIAL.MAC
-;-----------------------------------------------------------------------------
-.IF !.DEFINED(SERIAL_TXBUFFER)	;DON'T DEFINE MACROS IF THEY EXIST ALREADY
-
-.IMPORTZP SERIAL_TXBUFFER, SERIAL_RXBUFFER
-.IMPORT SERIAL_INIT, SERIAL_TX
-
-.ENDIF

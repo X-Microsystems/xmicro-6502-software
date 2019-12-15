@@ -1,0 +1,26 @@
+;-----------------------------------------------------------------------------
+; CFDRIVER.MAC
+; PROCEDURE CALL MACROS FOR THE COMPACTFLASH DRIVER LIBRARY
+;-----------------------------------------------------------------------------
+.IF !.DEFINEDMACRO(CF_READ)	;DON'T DEFINE MACROS IF THEY EXIST ALREADY
+
+.INCLUDE "INSTRUCTIONS.MAC"
+
+.IMPORT CF_INIT, CF_READ_SECTOR			;PROCEDURES
+.IMPORT CF_BUFFER				;CONSTANTS
+.IMPORTZP CF_LBA				;VARIABLES
+.IMPORTZP CF_BUFFERPOINTER			;ZERO-PAGE VARIABLES
+
+;-----------------------------------------------------------------------------
+; CF_READ
+;-----------------------------------------------------------------------------
+.MACRO CF_READ LBA
+	.IFNBLANK LBA		;COPY THE NEW LBA IF ONE IS SPECIFIED
+		PHA
+		MDA {LBA}, CF_LBA
+		PLA
+	.ENDIF
+	JSR CF_READ_SECTOR
+.ENDMACRO
+
+.ENDIF
