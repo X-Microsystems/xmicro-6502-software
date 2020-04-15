@@ -3,6 +3,6 @@
 ;-----------------------------------------------------------------------------
 .IF !.DEFINED(PS2_POINTER)	;DON'T DEFINE MACROS IF THEY EXIST ALREADY
 
-.IMPORT XMSERIAL_INIT, PS2_KEYBUFFER, PS2_KEYINDEX
+.IMPORT XMSERIAL_INIT, PS2_GETKEY
 
 .ENDIF
