@@ -6,7 +6,7 @@
 
 .INCLUDE "INSTRUCTIONS.MAC"
 
-.EXPORT XMSERIAL_INIT, PS2_GETKEY, PS2_COMMAND
+.EXPORT XMSERIAL_INIT, PS2_GETKEY, PS2_COMMAND, ASCII_NORMAL_TABLE, ASCII_SHIFT_TABLE
 
 ;ADDRESS CONSTANTS
 	XM7SEG			= $7400						;****TEMPORARY DEBUG DISPLAY
@@ -114,13 +114,13 @@ OVERFLOW:
 ; CLOBBERS: A
 ;-----------------------------------------------------------------------------
 .PROC PS2_SEND
-	LDA #%00001000							;CHECK THAT NOTHING IS CURRENTLY BEING SENT TO THE KEYBOARD
+	LDA #%00001000								;CHECK THAT NOTHING IS CURRENTLY BEING SENT TO THE KEYBOARD
 	BIT XMSERIAL_CSR
-	BNE PS2_SEND							;OTHERWISE WAIT FOR THE CURRENT BYTE TO BE SENT.
+	BNE PS2_SEND								;OTHERWISE WAIT FOR THE CURRENT BYTE TO BE SENT.
 	@1:
 	LDA PS2_CMDBUFFER
 	STA PS2_DATA
-	STZ PS2_FLAGS							;RESET THE FLAGS
+	STZ PS2_FLAGS								;RESET THE FLAGS
 	RTS
 .ENDPROC
 
@@ -164,7 +164,7 @@ OVERFLOW:
 	JMP STATE_PABR								;PABR FLAG IS SET
 
 STATE_DEFAULT:									;DEFAULT STATE - DECIDE WHAT TO DO BASED ON CURRENT BYTE'S VALUE
-	@1:	CPY #$84							;BELOW $84, (NOT A SPECIAL BYTE)
+		CPY #$84							;BELOW $84, (NOT A SPECIAL BYTE)
 		BCS @2
 		JMP CHECK_EXT
 	@2:	CPY #$E0							;START OF AN EXTENDED SCANCODE
@@ -205,8 +205,6 @@ STATE_DEFAULT:									;DEFAULT STATE - DECIDE WHAT TO DO BASED ON CURRENT BYTE'
 		@ERROR:								;****COMMAND ERROR - DROP THE LAST COMMAND (CURRENTLY NO ACTUAL ERROR SIGNALLING)
 		LDX #PS2_RETRY_LIMIT						;RESET THE RETRY LIMIT
 		STX PS2_RETRY
-;		LDA PS2_CMDINDEX						;CHECK IF WE'RE ALREADY AT THE END OF THE COMMAND QUEUE
-;		BEQ @3
 		@1:
 		LDX #$00							;IF NOT, DROP THE CURRENT COMMAND (INCLUDING DATA BYTES)
 		@2:
@@ -252,10 +250,9 @@ STATE_DEFAULT:									;DEFAULT STATE - DECIDE WHAT TO DO BASED ON CURRENT BYTE'
 		INY								;INCREMENT THE KEYCODE BUFFER INDEX
 		STY PS2_KEYINDEX
 		@RETURN:
-		LDA #$00
-		STA PS2_FLAGS
+		STZ PS2_FLAGS
 		JMP END_ISR
-		@OVERFLOW:							;BUFFER OVERFLOW ERROR - CURRENTLY DOES NOTHING, JUST IGNORES THE KEY.
+		@OVERFLOW:							;****BUFFER OVERFLOW ERROR - CURRENTLY DOES NOTHING, JUST IGNORES THE KEY.
 		BRA @RETURN
 
 	SET_EXT:								;SET THE EXT FLAG
@@ -299,7 +296,6 @@ STATE_DEFAULT:									;DEFAULT STATE - DECIDE WHAT TO DO BASED ON CURRENT BYTE'
 		STA PS2_RETRY
 		JMP END_ISR
 
-
 STATE_PABR:									;PABR STATE - IGNORE REMAINING BYTES OF THE PAUSE/BREAK SCANCODE
 	DEC PS2_SCANINDEX
 	BNE END_ISR
@@ -319,290 +315,573 @@ END_ISR:									;END THE ISR AND RETURN
 ; SCANCODE LOOKUP TABLES
 ; MAPS THE KEYBOARD SCANCODES TO KEYCODES USED BY THE DRIVER
 ;
-; KEYCODES ARE A ONE-BYTE CODE INDICATING WHICH KEY WAS PRESSED
-; VISIBLE CHARACTERS ARE MAPPED TO THEIR UPPERCASE ASCII VALUE
+; KEYCODES ARE A ONE-BYTE CODE INDICATING WHICH PHYSICAL KEY WAS PRESSED
 ; BIT 7 INDICATES A KEY BREAK
 ;-----------------------------------------------------------------------------
-PS2_NORMAL_TABLE:								;NORMAL SCANCODES
-	.BYTE	$00								;00
-	.BYTE	$00								;01	F9
-	.BYTE	$00								;02
-	.BYTE	$00								;03	F5
-	.BYTE	$00								;04	F3
-	.BYTE	$00								;05	F1
-	.BYTE	$00								;06	F2
-	.BYTE	$00								;07	F12
-	.BYTE	$00								;08
-	.BYTE	$00								;09	F10
-	.BYTE	$00								;0A	F8
-	.BYTE	$00								;0B	F6
-	.BYTE	$00								;0C	F4
-	.BYTE	$11								;0D	TAB
-	.BYTE	"`"								;0E	`
-	.BYTE	$00								;0F
+PS2_NORMAL_TABLE:								;CONVERT NORMAL SCANCODES TO KEYCODES
+	.BYTE	0								;00
+	.BYTE	120								;01	F9
+	.BYTE	0								;02
+	.BYTE	116								;03	F5
+	.BYTE	114								;04	F3
+	.BYTE	112								;05	F1
+	.BYTE	113								;06	F2
+	.BYTE	123								;07	F12
+	.BYTE	0								;08
+	.BYTE	121								;09	F10
+	.BYTE	119								;0A	F8
+	.BYTE	117								;0B	F6
+	.BYTE	115								;0C	F4
+	.BYTE	16								;0D	TAB
+	.BYTE	1								;0E	`
+	.BYTE	0								;0F
 
-	.BYTE	$00								;10
-	.BYTE	$00								;11	LALT
-	.BYTE	$00								;12	LSHIFT
-	.BYTE	$00								;13
-	.BYTE	$00								;14	LCTRL
-	.BYTE	"Q"								;15	Q
-	.BYTE	"1"								;16	1
-	.BYTE	$00								;17
-	.BYTE	$00								;18
-	.BYTE	$00								;19
-	.BYTE	"Z"								;1A	Z
-	.BYTE	"S"								;1B	S
-	.BYTE	"A"								;1C	A
-	.BYTE	"W"								;1D	W
-	.BYTE	"2"								;1E	2
-	.BYTE	$00								;1F
+	.BYTE	0								;10
+	.BYTE	60								;11	LALT
+	.BYTE	44								;12	LSHIFT
+	.BYTE	0								;13
+	.BYTE	58								;14	LCTRL
+	.BYTE	17								;15	Q
+	.BYTE	2								;16	1
+	.BYTE	0								;17
+	.BYTE	0								;18
+	.BYTE	0								;19
+	.BYTE	46								;1A	Z
+	.BYTE	32								;1B	S
+	.BYTE	31								;1C	A
+	.BYTE	18								;1D	W
+	.BYTE	3								;1E	2
+	.BYTE	0								;1F
 
-	.BYTE	$00								;20
-	.BYTE	"C"								;21	C
-	.BYTE	"X"								;22	X
-	.BYTE	"D"								;23	D
-	.BYTE	"E"								;24	E
-	.BYTE	"4"								;25	4
-	.BYTE	"3"								;26	3
-	.BYTE	$00								;27
-	.BYTE	$00								;28
-	.BYTE	" "								;29	SPACE
-	.BYTE	"V"								;2A	V
-	.BYTE	"F"								;2B	F
-	.BYTE	"T"								;2C	T
-	.BYTE	"R"								;2D	R
-	.BYTE	"5"								;2E	5
-	.BYTE	$00								;2F
+	.BYTE	0								;20
+	.BYTE	48								;21	C
+	.BYTE	47								;22	X
+	.BYTE	33								;23	D
+	.BYTE	19								;24	E
+	.BYTE	5								;25	4
+	.BYTE	4								;26	3
+	.BYTE	0								;27
+	.BYTE	0								;28
+	.BYTE	61								;29	SPACE
+	.BYTE	49								;2A	V
+	.BYTE	34								;2B	F
+	.BYTE	21								;2C	T
+	.BYTE	20								;2D	R
+	.BYTE	6								;2E	5
+	.BYTE	0								;2F
 
-	.BYTE	$00								;30
-	.BYTE	"N"								;31	N
-	.BYTE	"B"								;32	B
-	.BYTE	"H"								;33	H
-	.BYTE	"G"								;34	G
-	.BYTE	"Y"								;35	Y
-	.BYTE	"6"								;36	6
-	.BYTE	$00								;37
-	.BYTE	$00								;38
-	.BYTE	$00								;39
-	.BYTE	"M"								;3A	M
-	.BYTE	"J"								;3B	J
-	.BYTE	"U"								;3C	U
-	.BYTE	"7"								;3D	7
-	.BYTE	"8"								;3E	8
-	.BYTE	$00								;3F
+	.BYTE	0								;30
+	.BYTE	51								;31	N
+	.BYTE	50								;32	B
+	.BYTE	36								;33	H
+	.BYTE	35								;34	G
+	.BYTE	22								;35	Y
+	.BYTE	7								;36	6
+	.BYTE	0								;37
+	.BYTE	0								;38
+	.BYTE	0								;39
+	.BYTE	52								;3A	M
+	.BYTE	37								;3B	J
+	.BYTE	23								;3C	U
+	.BYTE	8								;3D	7
+	.BYTE	9								;3E	8
+	.BYTE	0								;3F
 
-	.BYTE	$00								;40
-	.BYTE	","								;41	,
-	.BYTE	"K"								;42	K
-	.BYTE	"I"								;43	I
-	.BYTE	"O"								;44	O
-	.BYTE	"0"								;45	0
-	.BYTE	"9"								;46	9
-	.BYTE	$00								;47
-	.BYTE	$00								;48
-	.BYTE	"."								;49	.
-	.BYTE	"/"								;4A	/
-	.BYTE	"L"								;4B	L
-	.BYTE	";"								;4C	;
-	.BYTE	"P"								;4D	P
-	.BYTE	"-"								;4E	-
-	.BYTE	$00								;4F
+	.BYTE	0								;40
+	.BYTE	53								;41	,
+	.BYTE	38								;42	K
+	.BYTE	24								;43	I
+	.BYTE	25								;44	O
+	.BYTE	11								;45	0
+	.BYTE	10								;46	9
+	.BYTE	0								;47
+	.BYTE	0								;48
+	.BYTE	54								;49	.
+	.BYTE	55								;4A	/
+	.BYTE	39								;4B	L
+	.BYTE	40								;4C	;
+	.BYTE	26								;4D	P
+	.BYTE	12								;4E	-
+	.BYTE	0								;4F
 
-	.BYTE	$00								;50
-	.BYTE	$00								;51
-	.BYTE	"'"								;52	'
-	.BYTE	$00								;53
-	.BYTE	"["								;54	[
-	.BYTE	"="								;55	=
-	.BYTE	$00								;56
-	.BYTE	$00								;57
-	.BYTE	$00								;58	CAPSLOCK
-	.BYTE	$00								;59	RSHIFT
-	.BYTE	$0A								;5A	ENTER
-	.BYTE	"]"								;5B	]
-	.BYTE	$00								;5C
-	.BYTE	"\"								;5D	\
-	.BYTE	$00								;5E
-	.BYTE	$00								;5F
+	.BYTE	0								;50
+	.BYTE	0								;51
+	.BYTE	41								;52	'
+	.BYTE	0								;53
+	.BYTE	27								;54	[
+	.BYTE	13								;55	=
+	.BYTE	0								;56
+	.BYTE	0								;57
+	.BYTE	30								;58	CAPSLOCK
+	.BYTE	57								;59	RSHIFT
+	.BYTE	43								;5A	ENTER
+	.BYTE	28								;5B	]
+	.BYTE	0								;5C
+	.BYTE	29								;5D	\
+	.BYTE	0								;5E
+	.BYTE	0								;5F
 
-	.BYTE	$00								;60
-	.BYTE	$00								;61
-	.BYTE	$00								;62
-	.BYTE	$00								;63
-	.BYTE	$00								;64
-	.BYTE	$00								;65
-	.BYTE	$08								;66	BACKSPACE
-	.BYTE	$00								;67
-	.BYTE	$00								;68
-	.BYTE	"1"								;69	(KEYPAD) 1
-	.BYTE	$00								;6A
-	.BYTE	"4"								;6B	(KEYPAD) 4
-	.BYTE	"7"								;6C	(KEYPAD) 7
-	.BYTE	$00								;6D
-	.BYTE	$00								;6E
-	.BYTE	$00								;6F
+	.BYTE	0								;60
+	.BYTE	0								;61
+	.BYTE	0								;62
+	.BYTE	0								;63
+	.BYTE	0								;64
+	.BYTE	0								;65
+	.BYTE	15								;66	BACKSPACE
+	.BYTE	0								;67
+	.BYTE	0								;68
+	.BYTE	93								;69	(KEYPAD) 1
+	.BYTE	0								;6A
+	.BYTE	92								;6B	(KEYPAD) 4
+	.BYTE	91								;6C	(KEYPAD) 7
+	.BYTE	0								;6D
+	.BYTE	0								;6E
+	.BYTE	0								;6F
 
-	.BYTE	"0"								;70	(KEYPAD) 0
-	.BYTE	"."								;71	(KEYPAD) .
-	.BYTE	"2"								;72	(KEYPAD) 2
-	.BYTE	"5"								;73	(KEYPAD) 5
-	.BYTE	"6"								;74	(KEYPAD) 6
-	.BYTE	"8"								;75	(KEYPAD) 8
-	.BYTE	$1B								;76	ESC
-	.BYTE	$00								;77	NUMLOCK
-	.BYTE	$00								;78	F11
-	.BYTE	"+"								;79	(KEYPAD) +
-	.BYTE	"3"								;7A	(KEYPAD) 3
-	.BYTE	"-"								;7B	(KEYPAD) -
-	.BYTE	"*"								;7C	(KEYPAD) *
-	.BYTE	"9"								;7D	(KEYPAD) 9
-	.BYTE	$00								;7E	SCROLLLOCK
-	.BYTE	$00								;7F
+	.BYTE	99								;70	(KEYPAD) 0
+	.BYTE	104								;71	(KEYPAD) .
+	.BYTE	98								;72	(KEYPAD) 2
+	.BYTE	97								;73	(KEYPAD) 5
+	.BYTE	102								;74	(KEYPAD) 6
+	.BYTE	96								;75	(KEYPAD) 8
+	.BYTE	110								;76	ESC
+	.BYTE	90								;77	NUMLOCK
+	.BYTE	122								;78	F11
+	.BYTE	106								;79	(KEYPAD) +
+	.BYTE	103								;7A	(KEYPAD) 3
+	.BYTE	105								;7B	(KEYPAD) -
+	.BYTE	100								;7C	(KEYPAD) *
+	.BYTE	101								;7D	(KEYPAD) 9
+	.BYTE	125								;7E	SCROLLLOCK
+	.BYTE	0								;7F
 
-	.BYTE	$00								;80
-	.BYTE	$00								;81
-	.BYTE	$00								;82
-	.BYTE	$00								;83	F7
+	.BYTE	0								;80	ERROR
+	.BYTE	0								;81
+	.BYTE	0								;82
+	.BYTE	118								;83	F7
 
-PS2_EXT_TABLE:									;EXTENDED SCANCODES
-	.BYTE	$00								;00
-	.BYTE	$00								;01
-	.BYTE	$00								;02
-	.BYTE	$00								;03
-	.BYTE	$00								;04
-	.BYTE	$00								;05
-	.BYTE	$00								;06
-	.BYTE	$00								;07
-	.BYTE	$00								;08
-	.BYTE	$00								;09
-	.BYTE	$00								;0A
-	.BYTE	$00								;0B
-	.BYTE	$00								;0C
-	.BYTE	$00								;0D
-	.BYTE	$00								;0E
-	.BYTE	$00								;0F
+PS2_EXT_TABLE:									;CONVERT EXTENDED SCANCODES TO KEYCODES
+	.BYTE	0								;00
+	.BYTE	0								;01
+	.BYTE	0								;02
+	.BYTE	0								;03
+	.BYTE	0								;04
+	.BYTE	0								;05
+	.BYTE	0								;06
+	.BYTE	0								;07
+	.BYTE	0								;08
+	.BYTE	0								;09
+	.BYTE	0								;0A
+	.BYTE	0								;0B
+	.BYTE	0								;0C
+	.BYTE	0								;0D
+	.BYTE	0								;0E
+	.BYTE	0								;0F
 
-	.BYTE	$00								;10
-	.BYTE	$00								;11	RALT
-	.BYTE	$00								;12	PRINTSCREEN
-	.BYTE	$00								;13
-	.BYTE	$00								;14	RCTRL
-	.BYTE	$00								;15
-	.BYTE	$00								;16
-	.BYTE	$00								;17
-	.BYTE	$00								;18
-	.BYTE	$00								;19
-	.BYTE	$00								;1A
-	.BYTE	$00								;1B
-	.BYTE	$00								;1C
-	.BYTE	$00								;1D
-	.BYTE	$00								;1E
-	.BYTE	$00								;1F	LGUI
+	.BYTE	0								;10
+	.BYTE	62								;11	RALT
+	.BYTE	124								;12	PRINTSCREEN
+	.BYTE	0								;13
+	.BYTE	64								;14	RCTRL
+	.BYTE	0								;15
+	.BYTE	0								;16
+	.BYTE	0								;17
+	.BYTE	0								;18
+	.BYTE	0								;19
+	.BYTE	0								;1A
+	.BYTE	0								;1B
+	.BYTE	0								;1C
+	.BYTE	0								;1D
+	.BYTE	0								;1E
+	.BYTE	0								;1F	LGUI
 
-	.BYTE	$00								;20
-	.BYTE	$00								;21
-	.BYTE	$00								;22
-	.BYTE	$00								;23
-	.BYTE	$00								;24
-	.BYTE	$00								;25
-	.BYTE	$00								;26
-	.BYTE	$00								;27	RGUI
-	.BYTE	$00								;28
-	.BYTE	$00								;29
-	.BYTE	$00								;2A
-	.BYTE	$00								;2B
-	.BYTE	$00								;2C
-	.BYTE	$00								;2D
-	.BYTE	$00								;2E
-	.BYTE	$00								;2F
+	.BYTE	0								;20
+	.BYTE	0								;21
+	.BYTE	0								;22
+	.BYTE	0								;23
+	.BYTE	0								;24
+	.BYTE	0								;25
+	.BYTE	0								;26
+	.BYTE	0								;27	RGUI
+	.BYTE	0								;28
+	.BYTE	0								;29
+	.BYTE	0								;2A
+	.BYTE	0								;2B
+	.BYTE	0								;2C
+	.BYTE	0								;2D
+	.BYTE	0								;2E
+	.BYTE	0								;2F
 
-	.BYTE	$00								;30
-	.BYTE	$00								;31
-	.BYTE	$00								;32
-	.BYTE	$00								;33
-	.BYTE	$00								;34
-	.BYTE	$00								;35
-	.BYTE	$00								;36
-	.BYTE	$00								;37
-	.BYTE	$00								;38
-	.BYTE	$00								;39
-	.BYTE	$00								;3A
-	.BYTE	$00								;3B
-	.BYTE	$00								;3C
-	.BYTE	$00								;3D
-	.BYTE	$00								;3E
-	.BYTE	$00								;3F
+	.BYTE	0								;30
+	.BYTE	0								;31
+	.BYTE	0								;32
+	.BYTE	0								;33
+	.BYTE	0								;34
+	.BYTE	0								;35
+	.BYTE	0								;36
+	.BYTE	0								;37
+	.BYTE	0								;38
+	.BYTE	0								;39
+	.BYTE	0								;3A
+	.BYTE	0								;3B
+	.BYTE	0								;3C
+	.BYTE	0								;3D
+	.BYTE	0								;3E
+	.BYTE	0								;3F
 
-	.BYTE	$00								;40
-	.BYTE	$00								;41
+	.BYTE	0								;40
+	.BYTE	0								;41
+	.BYTE	0								;42
+	.BYTE	0								;43
+	.BYTE	0								;44
+	.BYTE	0								;45
+	.BYTE	0								;46
+	.BYTE	0								;47
+	.BYTE	0								;48
+	.BYTE	0								;49
+	.BYTE	95								;4A	(KEYPAD) /
+	.BYTE	0								;4B
+	.BYTE	0								;4C
+	.BYTE	0								;4D
+	.BYTE	0								;4E
+	.BYTE	0								;4F
+
+	.BYTE	0								;50
+	.BYTE	0								;51
+	.BYTE	0								;52
+	.BYTE	0								;53
+	.BYTE	0								;54
+	.BYTE	0								;55
+	.BYTE	0								;56
+	.BYTE	0								;57
+	.BYTE	0								;58
+	.BYTE	0								;59
+	.BYTE	108								;5A	(KEYPAD) ENTER
+	.BYTE	0								;5B
+	.BYTE	0								;5C
+	.BYTE	0								;5D
+	.BYTE	0								;5E
+	.BYTE	0								;5F
+
+	.BYTE	0								;60
+	.BYTE	0								;61
+	.BYTE	0								;62
+	.BYTE	0								;63
+	.BYTE	0								;64
+	.BYTE	0								;65
+	.BYTE	0								;66
+	.BYTE	0								;67
+	.BYTE	0								;68
+	.BYTE	81								;69	END
+	.BYTE	0								;6A
+	.BYTE	79								;6B	LEFT
+	.BYTE	80								;6C	HOME
+	.BYTE	0								;6D
+	.BYTE	0								;6E
+	.BYTE	0								;6F
+
+	.BYTE	75								;70	INSERT
+	.BYTE	76								;71	DELETE
+	.BYTE	84								;72	DOWN
+	.BYTE	0								;73
+	.BYTE	89								;74	RIGHT
+	.BYTE	83								;75	UP
+	.BYTE	0								;76
+	.BYTE	0								;77
+	.BYTE	0								;78
+	.BYTE	0								;79
+	.BYTE	86								;7A	PAGEDOWN
+	.BYTE	0								;7B
+	.BYTE	0								;7C	PRINTSCREEN (SECOND CODE)
+	.BYTE	85								;7D	PAGEUP
+	.BYTE	0								;7E
+	.BYTE	0								;7F
+
+	.BYTE	0								;80	ERROR
+	.BYTE	0								;81
+	.BYTE	0								;82
+	.BYTE	0								;83
+
+ASCII_NORMAL_TABLE:								;CONVERT KEYCODES TO ASCII (UNSHIFTED)
+	.BYTE	$00								;0	NULL
+	.BYTE	"`"								;1	`
+	.BYTE	"1"								;2	1
+	.BYTE	"2"								;3	2
+	.BYTE	"3"								;4	3
+	.BYTE	"4"								;5	4
+	.BYTE	"5"								;6	5
+	.BYTE	"6"								;7	6
+	.BYTE	"7"								;8	7
+	.BYTE	"8"								;9	8
+
+	.BYTE	"9"								;10	9
+	.BYTE	"0"								;11	0
+	.BYTE	"-"								;12	-
+	.BYTE	"="								;13	=
+	.BYTE	$00								;14
+	.BYTE	$00								;15	BACKSPACE
+	.BYTE	$00								;16	TAB
+	.BYTE	"q"								;17	Q
+	.BYTE	"w"								;18	W
+	.BYTE	"e"								;19	E
+
+	.BYTE	"r"								;20	R
+	.BYTE	"t"								;21	T
+	.BYTE	"y"								;22	Y
+	.BYTE	"u"								;23	U
+	.BYTE	"i"								;24	I
+	.BYTE	"o"								;25	O
+	.BYTE	"p"								;26	P
+	.BYTE	"["								;27	[
+	.BYTE	"]"								;28	]
+	.BYTE	"\"								;29	\
+
+	.BYTE	$00								;30	CAPSLOCK
+	.BYTE	"a"								;31	A
+	.BYTE	"s"								;32	S
+	.BYTE	"d"								;33	D
+	.BYTE	"f"								;34	F
+	.BYTE	"g"								;35	G
+	.BYTE	"h"								;36	H
+	.BYTE	"j"								;37	J
+	.BYTE	"k"								;38	K
+	.BYTE	"l"								;39	L
+
+	.BYTE	";"								;40	;
+	.BYTE	"'"								;41	'
 	.BYTE	$00								;42
-	.BYTE	$00								;43
-	.BYTE	$00								;44
+	.BYTE	$00								;43	ENTER
+	.BYTE	$00								;44	LSHIFT
 	.BYTE	$00								;45
-	.BYTE	$00								;46
-	.BYTE	$00								;47
-	.BYTE	$00								;48
-	.BYTE	$00								;49
-	.BYTE	"/"								;4A	(KEYPAD) /
-	.BYTE	$00								;4B
-	.BYTE	$00								;4C
-	.BYTE	$00								;4D
-	.BYTE	$00								;4E
-	.BYTE	$00								;4F
+	.BYTE	"z"								;46	Z
+	.BYTE	"x"								;47	X
+	.BYTE	"c"								;48	C
+	.BYTE	"v"								;49	V
 
-	.BYTE	$00								;50
-	.BYTE	$00								;51
-	.BYTE	$00								;52
-	.BYTE	$00								;53
-	.BYTE	$00								;54
-	.BYTE	$00								;55
+	.BYTE	"b"								;50	B
+	.BYTE	"n"								;51	N
+	.BYTE	"m"								;52	M
+	.BYTE	","								;53	,
+	.BYTE	"."								;54	.
+	.BYTE	"/"								;55	/
 	.BYTE	$00								;56
-	.BYTE	$00								;57
-	.BYTE	$00								;58
+	.BYTE	$00								;57	RSHIFT
+	.BYTE	$00								;58	LCTRL
 	.BYTE	$00								;59
-	.BYTE	$0A								;5A	(KEYPAD) ENTER
-	.BYTE	$00								;5B
-	.BYTE	$00								;5C
-	.BYTE	$00								;5D
-	.BYTE	$00								;5E
-	.BYTE	$00								;5F
 
-	.BYTE	$00								;60
-	.BYTE	$00								;61
-	.BYTE	$00								;62
+	.BYTE	$00								;60	LALT
+	.BYTE	" "								;61	SPACE
+	.BYTE	$00								;62	RALT
 	.BYTE	$00								;63
-	.BYTE	$00								;64
+	.BYTE	$00								;64	RCTRL
 	.BYTE	$00								;65
 	.BYTE	$00								;66
 	.BYTE	$00								;67
 	.BYTE	$00								;68
-	.BYTE	$00								;69	END
-	.BYTE	$00								;6A
-	.BYTE	$00								;6B	LEFT
-	.BYTE	$00								;6C	HOME
-	.BYTE	$00								;6D
-	.BYTE	$00								;6E
-	.BYTE	$00								;6F
+	.BYTE	$00								;69
 
-	.BYTE	$00								;70	INSERT
-	.BYTE	$7F								;71	DELETE
-	.BYTE	$00								;72	DOWN
+	.BYTE	$00								;70
+	.BYTE	$00								;71
+	.BYTE	$00								;72
 	.BYTE	$00								;73
-	.BYTE	$00								;74	RIGHT
-	.BYTE	$00								;75	UP
-	.BYTE	$00								;76
+	.BYTE	$00								;74
+	.BYTE	$00								;75	INSERT
+	.BYTE	$00								;76	DELETE
 	.BYTE	$00								;77
 	.BYTE	$00								;78
-	.BYTE	$00								;79
-	.BYTE	$00								;7A	PAGEDOWN
-	.BYTE	$00								;7B
-	.BYTE	$00								;7C	PRINTSCREEN
-	.BYTE	$00								;7D	PAGEUP
-	.BYTE	$00								;7E
-	.BYTE	$00								;7F
+	.BYTE	$00								;79	LEFT
 
-	.BYTE	$00								;80
-	.BYTE	$00								;81
+	.BYTE	$00								;80	HOME
+	.BYTE	$00								;81	END
 	.BYTE	$00								;82
-	.BYTE	$00								;83
+	.BYTE	$00								;83	UP
+	.BYTE	$00								;84	DOWN
+	.BYTE	$00								;85	PAGEUP
+	.BYTE	$00								;86	PAGEDOWN
+	.BYTE	$00								;87
+	.BYTE	$00								;88
+	.BYTE	$00								;89	RIGHT
+
+	.BYTE	$00								;90	NUMLOCK
+	.BYTE	"7"								;91	NUMPAD 7
+	.BYTE	"4"								;92	NUMPAD 4
+	.BYTE	"1"								;93	NUMPAD 1
+	.BYTE	$00								;94
+	.BYTE	"/"								;95	NUMPAD /
+	.BYTE	"8"								;96	NUMPAD 8
+	.BYTE	"5"								;97	NUMPAD 5
+	.BYTE	"2"								;98	NUMPAD 2
+	.BYTE	"0"								;99	NUMPAD 0
+
+	.BYTE	"*"								;100	NUMPAD *
+	.BYTE	"9"								;101	NUMPAD 9
+	.BYTE	"6"								;102	NUMPAD 6
+	.BYTE	"3"								;103	NUMPAD 3
+	.BYTE	"."								;104	NUMPAD .
+	.BYTE	"-"								;105	NUMPAD -
+	.BYTE	"+"								;106	NUMPAD +
+	.BYTE	$00								;107
+	.BYTE	$00								;108	NUMPAD ENTER
+	.BYTE	$00								;109
+
+	.BYTE	$00								;110	ESC
+	.BYTE	$00								;111
+	.BYTE	$00								;112	F1
+	.BYTE	$00								;113	F2
+	.BYTE	$00								;114	F3
+	.BYTE	$00								;115	F4
+	.BYTE	$00								;116	F5
+	.BYTE	$00								;117	F6
+	.BYTE	$00								;118	F7
+	.BYTE	$00								;119	F8
+
+	.BYTE	$00								;120	F9
+	.BYTE	$00								;121	F10
+	.BYTE	$00								;122	F11
+	.BYTE	$00								;123	F12
+	.BYTE	$00								;124	PRINTSCREEN
+	.BYTE	$00								;125	SCROLLLOCK
+	.BYTE	$00								;126	PAUSE
+	.BYTE	$00								;127
+
+ASCII_SHIFT_TABLE:								;CONVERT KEYCODES TO ASCII (SHIFTED)
+	.BYTE	$00								;0	NULL
+	.BYTE	"~"								;1	`
+	.BYTE	"!"								;2	1
+	.BYTE	"@"								;3	2
+	.BYTE	"#"								;4	3
+	.BYTE	"$"								;5	4
+	.BYTE	"%"								;6	5
+	.BYTE	"^"								;7	6
+	.BYTE	"&"								;8	7
+	.BYTE	"*"								;9	8
+
+	.BYTE	"("								;10	9
+	.BYTE	")"								;11	0
+	.BYTE	"_"								;12	-
+	.BYTE	"+"								;13	=
+	.BYTE	$00								;14
+	.BYTE	$00								;15	BACKSPACE
+	.BYTE	$00								;16	TAB
+	.BYTE	"Q"								;17	Q
+	.BYTE	"W"								;18	W
+	.BYTE	"E"								;19	E
+
+	.BYTE	"R"								;20	R
+	.BYTE	"T"								;21	T
+	.BYTE	"Y"								;22	Y
+	.BYTE	"U"								;23	U
+	.BYTE	"I"								;24	I
+	.BYTE	"O"								;25	O
+	.BYTE	"P"								;26	P
+	.BYTE	"{"								;27	[
+	.BYTE	"}"								;28	]
+	.BYTE	"|"								;29	\
+
+	.BYTE	$00								;30	CAPSLOCK
+	.BYTE	"A"								;31	A
+	.BYTE	"S"								;32	S
+	.BYTE	"D"								;33	D
+	.BYTE	"F"								;34	F
+	.BYTE	"G"								;35	G
+	.BYTE	"H"								;36	H
+	.BYTE	"J"								;37	J
+	.BYTE	"K"								;38	K
+	.BYTE	"L"								;39	L
+
+	.BYTE	":"								;40	;
+	.BYTE	$22								;41	'
+	.BYTE	$00								;42
+	.BYTE	$00								;43	ENTER
+	.BYTE	$00								;44	LSHIFT
+	.BYTE	$00								;45
+	.BYTE	"Z"								;46	Z
+	.BYTE	"X"								;47	X
+	.BYTE	"C"								;48	C
+	.BYTE	"V"								;49	V
+
+	.BYTE	"B"								;50	B
+	.BYTE	"N"								;51	N
+	.BYTE	"M"								;52	M
+	.BYTE	"<"								;53	,
+	.BYTE	">"								;54	.
+	.BYTE	"?"								;55	/
+	.BYTE	$00								;56
+	.BYTE	$00								;57	RSHIFT
+	.BYTE	$00								;58	LCTRL
+	.BYTE	$00								;59
+
+	.BYTE	$00								;60	LALT
+	.BYTE	" "								;61	SPACE
+	.BYTE	$00								;62	RALT
+	.BYTE	$00								;63
+	.BYTE	$00								;64	RCTRL
+	.BYTE	$00								;65
+	.BYTE	$00								;66
+	.BYTE	$00								;67
+	.BYTE	$00								;68
+	.BYTE	$00								;69
+
+	.BYTE	$00								;70
+	.BYTE	$00								;71
+	.BYTE	$00								;72
+	.BYTE	$00								;73
+	.BYTE	$00								;74
+	.BYTE	$00								;75	INSERT
+	.BYTE	$00								;76	DELETE
+	.BYTE	$00								;77
+	.BYTE	$00								;78
+	.BYTE	$00								;79	LEFT
+
+	.BYTE	$00								;80	HOME
+	.BYTE	$00								;81	END
+	.BYTE	$00								;82
+	.BYTE	$00								;83	UP
+	.BYTE	$00								;84	DOWN
+	.BYTE	$00								;85	PAGEUP
+	.BYTE	$00								;86	PAGEDOWN
+	.BYTE	$00								;87
+	.BYTE	$00								;88
+	.BYTE	$00								;89	RIGHT
+
+	.BYTE	$00								;90	NUMLOCK
+	.BYTE	"7"								;91	NUMPAD 7
+	.BYTE	"4"								;92	NUMPAD 4
+	.BYTE	"1"								;93	NUMPAD 1
+	.BYTE	$00								;94
+	.BYTE	"/"								;95	NUMPAD /
+	.BYTE	"8"								;96	NUMPAD 8
+	.BYTE	"5"								;97	NUMPAD 5
+	.BYTE	"2"								;98	NUMPAD 2
+	.BYTE	"0"								;99	NUMPAD 0
+
+	.BYTE	"*"								;100	NUMPAD *
+	.BYTE	"9"								;101	NUMPAD 9
+	.BYTE	"6"								;102	NUMPAD 6
+	.BYTE	"3"								;103	NUMPAD 3
+	.BYTE	"."								;104	NUMPAD .
+	.BYTE	"-"								;105	NUMPAD -
+	.BYTE	"+"								;106	NUMPAD +
+	.BYTE	$00								;107
+	.BYTE	$00								;108	NUMPAD ENTER
+	.BYTE	$00								;109
+
+	.BYTE	$00								;110	ESC
+	.BYTE	$00								;111
+	.BYTE	$00								;112	F1
+	.BYTE	$00								;113	F2
+	.BYTE	$00								;114	F3
+	.BYTE	$00								;115	F4
+	.BYTE	$00								;116	F5
+	.BYTE	$00								;117	F6
+	.BYTE	$00								;118	F7
+	.BYTE	$00								;119	F8
+
+	.BYTE	$00								;120	F9
+	.BYTE	$00								;121	F10
+	.BYTE	$00								;122	F11
+	.BYTE	$00								;123	F12
+	.BYTE	$00								;124	PRINTSCREEN
+	.BYTE	$00								;125	SCROLLLOCK
+	.BYTE	$00								;126	PAUSE
+	.BYTE	$00								;127
