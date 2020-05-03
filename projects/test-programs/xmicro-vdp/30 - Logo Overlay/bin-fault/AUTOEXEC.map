@@ -1,0 +1,132 @@
+Modules list:
+-------------
+CFDRIVER.S.o:
+    CODE              Offs=000000  Size=00013A  Align=00001  Fill=0000
+    RODATA            Offs=000000  Size=000002  Align=00001  Fill=0000
+    ZEROPAGE          Offs=000000  Size=000007  Align=00001  Fill=0000
+FAT.S.o:
+    CODE              Offs=00013A  Size=000614  Align=00001  Fill=0000
+    RODATA            Offs=000002  Size=000009  Align=00001  Fill=0000
+    ZEROPAGE          Offs=000007  Size=000062  Align=00001  Fill=0000
+MATH_32.S.o:
+    CODE              Offs=00074E  Size=0000E3  Align=00001  Fill=0000
+    ZEROPAGE          Offs=000069  Size=000018  Align=00001  Fill=0000
+MOVE.S.o:
+    CODE              Offs=000831  Size=000076  Align=00001  Fill=0000
+    ZEROPAGE          Offs=000081  Size=000006  Align=00001  Fill=0000
+STARTUP.S.o:
+    CODE              Offs=0008A7  Size=0001D9  Align=00001  Fill=0000
+    RODATA            Offs=00000B  Size=002590  Align=00001  Fill=0000
+    STARTUP           Offs=000000  Size=000043  Align=00001  Fill=0000
+XM7SEG.S.o:
+    CODE              Offs=000A80  Size=00003F  Align=00001  Fill=0000
+    ZEROPAGE          Offs=000087  Size=000006  Align=00001  Fill=0000
+
+
+Segment list:
+-------------
+Name                   Start     End    Size  Align
+----------------------------------------------------
+ZEROPAGE              000000  00008C  00008D  00001
+STARTUP               008000  008042  000043  00001
+CODE                  008043  008B01  000ABF  00001
+RODATA                008B02  00B09C  00259B  00001
+
+
+Exports list by name:
+---------------------
+CF_BUFFER                 008B02 RLA    CF_BUFFERPOINTER          000000 RLZ    
+CF_INIT                   008043 RLA    CF_LBA                    000002 RLZ    
+CF_READ_SECTOR            008170 RLA    ERROR_HALT                00803E RLA    
+FAT_FIND                  0083B4 RLA    FAT_INIT                  00817D RLA    
+FAT_LOAD_STREAM           008606 RLA    FAT_STATUS                00005D RLZ    
+FILEDEST                  00004B RLZ    FILENAME                  00005E RLZ    
+M32PTR1                   000069 RLZ    M32PTR2                   00006B RLZ    
+M32PTR3                   00006D RLZ    M32PTR4                   00006F RLZ    
+MATH_ADD32                008791 RLA    MATH_DIV32                008808 RLA    
+MATH_MUL32                0087BF RLA    MATH_SUB32                0087A8 RLA    
+MOVEDOWN                  008874 RLA    MOVESTREAM                00889B RLA    
+MOVE_FROM                 000081 RLZ    MOVE_SIZE                 000085 RLZ    
+MOVE_TO                   000083 RLZ    XM7SEG_ERRORCODE          008AC3 RLA    
+XMICRO_MEMORY             007100 REA    
+
+
+Exports list by value:
+----------------------
+CF_BUFFERPOINTER          000000 RLZ    CF_LBA                    000002 RLZ    
+FILEDEST                  00004B RLZ    FAT_STATUS                00005D RLZ    
+FILENAME                  00005E RLZ    M32PTR1                   000069 RLZ    
+M32PTR2                   00006B RLZ    M32PTR3                   00006D RLZ    
+M32PTR4                   00006F RLZ    MOVE_FROM                 000081 RLZ    
+MOVE_TO                   000083 RLZ    MOVE_SIZE                 000085 RLZ    
+XMICRO_MEMORY             007100 REA    ERROR_HALT                00803E RLA    
+CF_INIT                   008043 RLA    CF_READ_SECTOR            008170 RLA    
+FAT_INIT                  00817D RLA    FAT_FIND                  0083B4 RLA    
+FAT_LOAD_STREAM           008606 RLA    MATH_ADD32                008791 RLA    
+MATH_SUB32                0087A8 RLA    MATH_MUL32                0087BF RLA    
+MATH_DIV32                008808 RLA    MOVEDOWN                  008874 RLA    
+MOVESTREAM                00889B RLA    XM7SEG_ERRORCODE          008AC3 RLA    
+CF_BUFFER                 008B02 RLA    
+
+
+Imports list:
+-------------
+CF_BUFFER (CFDRIVER.S.o):
+    FAT.S.o                   ./CFDRIVER.MAC(10)
+CF_BUFFERPOINTER (CFDRIVER.S.o):
+    FAT.S.o                   ./CFDRIVER.MAC(12)
+CF_INIT (CFDRIVER.S.o):
+    STARTUP.S.o               ./CFDRIVER.MAC(9)
+CF_LBA (CFDRIVER.S.o):
+    FAT.S.o                   ./CFDRIVER.MAC(11)
+CF_READ_SECTOR (CFDRIVER.S.o):
+    FAT.S.o                   ./CFDRIVER.MAC(9)
+ERROR_HALT (STARTUP.S.o):
+    CFDRIVER.S.o              ./CFDRIVER.S(9)
+FAT_FIND (FAT.S.o):
+    STARTUP.S.o               ./FAT.MAC(12)
+FAT_INIT (FAT.S.o):
+    STARTUP.S.o               ./FAT.MAC(12)
+FAT_LOAD_STREAM (FAT.S.o):
+    STARTUP.S.o               ./FAT.MAC(12)
+FAT_STATUS (FAT.S.o):
+    STARTUP.S.o               ./FAT.MAC(13)
+FILEDEST (FAT.S.o):
+    STARTUP.S.o               ./FAT.MAC(13)
+FILENAME (FAT.S.o):
+    STARTUP.S.o               ./FAT.MAC(13)
+M32PTR1 (MATH_32.S.o):
+    FAT.S.o                   ./MATH_32.MAC(13)
+M32PTR2 (MATH_32.S.o):
+    FAT.S.o                   ./MATH_32.MAC(13)
+M32PTR3 (MATH_32.S.o):
+    FAT.S.o                   ./MATH_32.MAC(13)
+M32PTR4 (MATH_32.S.o):
+    FAT.S.o                   ./MATH_32.MAC(13)
+MATH_ADD32 (MATH_32.S.o):
+    FAT.S.o                   ./MATH_32.MAC(11)
+MATH_DIV32 (MATH_32.S.o):
+    FAT.S.o                   ./MATH_32.MAC(11)
+MATH_MUL32 (MATH_32.S.o):
+    FAT.S.o                   ./MATH_32.MAC(11)
+MATH_SUB32 (MATH_32.S.o):
+    FAT.S.o                   ./MATH_32.MAC(11)
+MOVEDOWN (MOVE.S.o):
+    STARTUP.S.o               ./MOVE.MAC(9)
+    FAT.S.o                   ./MOVE.MAC(9)
+MOVESTREAM (MOVE.S.o):
+    FAT.S.o                   ./MOVE.MAC(9)
+MOVE_FROM (MOVE.S.o):
+    STARTUP.S.o               ./MOVE.MAC(11)
+    FAT.S.o                   ./MOVE.MAC(11)
+MOVE_SIZE (MOVE.S.o):
+    STARTUP.S.o               ./MOVE.MAC(11)
+    FAT.S.o                   ./MOVE.MAC(11)
+MOVE_TO (MOVE.S.o):
+    STARTUP.S.o               ./MOVE.MAC(11)
+    FAT.S.o                   ./MOVE.MAC(11)
+XM7SEG_ERRORCODE (XM7SEG.S.o):
+    STARTUP.S.o               ./XM7SEG.MAC(10)
+XMICRO_MEMORY (STARTUP.S.o):
+    CFDRIVER.S.o              ./CFDRIVER.S(9)
+
