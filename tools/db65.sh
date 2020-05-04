@@ -7,6 +7,9 @@ set -e
 
 mkdir /tmp/debuginfo
 
+#Code segments to disassemble (other segments are disassembled as byte tables)
+CODESEGS="STARTUP|ONCE|CODE|LOWCODE"
+
 #Set up arguments
 if [ -z $1 ]
 then
@@ -46,15 +49,15 @@ do
 	for field in {1..15}
 	do
 		csymCount=$csymCount`echo $line | cut -d , -f $field | grep '^csym=' | cut -d \= -f 2`
-		fileCount=$fileCount`echo $line | cut -d , -f $field | grep '^file=' | cut -d \= -f 2`
+		# fileCount=$fileCount`echo $line | cut -d , -f $field | grep '^file=' | cut -d \= -f 2`
 		libCount=$libCount`echo $line | cut -d , -f $field | grep '^lib=' | cut -d \= -f 2`
-		lineCount=$lineCount`echo $line | cut -d , -f $field | grep '^line=' | cut -d \= -f 2`
+		# lineCount=$lineCount`echo $line | cut -d , -f $field | grep '^line=' | cut -d \= -f 2`
 		modCount=$modCount`echo $line | cut -d , -f $field | grep '^mod=' | cut -d \= -f 2`
 		scopeCount=$scopeCount`echo $line | cut -d , -f $field | grep '^scope=' | cut -d \= -f 2`
 		segCount=$segCount`echo $line | cut -d , -f $field | grep '^seg=' | cut -d \= -f 2`
-		spanCount=$spanCount`echo $line | cut -d , -f $field | grep '^span=' | cut -d \= -f 2`
+		# spanCount=$spanCount`echo $line | cut -d , -f $field | grep '^span=' | cut -d \= -f 2`
 		symCount=$symCount`echo $line | cut -d , -f $field | grep '^sym=' | cut -d \= -f 2`
-		typeCount=$typeCount`echo $line | cut -d , -f $field | grep '^type=' | cut -d \= -f 2`
+		# typeCount=$typeCount`echo $line | cut -d , -f $field | grep '^type=' | cut -d \= -f 2`
 	done
 done < /tmp/debuginfo/info.dbg
 
@@ -68,8 +71,8 @@ do
 		segName[$index]=${segName[$index]}`echo $line | cut -d , -f $field | grep '^name=' | cut -d \" -f 2`
 		segStart[$index]=${segStart[$index]}`echo $line | cut -d , -f $field | grep '^start=' | cut -d x -f 2`
 		segSize[$index]=${segSize[$index]}`echo $line | cut -d , -f $field | grep '^size=' | cut -d x -f 2`
-		segAddrsize[$index]=${segAddrsize[$index]}`echo $line | cut -d , -f $field | grep '^addrsize=' | cut -d \= -f 2`
-		segType[$index]=${segType[$index]}`echo $line | cut -d , -f $field | grep '^type=' | cut -d \= -f 2`
+		# segAddrsize[$index]=${segAddrsize[$index]}`echo $line | cut -d , -f $field | grep '^addrsize=' | cut -d \= -f 2`
+		# segType[$index]=${segType[$index]}`echo $line | cut -d , -f $field | grep '^type=' | cut -d \= -f 2`
 		segOname[$index]=${segOname[$index]}`echo $line | cut -d , -f $field | grep '^oname=' | cut -d \" -f 2`
 		segOoffs[$index]=${segOoffs[$index]}`echo $line | cut -d , -f $field | grep '^ooffs=' | cut -d \= -f 2`
 	done
@@ -85,12 +88,12 @@ do
 		symName[$index]=${symName[$index]}`echo $line | cut -d , -f $field | grep '^name=' | cut -d \" -f 2`
 		symAddrsize[$index]=${symAddrsize[$index]}`echo $line | cut -d , -f $field | grep '^addrsize=' | cut -d \= -f 2`
 		symScope[$index]=${symScope[$index]}`echo $line | cut -d , -f $field | grep '^scope=' | cut -d \= -f 2`
-		symDef[$index]=${symDef[$index]}`echo $line | cut -d , -f $field | grep '^def=' | cut -d \= -f 2`
-		symRef[$index]=${symRef[$index]}`echo $line | cut -d , -f $field | grep '^ref=' | cut -d \= -f 2`
+#		symDef[$index]=${symDef[$index]}`echo $line | cut -d , -f $field | grep '^def=' | cut -d \= -f 2`
+#		symRef[$index]=${symRef[$index]}`echo $line | cut -d , -f $field | grep '^ref=' | cut -d \= -f 2`
 		symVal[$index]=${symVal[$index]}`echo $line | cut -d , -f $field | grep '^val=' | cut -d x -f 2`
 		symSeg[$index]=${symSeg[$index]}`echo $line | cut -d , -f $field | grep '^seg=' | cut -d \= -f 2`
 		symType[$index]=${symType[$index]}`echo $line | cut -d , -f $field | grep '^type=' | cut -d \= -f 2`
-		symExp[$index]=${symExp[$index]}`echo $line | cut -d , -f $field | grep '^exp=' | cut -d \= -f 2`
+#		symExp[$index]=${symExp[$index]}`echo $line | cut -d , -f $field | grep '^exp=' | cut -d \= -f 2`
 	done
 done < /tmp/debuginfo/symbols.dbg
 
@@ -103,11 +106,11 @@ do
 	do
 		scopeName[$index]=${scopeName[$index]}`echo $line | cut -d , -f $field | grep '^name=' | cut -d \" -f 2`
 		scopeType[$index]=${scopeType[$index]}`echo $line | cut -d , -f $field | grep '^type=' | cut -d \= -f 2`
-		scopeSize[$index]=${scopeSize[$index]}`echo $line | cut -d , -f $field | grep '^size=' | cut -d \= -f 2`
+#		scopeSize[$index]=${scopeSize[$index]}`echo $line | cut -d , -f $field | grep '^size=' | cut -d \= -f 2`
 		scopeParent[$index]=${scopeParent[$index]}`echo $line | cut -d , -f $field | grep '^parent=' | cut -d \= -f 2`
 		scopeSym[$index]=${scopeSym[$index]}`echo $line | cut -d , -f $field | grep '^sym=' | cut -d \= -f 2`
 		scopeMod[$index]=${scopeMod[$index]}`echo $line | cut -d , -f $field | grep '^mod=' | cut -d \= -f 2`
-		scopeSpan[$index]=${scopeSpan[$index]}`echo $line | cut -d , -f $field | grep '^span=' | cut -d \= -f 2`
+#		scopeSpan[$index]=${scopeSpan[$index]}`echo $line | cut -d , -f $field | grep '^span=' | cut -d \= -f 2`
 	done
 done < /tmp/debuginfo/scopes.dbg
 
@@ -119,9 +122,9 @@ do
 	for field in {1..6}
 	do
 		modName[$index]=${modName[$index]}`echo $line | cut -d , -f $field | grep '^name=' | cut -d \" -f 2`
-		modSource[$index]=${modSource[$index]}`echo $line | cut -d , -f $field | grep '^source=' | cut -d \= -f 2`
+#		modSource[$index]=${modSource[$index]}`echo $line | cut -d , -f $field | grep '^source=' | cut -d \= -f 2`
 		modLib[$index]=${modLib[$index]}`echo $line | cut -d , -f $field | grep '^lib=' | cut -d \= -f 2`
-		modScope[$index]=${modScope[$index]}`echo $line | cut -d , -f $field | grep '^scope=' | cut -d \= -f 2`
+#		modScope[$index]=${modScope[$index]}`echo $line | cut -d , -f $field | grep '^scope=' | cut -d \= -f 2`
 	done
 done < /tmp/debuginfo/modules.dbg
 
@@ -163,18 +166,18 @@ do
 	fi
 done
 
-#Create range for CONDES segment
+#Create ranges for non-code segments
 for ((index=0; index<$segCount; index++))
 do
 	#Only list segments that were written to the output (this script's input) file and have non-zero length.
-	if [ "${segName[$index]}" == "CONDESTABLES" ] && [ "$((0x${segSize[$index]}))" != 0 ]
+	# if [[ ! "${segName[$index]}" =~ ^(STARTUP|ONCE|CODE|LOWCODE)$ ]] && [ "${segOname[$index]}" == "${INPUTBIN}" ] && [ "$((0x${segSize[$index]}))" != 0 ]
+	if [[ ! "${segName[$index]}" =~ ^(${CODESEGS})$ ]] && [ "${segOname[$index]}" == "${INPUTBIN}" ] && [ "$((0x${segSize[$index]}))" != 0 ]
 	then
-		echo "RANGE { NAME \"${segName[$index]}\";	START \$`echo 16o$((0x${STARTADDR}+${segOoffs[$index]}))p | dc`;	END \$`echo 16o$((0x${STARTADDR}+${segOoffs[$index]}+0x${segSize[$index]}-1))p | dc`;	TYPE AddrTable;	};" >> /tmp/debuginfo/info.txt
+		echo "RANGE { START \$`echo 16o$((0x${STARTADDR}+${segOoffs[$index]}))p | dc`;	END \$`echo 16o$((0x${STARTADDR}+${segOoffs[$index]}+0x${segSize[$index]}-1))p | dc`;	TYPE BYTETABLE;	};" >> /tmp/debuginfo/info.txt
 	fi
 done
 
 #Add symbol info
-echo >> /tmp/debuginfo/info.txt
 touch /tmp/debuginfo/dalabels.dbg
 for ((index=0; index<$symCount; index++))
 do
