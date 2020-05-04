@@ -1,6 +1,7 @@
 ###############################################################################
 ### Generic Makefile for cc65 projects - full version with abstract options ###
 ### V1.3.0(w) 2010 - 2013 Oliver Schmidt & Patryk "Silver Dream !" Łogiewa  ###
+###                    Modified for XMICRO-6502 projects                    ###
 ###############################################################################
 
 ###############################################################################
@@ -27,11 +28,11 @@ CONFIG  :=
 
 # Additional C compiler flags and options.
 # Default: none
-CFLAGS  =
+CFLAGS  = --cpu 65c02
 
 # Additional assembler flags and options.
 # Default: none
-ASFLAGS =
+ASFLAGS = --cpu 65c02
 
 # Additional linker flags and options.
 # Default: none

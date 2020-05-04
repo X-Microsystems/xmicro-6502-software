@@ -1,8 +1,5 @@
 ;-----------------------------------------------------------------------------
-; SERIAL.MAC
+; XMSERIAL_PS2.INC
 ;-----------------------------------------------------------------------------
-.IF !.DEFINED(PS2_POINTER)	;DON'T DEFINE MACROS IF THEY EXIST ALREADY
 
 .IMPORT XMSERIAL_INIT, PS2_GETKEY, PS2_COMMAND, ASCII_NORMAL_TABLE, ASCII_SHIFT_TABLE
-
-.ENDIF

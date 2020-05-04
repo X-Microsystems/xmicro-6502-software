@@ -35,12 +35,8 @@ _init:	LDX #$FF                 ; Initialize stack pointer to $01FF
 
 ; ---------------------------------------------------------------------------
 ; Initialize memory storage
-; .IF __BSS_START__ != __BSS_LOAD__
-; 	JSR     zerobss			; Clear BSS segment
-; .ENDIF
-; .IF __DATA_START__ != __DATA_LOAD__
+ 	JSR zerobss			; Clear BSS segment
 ; 	JSR copydata			; Initialize DATA segment
-; .ENDIF
  	JSR initlib			; Run constructors
 	CLI				; Enable interrupts
 

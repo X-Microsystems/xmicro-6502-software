@@ -27,11 +27,11 @@ CONFIG  :=
 
 # Additional C compiler flags and options.
 # Default: none
-CFLAGS  =
+CFLAGS  = --cpu 65c02
 
 # Additional assembler flags and options.
 # Default: none
-ASFLAGS =
+ASFLAGS = --cpu 65c02
 
 # Additional linker flags and options.
 # Default: none
